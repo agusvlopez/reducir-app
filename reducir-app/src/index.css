@@ -1,3 +1,7 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -25,14 +29,18 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #fdfdfd;
+  color: #242424;
+}
+
+::placeholder {
+  font-size: 0.8rem;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2em;
   line-height: 1.1;
 }
 
@@ -48,11 +56,66 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #005840;
 }
-button:focus,
+
+ button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto transparent;
+} 
+
+.backgroundWhite {
+  background-color: #F1EDEC;
+}
+
+.backgroundOrange {
+  background-color: #ed6C1D;
+}
+
+.backgroundDarkGreen {
+  background-color: #005840;
+}
+
+.menuHamburguer {
+  height: 30px;
+  width: 30px;
+}
+
+.navLogo {
+  max-width: 150px;
+}
+.textDarkGreen {
+  color: #005840;
+}
+
+.buttonDarkGreen {
+  background-color: #005840;
+  color: white;
+  border-color: #005840;
+}
+.buttonDarkGreen:hover {
+  background-color: #014936;
+  color: white;
+  border-color: #005840;
+}
+.buttonDarkGreen:focus {
+  background-color: #F1EDEC;
+  color: #005840;
+  border-color: #005840;
+}
+
+.backgroundLightGreen {
+  background-color: #C9D641;
+}
+
+.arrowRight {
+  background-image: url('./covers/icons/arrow-right.png');
+  content: '';
+  width: 22px;
+  height: 12px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
 }
 
 @media (prefers-color-scheme: light) {

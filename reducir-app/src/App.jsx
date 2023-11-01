@@ -1,33 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './index.css';
+import React from "react";
+import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements } from "react-router-dom";
+import { Home } from "./components/Home";
+import { Login } from "./components/Login";
+import { Register } from "./components/Register";
+import { Welcome } from "./components/Welcome";
+import { Profile } from './components/Profile';
+import { Actions } from './components/Actions';
+import { Achievements } from './components/Achievements';
+import { Benefits } from './components/Benefits';
+
+const routes = createBrowserRouter(createRoutesFromElements(
+  <>
+  <Route path="/" element={<Home />} />
+  <Route path="/iniciar-sesion" element={<Login />}/>
+  <Route path="/registrarse" element={<Register />}/>
+  <Route path="/bienvenida" element={<Welcome />}/>
+  <Route path="/perfil" element={<Profile />}/>
+  <Route path="/acciones" element={<Actions />}/>
+  <Route path="/logros" element={<Achievements />}/>
+  <Route path="/beneficios" element={<Benefits />}/>
+  </>
+))
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+ 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <RouterProvider router={routes} />
     </>
   )
 }
