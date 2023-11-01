@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import logo from './../covers/logo-horizontal.png';
 import { Link, useNavigate } from "react-router-dom";
 import {Button} from "@nextui-org/react";
-import { NavbarWeb } from "./NavbarWeb";
+import  NavbarWeb  from "./NavbarWeb";
 
 export function Login () {
     const [inputEmail, setInputEmail] = useState('');

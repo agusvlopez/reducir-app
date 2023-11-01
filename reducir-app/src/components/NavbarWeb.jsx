@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+
+import {Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
 import menuHamburguer from '../covers/icons/menu-green.png'
-import logoNav from '../covers/nombre-large.png';
+import ReducirLogo from './ReducirLogo';
 
 const menuRoutes = [];
 
@@ -33,50 +34,78 @@ menuRoutes.push({
 
 
 
+export default function NavbarWeb() {
 
-export function NavbarWeb () {
-    const [open, setOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-    const toggleMenu = () => {
-      setOpen(!open);
-    };
-    return (
-        <>
-        <nav className="bg-gray-100 p-4 container mb-4 w-full shadow rounded-t-lg">
-       {/* TO DO : ARREGLAR EL ALT porque no aparece */}
-       <div className="container mx-auto flex items-center justify-between">
-        <div className="text-white text-2xl font-bold"><img className='navLogo' src={logoNav}></img></div>
+  const menuItems = [
+    "Home",
+    "Iniciar sesión",
+    "Registrarse",
+    "Log Out",
+  ];
 
-        <div className="md:hidden">
-          <a
-            onClick={toggleMenu}
-            className="focus:outline-none"
-          >
-           <img className='menuHamburguer' src={open ? menuHamburguer : menuHamburguer} /> 
-          </a>
-        </div>
-        </div>
-        <div className={`md:flex ${open ? 'block' : 'hidden'}`}>
-         
-        <ul className="md:flex text-end mt-2 content-end textDarkGreen">
-            {menuRoutes.map(route => {
+  return (
+    <Navbar
+      isBordered
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+    >
+      <NavbarContent className="sm:hidden" justify="start">
+        <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
+      </NavbarContent>
 
-                return (
-                    <li key={route.id}
-                    >
-                        <Link to={route.path}
-                        className="textDarkGreen p-2 border-b-2 block">
-                         {route.name}
-                        </Link>
-                    </li>)
-                }
-            )}
-            
-        </ul>
-        </div>
-        </nav>
-        </>
-    );
+      <NavbarContent className="sm:hidden pr-1" justify="center">
+        <NavbarBrand>
+          <ReducirLogo />
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className="hidden sm:flex gap-2" justify="center">
+        <NavbarBrand>
+          <ReducirLogo />
+        </NavbarBrand>
+        {menuRoutes.map((item) => (
+        <NavbarItem key={item.id}>
+          <Link color="foreground" href={item.path}>
+           {item.name}
+          </Link>
+        </NavbarItem>
+         ))}
+        {/* <NavbarItem isActive>
+          <Link href="#" aria-current="page">
+            Customers
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="#">
+            Integrations
+          </Link>
+        </NavbarItem> */}
+      </NavbarContent>
+
+      <NavbarContent justify="end">
+
+        <NavbarItem>
+          <Button as={Link} color="warning" href="#" variant="flat">
+           Login
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+
+      <NavbarMenu>
+        {menuRoutes.map((item) => (
+          <NavbarMenuItem key={item.id}>
+            <Link
+              className="w-full textDarkGreen"
+              href={item.path}
+              size="lg"
+            >
+              {item.name}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
+    </Navbar>
+  );
 }
-
-

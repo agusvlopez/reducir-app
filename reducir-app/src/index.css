@@ -82,10 +82,13 @@ button:focus-visible {
 }
 
 .navLogo {
-  max-width: 150px;
+  max-width: 130px;
 }
 .textDarkGreen {
   color: #005840;
+}
+.textOrange{
+  color: #ed6C1D;
 }
 
 .buttonDarkGreen {
@@ -118,13 +121,17 @@ button:focus-visible {
   display: inline-block;
 }
 
+.backgroundTrama {
+  background-image: url('./covers/fondo-trama.png');
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #014936bd;
   }
   button {
     background-color: #f9f9f9;

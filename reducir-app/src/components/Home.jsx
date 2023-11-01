@@ -1,11 +1,14 @@
 import React from "react";
-import {NavbarWeb} from './NavbarWeb';
+import NavbarWeb from './NavbarWeb';
 import {Button} from "@nextui-org/react";
 import homeApp from '../covers/home-app.jpg';
 import {Card, CardHeader, CardBody, Image} from "@nextui-org/react";
 import benefitsCard from '../covers/benefits.jpg';
 import tipsCard from '../covers/tips.jpg';
 import worldCard from '../covers/world.jpg';
+import Footer from "./Footer";
+import { Link } from "react-router-dom";
+
 
 export function Home () {
 
@@ -15,13 +18,15 @@ export function Home () {
     <NavbarWeb></NavbarWeb>
     <div className="container p-4">
         <div>
-        <section className="container mx-auto mt-8 p-4">
+        <section className="container mx-auto p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="text-center md:text-left">
                 <h1 className="text-4xl font-bold text-gray-800 mb-4">App Reducir</h1>
                 <p className="text-gray-600 mb-4">Reducir es una aplicación web y <span lang="en">mobile</span> que te acompaña en tu dia a dia ayudandote a incorporar hábitos mas amigables con el medio ambiente.</p>
                 <p className="text-gray-600 mb-4">Animate a dar el primer paso para construir un mundo mejor. <span className="font-bold">¡Registrate ahora!</span></p>
-                <a href="#" className="bg-blue-500 text-white rounded-full py-2 px-4 hover:bg-blue-600 transition duration-300">Registrarse</a>
+                <Link to="/registrarse">
+                    <Button className="backgroundDarkGreen text-white rounded-full py-2 px-4 transition duration-300">Registrarse</Button>
+                </Link>
             </div>
             <div className="text-center">
                 <img src={homeApp} alt="Captura de pantalla de la aplicación" className="w-full rounded-lg shadow-lg" />
@@ -31,8 +36,8 @@ export function Home () {
         </section>
 
         {/* Sección de características */}
-        <section className="container mx-auto mt-8 p-2">
-            <h2 className="text-3xl font-bold mb-4">¿Por qué deberías instalar nuestra App?</h2>
+        <section className="container mx-auto mt-8 p-2 backgroundTrama">
+            <h2 className="text-2xl font-bolder m-4 text-center bg-white rounded-lg p-2 w-fit">¿Por qué deberías instalar nuestra App?</h2>
             <div className="flex flex-wrap">
             <Card className="py-4 m-1">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
@@ -97,6 +102,7 @@ export function Home () {
         </section>
         </div>
     </div>
+    <Footer></Footer>
     </>
     );
 }
