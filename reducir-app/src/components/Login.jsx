@@ -7,8 +7,7 @@ import  NavbarWeb  from "./NavbarWeb";
 export function Login () {
     const [inputEmail, setInputEmail] = useState('');
     const [inputPass, setInputPass] = useState('');
-    const emailRef = useRef();
-    const passRef = useRef();
+
     const navigate = useNavigate();
 
     const authUser = 
@@ -19,16 +18,14 @@ export function Login () {
     
     const login = (event) => {
         event.preventDefault();
-        const inputEmail = emailRef.current.value;
-        const inputPass = passRef.current.value;
 
         if(inputEmail === authUser.email && inputPass === authUser.pass){
             console.log("hola");
-           navigate("/");
+           navigate("/perfil");
         }
-        console.log(emailRef.current.value);
+
         console.log(inputEmail, "pass ", inputPass);
-        console.log(event);
+        // console.log(event);
     };
 
    
@@ -38,18 +35,18 @@ export function Login () {
         <NavbarWeb></NavbarWeb>
         <div className="container p-8 mx-auto min-h-screen">
 
-        <div className="flex justify-center w-full p-2 mb-4">
+        {/* <div className="flex justify-center w-full p-2 mb-4">
             <img src={logo} alt="Logo de Reducir" />
-        </div>
+        </div> */}
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Iniciar sesión</h1>
         
-        <form action="#"
+        <form action=""
         onSubmit={login}>
             <div className="mb-3">
                 <label className="mb-2 text-sm">Email</label>
                 <input     
-                    ref={emailRef}
+
                     value={inputEmail}
                     onChange={(e) => {setInputEmail(e.target.value)}}
                     type="email" 
@@ -61,7 +58,7 @@ export function Login () {
             <div className="mb-6">
                 <label className="mb-2 text-sm">Contraseña</label>
                 <input
-                    ref={passRef}
+
                     value={inputPass}
                     onChange={(e) => {setInputPass(e.target.value)}}
                     type="password" 
@@ -71,17 +68,16 @@ export function Login () {
                 />
             </div>
             <div className="flex justify-center">
-                <Button className="bg-white textDarkGreen shadow">Ingresar</Button>
+                <Button type="submit" className="bg-white textDarkGreen shadow">Ingresar</Button>
             </div>
         </form>
 
             <p className="text-center mt-8">¿Aún no tenes una cuenta?</p>
             <div className="flex justify-center mt-3">
-            <Link to="/registrarse">
-                <Button className="backgroundDarkGreen text-white">
-                Registrarse
-                </Button>
-            </Link>
+           
+                <Button className="backgroundDarkGreen">
+                 <Link className="text-white" to="/registrarse">Registrarse</Link>
+                </Button>            
             </div>
         
         </div>

@@ -1,14 +1,16 @@
 import React from "react";
 import { Menu } from "./Menu";
-import Navbar from "./Navbar";
+import NavbarAplication from "./NavbarAplication";
 
 export function Benefits () {
 
 
     return (
     <>
-    <Navbar></Navbar>
-    <h1>Beneficios</h1>
+        <NavbarAplication></NavbarAplication>
+        <div className="container p-4">
+            <h1>Beneficios</h1>
+        </div>
        <Menu></Menu>
     </>
     );

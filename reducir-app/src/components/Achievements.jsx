@@ -1,14 +1,16 @@
 import React from "react";
 import { Menu } from "./Menu";
-import Navbar from "./Navbar";
+import NavbarAplication from "./NavbarAplication";
 
 export function Achievements () {
 
 
     return (
     <>
-    <Navbar></Navbar>
-    <h1>Logros</h1>
+        <NavbarAplication></NavbarAplication>
+        <div className="container p-4">
+            <h1>Logros</h1>
+        </div>
         <Menu></Menu>
     </>
     );

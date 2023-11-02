@@ -1,5 +1,5 @@
 import React from 'react';
-import logoNav from '../covers/nombre-large.png';
+import logoNav from '../covers/logo-horizontal-mini.png';
 
 function ReducirLogo() {
   return (

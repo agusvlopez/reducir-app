@@ -68,23 +68,24 @@ export function Menu () {
 
     return (
         <>
-        <nav className="bg-gray-100 p-4 container fixed bottom-0 w-full shadow rounded-t-lg">
+        <div className="backgroundWhite p-4 fixed bottom-0 left-0 w-full shadow rounded-t-lg min-h-min py-4 z-40 ">
        {/* TO DO : ARREGLAR EL ALT porque no aparece */}
-        <ul className="flex space-x-4  justify-around">
+        <ul className="flex  justify-around">
             {navbarRoutes.map(route => {
 
                 return (
-                    <li key="{route.id}"
+                    <li key={route.id}
                     >
                         <Link to={route.path}>
-                          <img src={route.icon} alt={route.alt} />
+                          <img src={route.icon} alt={route.alt} 
+                          />
                         </Link>
                     </li>)
                 }
             )}
             
         </ul>
-        </nav>
+        </div>
         </>
     );
 }

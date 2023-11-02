@@ -9,6 +9,7 @@ import { Profile } from './components/Profile';
 import { Actions } from './components/Actions';
 import { Achievements } from './components/Achievements';
 import { Benefits } from './components/Benefits';
+import { Action } from './components/Action';
 
 const routes = createBrowserRouter(createRoutesFromElements(
   <>
@@ -20,6 +21,7 @@ const routes = createBrowserRouter(createRoutesFromElements(
   <Route path="/acciones" element={<Actions />}/>
   <Route path="/logros" element={<Achievements />}/>
   <Route path="/beneficios" element={<Benefits />}/>
+  <Route path="/accion/:idAccion" element={<Action />}/>
   </>
 ))
 

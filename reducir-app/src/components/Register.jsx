@@ -21,7 +21,7 @@ export function Register () {
         const inputConfirmPass = passConfirmRef.current.value;
 
         if(inputPass != inputConfirmPass){
-            navigate("/register");
+            navigate("/registrarse");
             //aca deberia aparecer un alert de error para avisarle al usuario
             return console.log("error, las contraseñas no coinciden.");
         }else{
@@ -34,7 +34,7 @@ export function Register () {
 
             users.push(newUser);
             console.log(users);
-            navigate("/welcome");
+            navigate("/bienvenida");
     
             console.log(emailRef.current.value);
             console.log(inputEmail, "pass ", inputPass);
@@ -48,10 +48,10 @@ export function Register () {
         <>
         <NavbarWeb></NavbarWeb>
         <div className="container p-8 mx-auto min-h-screen">
-
+{/* 
         <div className="flex justify-center w-full p-2 mb-4">
             <img src={logo} alt="Logo de Reducir" />
-        </div>
+        </div> */}
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Registrarse</h1>
         
@@ -92,13 +92,13 @@ export function Register () {
                 <input
                     ref={passConfirmRef}
                     type="password" 
-                    id="password"                   
+                    id="passwordConfirm"                   
                     placeholder="Confirmá tu contraseña"
                     className="block w-full rounded-md border-0 py-1.5 pl-4 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
             </div>
             <div className="flex justify-center mt-3">
-                <Button className="backgroundDarkGreen text-white">
+                <Button type="submit" className="backgroundDarkGreen text-white">
                 Registrarse
                 </Button>
             </div>

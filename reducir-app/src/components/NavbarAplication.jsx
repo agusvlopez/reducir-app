@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useState } from 'react';
 import {Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
 import menuHamburguer from '../covers/icons/menu-green.png'
 import ReducirLogo from './ReducirLogo';
@@ -9,52 +8,41 @@ const menuRoutes = [];
 
 menuRoutes.push({
     id: 1,
-    path: '/',
-    name: 'Home'
+    path: '/config',
+    name: 'Configuración de la cuenta'
 });
 
-// menuRoutes.push({
-//     id: 2,
-//     path: '/iniciar-sesion',
-//     name: 'Iniciar sesión'
-// });
+menuRoutes.push({
+    id: 2,
+    path: '/compartir',
+    name: 'Compartir'
+});
 
 menuRoutes.push({     
     id: 3,    
-    path: '/registrarse',
-    name: 'Registrarse' 
+    path: '/bienvenida',
+    name: 'Rehacer test' 
 });
 
-// menuRoutes.push({
-//     id: 4,
-//     path: '/welcome',
-//     name: 'Bienvenida',
-    
-// });
-
-
-
-export default function NavbarWeb() {
-
+function NavbarAplication() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-
   return (
-    <Navbar
+    <>
+     <Navbar
       isBordered
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
-      className="rounded"
     >
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden pr-1" justify="center">
+      <NavbarContent className="sm:hidden" justify="center">
         <NavbarBrand>
-          <Link href="/">
-            <ReducirLogo />
-          </Link>
+        <Link href="/">
+          <ReducirLogo />
+        </Link>
         </NavbarBrand>
       </NavbarContent>
 
@@ -71,23 +59,13 @@ export default function NavbarWeb() {
           </Link>
         </NavbarItem>
          ))}
-        {/* <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarContent justify="end">
 
         <NavbarItem>
-          <Button as={Link} color="warning" href="/iniciar-sesion" variant="flat">
-           Login
+          <Button as={Link} color="warning" href="#" variant="flat">
+           Logout
           </Button>
         </NavbarItem>
       </NavbarContent>
@@ -106,5 +84,10 @@ export default function NavbarWeb() {
         ))}
       </NavbarMenu>
     </Navbar>
+    <section>
+    </section>
+    </>
   );
 }
+
+export default NavbarAplication;

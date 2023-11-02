@@ -1,6 +1,6 @@
 import React from "react";
 import logo from './../covers/logo-horizontal.png';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {Button} from "@nextui-org/react";
 
 export function Welcome () {
@@ -9,7 +9,10 @@ export function Welcome () {
     return (
     <>
     <div className="container p-8 mx-auto min-h-screen max-w-fit">
-
+        <Link to="/"
+        className="text-sm">
+            Volver al inicio
+        </Link>
         <div className="flex justify-center w-full p-2 mb-6">
         <img src={logo} alt="Logo de Reducir" />
         </div>
