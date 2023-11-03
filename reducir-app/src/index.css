@@ -134,6 +134,15 @@ button:focus-visible {
   background-image: url('./covers/fondo-trama.png');
 }
 
+.iconShare {
+  background-image: url('./covers/icons/share.png');
+  content: '';
+  width: 22px;
+  height: 22px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+}
 
 
 @media (prefers-color-scheme: light) {
