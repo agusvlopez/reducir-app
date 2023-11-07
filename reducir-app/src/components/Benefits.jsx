@@ -5,19 +5,27 @@ import VerticalCard from "./VerticalCard";
 import Meraki from '../covers/benefits/meraki.jpg';
 import { Link } from "react-router-dom";
 import { Button } from "@nextui-org/react";
+import Sidebar from "./Sidebar";
 
 export function Benefits () {
 
 
     return (
     <>
+    
+        <div className="lg:flex">
+            <template className="hidden lg:block">
+                <Sidebar />
+            </template>
+
+        <div className="flex-1">
         <NavbarAplication></NavbarAplication>
-        <div className="container p-4 mx-auto">
+        <div className="container mx-auto p-4">
             <h1 className="mb-2">Beneficios</h1>
             <p>Acá encontrarás según tu ubicación los beneficios que podes canjear gracias a las acciones realizadas que compartiste.</p>
         </div>
         
-        <section className="backgroundDarkGreen rounded-t-lg p-4 mb-8 pb-8 mx-auto">
+        <section className="backgroundDarkGreen min-h-screen rounded-t-lg p-4 pb-8 mx-auto">
         <div className="mb-8 mt-4">
             <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
                 <div>
@@ -36,7 +44,11 @@ export function Benefits () {
             </div>
         </div>
         </section>
-        <Menu></Menu>
+        </div>
+        </div>
+        <div className="block lg:hidden mt-8">
+            <Menu></Menu>
+        </div>
     </>
     );
 }

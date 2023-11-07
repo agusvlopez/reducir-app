@@ -1,9 +1,9 @@
 import {configureStore} from "@reduxjs/toolkit";
+import favoriteActionReducer from './favoritesSlice';
 
 export const store = configureStore({
     reducer: {
-        // photos: photosReducer,
-        // favoritePhotos: favoritePhotosReducer
+        favoriteAction: favoriteActionReducer
     },
 
 });

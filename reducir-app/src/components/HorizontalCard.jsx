@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import {Card, CardBody, Image, Button} from "@nextui-org/react";
 import {HeartIcon} from "./HeartIcon";
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import { Link } from "react-router-dom";
+import { selectFavoriteAction, addFavoriteAction } from "../features/favoritesSlice";
+import { useSelector, useDispatch } from "react-redux";
+
 //esta data se va a sacar de la base de datos.
 
 export default function HorizontalCard() {
-  const [liked, setLiked] = React.useState(false);
+  const [liked, setLiked] = useState(false);
+  // const favorites = useSelector(selectFavoriteAction);
+  const dispatch = useDispatch();
+
+  const handleFavorite = () => {
+    setLiked((v) => !v);
+
+    dispatch(addFavoriteAction(1));
+  }
 
   return (
     <Card
@@ -40,7 +51,7 @@ export default function HorizontalCard() {
                 className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2"
                 radius="full"
                 variant="light"
-                onPress={() => setLiked((v) => !v)}
+                onPress={handleFavorite}
               >
                 <HeartIcon
                   className={liked ? "[&>path]:stroke-transparent" : ""}

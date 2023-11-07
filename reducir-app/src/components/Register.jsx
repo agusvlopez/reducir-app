@@ -55,11 +55,13 @@ export function Register () {
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Registrarse</h1>
         
-        <form action="#"
+        <form action="/register"
+        method="POST"
         onSubmit={register}>
             <div className="mb-3">
                 <label className="mb-2 text-sm">Nombre</label>
-                <input     
+                <input 
+                    name="name"    
                     ref={nameRef}
                     type="text" 
                     id="name" 
@@ -69,7 +71,8 @@ export function Register () {
             </div>
             <div className="mb-3">
                 <label className="mb-2 text-sm">Email</label>
-                <input     
+                <input 
+                    name="email"       
                     ref={emailRef}
                     type="email" 
                     id="email" 
@@ -80,6 +83,7 @@ export function Register () {
             <div className="mb-6">
                 <label className="mb-2 text-sm">Contraseña</label>
                 <input
+                    name="password"   
                     ref={passRef}
                     type="password" 
                     id="password"                   
@@ -90,6 +94,7 @@ export function Register () {
             <div className="mb-6">
                 <label className="mb-2 text-sm">Confirmar contraseña</label>
                 <input
+                    name="confirm_password"   
                     ref={passConfirmRef}
                     type="password" 
                     id="passwordConfirm"                   
@@ -98,7 +103,8 @@ export function Register () {
                 />
             </div>
             <div className="flex justify-center mt-3">
-                <Button type="submit" className="backgroundDarkGreen text-white">
+                <Button type="submit" className="backgroundDarkGreen text-white"
+                value="registrarse">
                 Registrarse
                 </Button>
             </div>

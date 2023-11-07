@@ -63,14 +63,13 @@ navbarRoutes.push({
 
 
 
-
 export function Menu () {
 
     return (
         <>
         <div className="backgroundWhite p-4 fixed bottom-0 left-0 w-full shadow rounded-t-lg min-h-min py-4 z-40 ">
        {/* TO DO : ARREGLAR EL ALT porque no aparece */}
-        <ul className="flex  justify-around">
+        <ul className="flex justify-around">
             {navbarRoutes.map(route => {
 
                 return (

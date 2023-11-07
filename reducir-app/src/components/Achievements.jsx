@@ -1,23 +1,28 @@
 import React from "react";
 import { Menu } from "./Menu";
 import NavbarAplication from "./NavbarAplication";
-import HorizontalCard from "./HorizontalCard";
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import { Button } from "@nextui-org/react";
-import ShareIcon from "../covers/icons/share.png";
 import { Link } from "react-router-dom";
+import Sidebar from "./Sidebar";
 
 export function Achievements () {
 
 
     return (
-    <>
-        <NavbarAplication></NavbarAplication>
-        <div className="container p-4 mx-auto">
+    <> 
+        <div className="lg:flex">
+            <template className="hidden lg:block">
+                <Sidebar />
+            </template>
+
+        <div className="flex-1">
+            <NavbarAplication></NavbarAplication>
+        <div className="container mx-auto p-4">
             <h1 className="mb-2">Logros</h1>
             <p>Tus logros realizados se encuentran acá... ¡compartilos con todos en las redes sociales!</p>
         </div>
-        <section className="backgroundDarkGreen rounded-t-lg p-4 mb-8 pb-8 mx-auto">
+        <section className="backgroundDarkGreen min-h-screen rounded-t-lg p-4 pb-8 mx-auto">
 
         <div className="mb-8 mt-4">
         <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
@@ -36,9 +41,15 @@ export function Achievements () {
         
         </div>
         </div>
-        </div>
+        </div>      
         </section>
-        <Menu></Menu>
+        
+        </div>
+        </div>
+        <div className="block lg:hidden mt-8">
+            <Menu></Menu>
+        </div>
+       
     </>
     );
 }
