@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
 import menuHamburguer from '../covers/icons/menu-green.png'
 import ReducirLogo from './ReducirLogo';
+import { useAuth } from "../context/authContext";
 
 const menuRoutes = [];
 
@@ -35,9 +36,14 @@ menuRoutes.push({
 
 
 export default function NavbarWeb() {
-
+  const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
+  const {displayName} = auth.user;
+  console.log(displayName);
+  
+  const handleLogout = () => {
+    auth.logout();
+  }
 
   return (
     <Navbar
@@ -85,9 +91,15 @@ export default function NavbarWeb() {
 
       <NavbarContent justify="end">
 
-        <NavbarItem>
-          <Button as={Link} color="warning" href="/iniciar-sesion" variant="flat">
-           Login
+      <NavbarItem>
+          <Button as={Link} 
+          color="warning" 
+          href="#" 
+          variant="flat"
+          onClick={() => handleLogout()}
+          >
+          {displayName && <span>Logout</span>} 
+          {!displayName && <span>Login</span>} 
           </Button>
         </NavbarItem>
       </NavbarContent>

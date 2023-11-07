@@ -10,6 +10,7 @@ import { Actions } from './components/Actions';
 import { Achievements } from './components/Achievements';
 import { Benefits } from './components/Benefits';
 import { Action } from './components/Action';
+import { AuthProvider } from './context/authContext';
 
 const routes = createBrowserRouter(createRoutesFromElements(
   <>
@@ -30,7 +31,9 @@ function App() {
  
   return (
     <>
-      <RouterProvider router={routes} />
+      <AuthProvider>
+        <RouterProvider router={routes} />
+      </AuthProvider>
     </>
   )
 }

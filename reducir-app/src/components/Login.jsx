@@ -1,32 +1,50 @@
 import React, { useState, useRef } from "react";
-import logo from './../covers/logo-horizontal.png';
 import { Link, useNavigate } from "react-router-dom";
 import {Button} from "@nextui-org/react";
 import  NavbarWeb  from "./NavbarWeb";
+import { useAuth } from "../context/AuthContext";
+
 
 export function Login () {
-    const [inputEmail, setInputEmail] = useState('');
-    const [inputPass, setInputPass] = useState('');
+    const auth = useAuth();
+    const {displayName} = auth.user;
+    console.log(displayName);
 
-    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    console.log(email, password, "estados de login");
 
-    const authUser = 
-    {
-        email: 'ana@io.com',
-        pass: '123',
-    };
+    const handleLogin = (e) => {
+        e.preventDefault();
+        auth.login(email, password);
+    }
+
+    const handleGoogle = (e) => {
+        e.preventDefault();
+        auth.loginWithGoogle();
+    }
+    // const [inputEmail, setInputEmail] = useState('');
+    // const [inputPass, setInputPass] = useState('');
+
+    // const navigate = useNavigate();
+
+    // const authUser = 
+    // {
+    //     email: 'ana@io.com',
+    //     pass: '123',
+    // };
     
-    const login = (event) => {
-        event.preventDefault();
+    // const login = (event) => {
+    //     event.preventDefault();
 
-        if(inputEmail === authUser.email && inputPass === authUser.pass){
-            console.log("hola");
-           navigate("/perfil");
-        }
+    //     if(inputEmail === authUser.email && inputPass === authUser.pass){
+    //         console.log("hola");
+    //        navigate("/perfil");
+    //     }
 
-        console.log(inputEmail, "pass ", inputPass);
-        // console.log(event);
-    };
+    //     console.log(inputEmail, "pass ", inputPass);
+    //     // console.log(event);
+    // };
 
    
 
@@ -40,15 +58,14 @@ export function Login () {
         </div> */}
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Iniciar sesión</h1>
-        
+        <div>{displayName && <h2>Bienvenido/a {displayName}</h2>}</div>
         <form action=""
-        onSubmit={login}>
+        onSubmit={(e)=>handleLogin(e)}
+        >
             <div className="mb-3">
                 <label className="mb-2 text-sm">Email</label>
                 <input     
-
-                    value={inputEmail}
-                    onChange={(e) => {setInputEmail(e.target.value)}}
+                    onChange={(e) => setEmail(e.target.value)}
                     type="email" 
                     id="email" 
                     placeholder="Ingresá tu email"
@@ -58,9 +75,7 @@ export function Login () {
             <div className="mb-6">
                 <label className="mb-2 text-sm">Contraseña</label>
                 <input
-
-                    value={inputPass}
-                    onChange={(e) => {setInputPass(e.target.value)}}
+                    onChange={(e) => setPassword(e.target.value)}
                     type="password" 
                     id="password"                   
                     placeholder="Ingresá tu contraseña"
@@ -72,14 +87,17 @@ export function Login () {
             </div>
         </form>
 
-            <p className="text-center mt-8">¿Aún no tenes una cuenta?</p>
+            <p className="text-center mt-8">¿Aún no tenes una cuenta?</p>  
             <div className="flex justify-center mt-3">
-           
                 <Button className="backgroundDarkGreen">
-                 <Link className="text-white" to="/registrarse">Registrarse</Link>
-                </Button>            
+                    <Link className="text-white" to="">Registrarse</Link>
+                </Button>  
             </div>
-        
+            <div className="flex justify-center mt-3">
+                <Button className="bg-white shadow" onClick={(e)=> handleGoogle(e)}>
+                    <Link className="textDarkGreen" to="">Ingresar con Google</Link>
+                </Button>  
+            </div>
         </div>
         </div>
         </>
