@@ -8,8 +8,15 @@ import { useSelector, useDispatch } from "react-redux";
 
 //esta data se va a sacar de la base de datos.
 
-export default function HorizontalCard() {
-  const [liked, setLiked] = useState(false);
+export default function HorizontalCard({
+  titleCard,
+  descriptionCard,
+  imageCard,
+  categoryCard,
+  actionId
+}
+) {
+  const [liked, setLiked] = useState(null);
   // const favorites = useSelector(selectFavoriteAction);
   const dispatch = useDispatch();
 
@@ -19,7 +26,9 @@ export default function HorizontalCard() {
     dispatch(addFavoriteAction(1));
   }
 
+  console.log(liked);
   return (
+    <>
     <Card
       isBlurred
       className="border-none backgroundWhite/90 dark:bg-default-100/50 max-w-[610px] mx-auto"
@@ -33,7 +42,7 @@ export default function HorizontalCard() {
               className="object-cover"
               height={100}
               shadow="md"
-              src={RecycleImg}
+              src={imageCard}
               width="100%"
             />
           </div>
@@ -41,10 +50,10 @@ export default function HorizontalCard() {
           <div className="flex flex-col col-span-6 md:col-span-8">
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0"> 
-                <p className="text-large font-medium mt-2">Separar la basura</p>
-                <p className="text-small text-foreground/80">Separar la basura adecuadamente es una forma importante de contribuir al cuidado del medio ambiente y al reciclaje.</p>
-                <p className="font-semibold text-foreground/90">Categoría: Reciclaje</p>
-                <Link to="/accion/:idAccion" className="font-bold">Leer más</Link>
+                <p className="text-large font-medium mt-2">{titleCard}</p>
+                <p className="text-small text-foreground/80">{descriptionCard}</p>
+                <p className="font-semibold text-foreground/90">{categoryCard}</p>
+                <Link to={actionId} className="font-bold">Leer más</Link>
               </div>
               <Button
                 isIconOnly
@@ -64,5 +73,6 @@ export default function HorizontalCard() {
       </CardBody>
       
     </Card>
+    </>
   );
 }

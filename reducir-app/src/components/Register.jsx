@@ -61,7 +61,7 @@ export function Register () {
     return (
         <>
         <NavbarWeb></NavbarWeb>
-        <div className="container p-8 mx-auto min-h-screen">
+        <div className="container p-8 mx-auto min-h-screen max-w-sm">
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Registrarse</h1>
 
@@ -118,7 +118,6 @@ export function Register () {
             </div>
             <div className="flex justify-center mt-3">
                 <Button type="submit" className="backgroundDarkGreen text-white"
-                
                 value="registrarse">
                 Registrarse
                 </Button>

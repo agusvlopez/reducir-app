@@ -1,15 +1,35 @@
 import React from "react";
+import { collection, addDoc, getDocs, getDoc } from "firebase/firestore";
 import { Menu} from "./Menu";
-import NavbarAplication from "./NavbarAplication";
-import VerticalCard from './VerticalCard';
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import {HeartIcon} from "./HeartIcon";
 import { Button } from "@nextui-org/react";
 import Sidebar from "./Sidebar";
+import NavbarWeb from "./NavbarWeb";
+import { useParams } from "react-router-dom";
+import { db } from "../firebase/firebase.config";
 
 export function Action () {
     const [liked, setLiked] = React.useState(false);
+    const idAccion = useParams().idAccion;
 
+    const collectionRef = collection(db, "actions")
+    const documentId = idAccion;
+
+    // Realizar la búsqueda
+    getDocs(collectionRef)
+    .then((doc) => {
+    if (doc.exists) {
+        console.log('Documento encontrado:', doc.data());
+    } else {
+        console.log('El documento no existe.');
+    }
+    })
+    .catch((error) => {
+    console.error('Error al buscar el documento:', error);
+    });
+
+    console.log(idAccion);
     return (
     <>
         <div className="lg:flex">
@@ -18,7 +38,7 @@ export function Action () {
             </template>
 
             <div className="flex-1">
-                <NavbarAplication></NavbarAplication>
+            <NavbarWeb></NavbarWeb>
 
                 <div className="container p-4 mx-auto">
                     <h1 className="mb-2">Acción ...</h1>

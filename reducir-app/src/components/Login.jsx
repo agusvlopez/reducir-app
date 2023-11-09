@@ -6,8 +6,10 @@ import { useAuth } from "../context/AuthContext";
 
 
 export function Login () {
+    const navigate = useNavigate();
     const auth = useAuth();
     const {displayName} = auth.user;
+    const displayEmail = auth.user.email;
     console.log(displayName);
 
     const [email, setEmail] = useState("");
@@ -15,13 +17,17 @@ export function Login () {
     console.log(email, password, "estados de login");
 
     const handleLogin = (e) => {
+        console.log(email, password);
         e.preventDefault();
-        auth.login(email, password);
+        auth.login(email, password);     
+        navigate("/perfil");
+       
     }
 
     const handleGoogle = (e) => {
         e.preventDefault();
         auth.loginWithGoogle();
+        navigate("/perfil");
     }
     // const [inputEmail, setInputEmail] = useState('');
     // const [inputPass, setInputPass] = useState('');
@@ -46,22 +52,15 @@ export function Login () {
     //     // console.log(event);
     // };
 
-   
 
     return (
         <>
         <NavbarWeb></NavbarWeb>
-        <div className="container p-8 mx-auto min-h-screen">
-
-        {/* <div className="flex justify-center w-full p-2 mb-4">
-            <img src={logo} alt="Logo de Reducir" />
-        </div> */}
+        <div className="container p-8 mx-auto min-h-screen max-w-sm">
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Iniciar sesión</h1>
-        <div>{displayName && <h2>Bienvenido/a {displayName}</h2>}</div>
-        <form action=""
-        onSubmit={(e)=>handleLogin(e)}
-        >
+        <form
+        onSubmit={(e)=>handleLogin(e)}>
             <div className="mb-3">
                 <label className="mb-2 text-sm">Email</label>
                 <input     
@@ -83,9 +82,9 @@ export function Login () {
                 />
             </div>
             <div className="flex justify-center">
-                <Button type="submit" className="bg-white textDarkGreen shadow">Ingresar</Button>
+                <Button type="submit" value="login" className="bg-white textDarkGreen shadow">Ingresar</Button>
             </div>
-        </form>
+            </form>
 
             <p className="text-center mt-8">¿Aún no tenes una cuenta?</p>  
             <div className="flex justify-center mt-3">

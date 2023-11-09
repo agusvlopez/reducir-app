@@ -36,33 +36,6 @@ navbarRoutes.push({
     icon: benefits,
 });
 
-// navbarRoutes.push({
-//     id: 1,
-//     path: '/',
-//     name: 'Home'
-// });
-
-// navbarRoutes.push({
-//     id: 2,
-//     path: '/iniciar-sesion',
-//     name: 'Iniciar sesión'
-// });
-
-// navbarRoutes.push({
-//     id: 4,
-//     path: '/registrarse',
-//     name: 'Registrarse'
-// });
-
-// navbarRoutes.push({
-//     id: 5,
-//     path: '/welcome',
-//     name: 'Bienvenida',
-    
-// });
-
-
-
 export function Menu () {
 
     return (

@@ -11,6 +11,7 @@ import { Achievements } from './components/Achievements';
 import { Benefits } from './components/Benefits';
 import { Action } from './components/Action';
 import { AuthProvider } from './context/authContext';
+import ItemListContainer from './components/ItemListContainer';
 
 const routes = createBrowserRouter(createRoutesFromElements(
   <>
@@ -22,6 +23,8 @@ const routes = createBrowserRouter(createRoutesFromElements(
   <Route path="/acciones" element={<Actions />}/>
   <Route path="/logros" element={<Achievements />}/>
   <Route path="/beneficios" element={<Benefits />}/>
+  <Route path="/acciones" element={<ItemListContainer />}/>
+  <Route path="/acciones/:categoria" element={<ItemListContainer />}/>
   <Route path="/accion/:idAccion" element={<Action />}/>
   </>
 ))

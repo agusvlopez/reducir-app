@@ -1,46 +1,62 @@
 import React, { useState } from "react";
-
 import {Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
-import menuHamburguer from '../covers/icons/menu-green.png'
 import ReducirLogo from './ReducirLogo';
 import { useAuth } from "../context/authContext";
 
 const menuRoutes = [];
 
-
 menuRoutes.push({
-    id: 1,
-    path: '/',
-    name: 'Home'
+  id: 1,
+  path: '/',
+  name: 'Home',
+  userAuthorization: false,
 });
-
-// menuRoutes.push({
-//     id: 2,
-//     path: '/iniciar-sesion',
-//     name: 'Iniciar sesión'
-// });
 
 menuRoutes.push({     
-    id: 3,    
-    path: '/registrarse',
-    name: 'Registrarse' 
+  id: 2,    
+  path: '/registrarse',
+  name: 'Registrarse',
+  userAuthorization: false,
 });
 
-// menuRoutes.push({
-//     id: 4,
-//     path: '/welcome',
-//     name: 'Bienvenida',
-    
-// });
+menuRoutes.push({
+  id: 3,
+  path: '/config',
+  name: 'Configuración de la cuenta',
+  userAuthorization: true,
+});
 
+menuRoutes.push({
+  id: 4,
+  path: '/compartir',
+  name: 'Compartir',
+  userAuthorization: true,
+});
 
+menuRoutes.push({     
+  id: 5,    
+  path: '/bienvenida',
+  name: 'Rehacer test',
+  userAuthorization: true, 
+});
+
+menuRoutes.push({     
+  id: 6,    
+  path: '/perfil',
+  name: 'Mi perfil',
+  userAuthorization: true,
+});
 
 export default function NavbarWeb() {
   const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const {displayName} = auth.user;
-  console.log(displayName);
   
+  const displayEmail = auth?.user?.email;
+  console.log(displayName);
+  console.log(displayEmail);
+  const filteredMenuRoutes = menuRoutes.filter(item => item.userAuthorization === false);
+
   const handleLogout = () => {
     auth.logout();
   }
@@ -70,52 +86,70 @@ export default function NavbarWeb() {
           <ReducirLogo />
           </Link>
         </NavbarBrand>
-        {menuRoutes.map((item) => (
+        
+        { (displayEmail) && menuRoutes.map((item) => (
         <NavbarItem key={item.id}>
           <Link color="foreground" href={item.path}>
            {item.name}
           </Link>
         </NavbarItem>
          ))}
-        {/* <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
+        { (!displayEmail) && filteredMenuRoutes.map((item) => (
+        <NavbarItem key={item.id}>
+          <Link color="foreground" href={item.path}>
+           {item.name}
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem> */}
+         ))}
+
       </NavbarContent>
 
       <NavbarContent justify="end">
 
-      <NavbarItem>
+      
+        <NavbarItem>
+          {(displayEmail) &&
           <Button as={Link} 
           color="warning" 
           href="#" 
           variant="flat"
           onClick={() => handleLogout()}
           >
-          {displayName && <span>Logout</span>} 
-          {!displayName && <span>Login</span>} 
+          Logout
           </Button>
+          }
         </NavbarItem>
+    
+       
+        <NavbarItem> 
+          {(!displayEmail) &&
+          <Button as={Link} 
+          color="warning" 
+          href="/iniciar-sesion" 
+          variant="flat"
+          >
+          Login
+          </Button>
+          }
+        </NavbarItem>
+    
       </NavbarContent>
 
       <NavbarMenu>
-        {menuRoutes.map((item) => (
-          <NavbarMenuItem key={item.id}>
-            <Link
-              className="w-full textDarkGreen"
-              href={item.path}
-              size="lg"
-            >
-              {item.name}
-            </Link>
+        { (displayEmail) && menuRoutes.map((item) => (
+        <NavbarMenuItem key={item.id}>
+          <Link color="foreground" href={item.path}>
+           {item.name}
+          </Link>
           </NavbarMenuItem>
-        ))}
+         ))}
+        { (!displayEmail) && filteredMenuRoutes.map((item) => (
+        <NavbarMenuItem key={item.id}>
+          <Link color="foreground" href={item.path}>
+           {item.name}
+          </Link>
+        </NavbarMenuItem>
+         ))}
       </NavbarMenu>
     </Navbar>
   );

@@ -1,11 +1,11 @@
 import React from "react";
 import { Menu } from "./Menu";
-import NavbarAplication from "./NavbarAplication";
 import VerticalCard from "./VerticalCard";
 import Meraki from '../covers/benefits/meraki.jpg';
 import { Link } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 import Sidebar from "./Sidebar";
+import NavbarWeb from "./NavbarWeb";
 
 export function Benefits () {
 
@@ -19,7 +19,7 @@ export function Benefits () {
             </template>
 
         <div className="flex-1">
-        <NavbarAplication></NavbarAplication>
+        <NavbarWeb></NavbarWeb>
         <div className="container mx-auto p-4">
             <h1 className="mb-2">Beneficios</h1>
             <p>Acá encontrarás según tu ubicación los beneficios que podes canjear gracias a las acciones realizadas que compartiste.</p>

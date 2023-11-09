@@ -1,7 +1,7 @@
 import React from "react";
 import logo from './../covers/logo-horizontal.png';
 import { Link, useNavigate } from "react-router-dom";
-import {Button} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 
 export function Welcome () {
 

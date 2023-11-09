@@ -1,10 +1,10 @@
 import React from "react";
 import { Menu } from "./Menu";
-import NavbarAplication from "./NavbarAplication";
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import { Button } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import NavbarWeb from "./NavbarWeb";
 
 export function Achievements () {
 
@@ -17,7 +17,7 @@ export function Achievements () {
             </template>
 
         <div className="flex-1">
-            <NavbarAplication></NavbarAplication>
+        <NavbarWeb></NavbarWeb>
         <div className="container mx-auto p-4">
             <h1 className="mb-2">Logros</h1>
             <p>Tus logros realizados se encuentran acá... ¡compartilos con todos en las redes sociales!</p>
