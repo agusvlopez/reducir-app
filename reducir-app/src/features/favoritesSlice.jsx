@@ -79,6 +79,7 @@ export const favoriteActionSlice = createSlice({
             if (docSnapshot.exists()) {
               // Si el documento existe, accede al campo deseado
               const favoritesArray = docSnapshot.data()["favorites"];
+
               favoritesArray.forEach(objeto => {
                 // Realizar operaciones en cada objeto del array
                 console.log("Valor específico dentro de favorites:", objeto["actionId"]);
@@ -88,8 +89,11 @@ export const favoriteActionSlice = createSlice({
                     "favorites": arrayRemove({...action.payload}), 
                   });
                   return [...state, action.payload]
+                }else{
+                  console.log("este es un else");
                 }
               });
+
               console.log(favoritesArray);
               const docRef = updateDoc(usersRef,{ 
                 "favorites": arrayUnion({...action.payload}), 

@@ -31,7 +31,7 @@ export default function HorizontalCard({
   // const [newMessage, setNewMessage] = ("");
   // const [messagesLoading, setMessagesLoading] = (true);
   // const [messages, setMessages] = useState([]);
-   const [liked, setLiked] = useState({});
+   const [liked, setLiked] = useState(false);
   // // const [userLoading, setUserLoading] = useState(true);
   // const [users, setUsers] = useState([]);
   // const [user, setUser] = useState({});
@@ -43,8 +43,8 @@ export default function HorizontalCard({
   let userId = auth.user.uid;
   console.log(userId);
 
-
-  const handleFavorite = async () => {
+  
+  const handleFavorite = () => {
     setLiked((v) => !v);
 
     // addToFavorites(setUser((newUser) => user = newUser ));
@@ -53,6 +53,7 @@ export default function HorizontalCard({
     //   userId: userId,
     // },
     // (newMessages) => this.messages = newMessages);
+   
 
     dispatch(addFavoriteAction({
       titleCard,
@@ -64,13 +65,6 @@ export default function HorizontalCard({
     }));
   
   
-    
-    //   category: categoryCard,
-    //   description: descriptionCard,
-    //   image: imageCard,
-    //   title: titleCard,
-    //   userId: userId
-    // }));
   }
 
   console.log(liked);

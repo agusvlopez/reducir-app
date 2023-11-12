@@ -10,7 +10,7 @@ export function Register () {
 
     const [emailRegister, setEmailRegister] = useState("");
     const [passwordRegister, setPasswordRegister] = useState("");
-    const [favorites, setFavorites] = useState("");
+    const [favorites, setFavorites] = useState([]);
     //console.log(emailRegister, passwordRegister, "Estados del formulario en registro");
 
     const handleRegister = (e) => {
