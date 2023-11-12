@@ -10,53 +10,15 @@ export function Register () {
 
     const [emailRegister, setEmailRegister] = useState("");
     const [passwordRegister, setPasswordRegister] = useState("");
+    const [favorites, setFavorites] = useState("");
     //console.log(emailRegister, passwordRegister, "Estados del formulario en registro");
 
     const handleRegister = (e) => {
         e.preventDefault();
-        auth.register(emailRegister, passwordRegister);
+        auth.register(emailRegister, passwordRegister, favorites);
 
     }
-
-    // const nameRef = useRef();
-    // const emailRef = useRef();
-    // const passRef = useRef();
-    // const passConfirmRef = useRef();
-
-    // const navigate = useNavigate();
-    // const users = [];
-
-    // const register = (event) => {
-    //     event.preventDefault();
-
-        // const inputName = nameRef.current.value;
-        // const inputEmail = emailRef.current.value;
-        // const inputPass = passRef.current.value;
-        // const inputConfirmPass = passConfirmRef.current.value;
-
-        // if(inputPass != inputConfirmPass){
-        //     navigate("/registrarse");
-        //     //aca deberia aparecer un alert de error para avisarle al usuario
-        //     return console.log("error, las contraseñas no coinciden.");
-        // }else{
-        //     console.log("hola");
-        //     let newUser = {
-        //         name: inputName,
-        //         email: inputEmail,
-        //         pass: inputPass
-        //     }
-
-        //     users.push(newUser);
-        //     console.log(users);
-        //     navigate("/bienvenida");
-    
-        //     console.log(emailRef.current.value);
-        //     console.log(inputEmail, "pass ", inputPass);
-        //     console.log(event);
-        // }
-    // };
-
-   
+  
 
     return (
         <>

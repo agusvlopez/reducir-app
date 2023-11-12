@@ -3,8 +3,15 @@ import {Card, CardBody, Image, Button} from "@nextui-org/react";
 import {HeartIcon} from "./HeartIcon";
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import { Link } from "react-router-dom";
-import { selectFavoriteAction, addFavoriteAction } from "../features/favoritesSlice";
+import { selectFavoriteAction, addFavoriteAction, addDocument, deleteFavoriteAction } from "../features/favoritesSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { getAuth } from "firebase/auth";
+import { useAuth } from "../context/authContext";
+import { useFavContext } from "../context/FavsContext";
+import { data } from "autoprefixer";
+import { db } from "../firebase/firebase.config";
+import { collection, getDocs, limit, query, where } from "firebase/firestore";
+import { addToFavorites, subscribeToUser } from "../services/users";
 
 //esta data se va a sacar de la base de datos.
 
@@ -16,14 +23,54 @@ export default function HorizontalCard({
   actionId
 }
 ) {
-  const [liked, setLiked] = useState(null);
-  // const favorites = useSelector(selectFavoriteAction);
-  const dispatch = useDispatch();
+//   newMessage: {
+//     message: '',
+// },
+// messagesLoading: true,
+// messages: [],
+  // const [newMessage, setNewMessage] = ("");
+  // const [messagesLoading, setMessagesLoading] = (true);
+  // const [messages, setMessages] = useState([]);
+   const [liked, setLiked] = useState({});
+  // // const [userLoading, setUserLoading] = useState(true);
+  // const [users, setUsers] = useState([]);
+  // const [user, setUser] = useState({});
 
-  const handleFavorite = () => {
+  // const favorites = useSelector(selectFavoriteAction);
+
+  const dispatch = useDispatch();
+  const auth = useAuth();
+  let userId = auth.user.uid;
+  console.log(userId);
+
+
+  const handleFavorite = async () => {
     setLiked((v) => !v);
 
-    dispatch(addFavoriteAction(1));
+    // addToFavorites(setUser((newUser) => user = newUser ));
+    
+    // await subscribeToUser({
+    //   userId: userId,
+    // },
+    // (newMessages) => this.messages = newMessages);
+
+    dispatch(addFavoriteAction({
+      titleCard,
+      descriptionCard,
+      imageCard,
+      categoryCard,
+      actionId,
+      userId
+    }));
+  
+  
+    
+    //   category: categoryCard,
+    //   description: descriptionCard,
+    //   image: imageCard,
+    //   title: titleCard,
+    //   userId: userId
+    // }));
   }
 
   console.log(liked);
@@ -53,7 +100,7 @@ export default function HorizontalCard({
                 <p className="text-large font-medium mt-2">{titleCard}</p>
                 <p className="text-small text-foreground/80">{descriptionCard}</p>
                 <p className="font-semibold text-foreground/90">{categoryCard}</p>
-                <Link to={actionId} className="font-bold">Leer más</Link>
+                <Link to={`/accion/${actionId}`} className="font-bold">Leer más</Link>
               </div>
               <Button
                 isIconOnly

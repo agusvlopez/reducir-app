@@ -4,11 +4,13 @@ import React, {useState, useEffect} from "react";
 import {auth} from "../firebase/firebase.config";
 import { createContext, useContext } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { createUserProfile } from "../services/user";
 
 export const authContext = createContext();
 
 export const useAuth = () => {
     const context = useContext(authContext);
+    
     if(!context){
         console.log("error creating auth context");
     }
@@ -30,9 +32,24 @@ export function AuthProvider({children}) {
         return () => suscribed()
     }, []);
 
-    const register = async (email, password) => {
-        const response = await createUserWithEmailAndPassword(auth, email, password);
-        console.log(response);
+    const register = async (email, password, favorites) => {
+          try {
+            const response = await createUserWithEmailAndPassword(auth, email, password);
+
+            createUserProfile(response.user.uid, {email, favorites});
+            console.log(response);
+
+             return {
+                 id: response.user.uid,
+                 email: response.user.email,
+                 favorites: favorites,
+             }  
+         } catch (error) {
+             return {
+                 code: error.code,
+                 message: error.message,
+             }
+         }
     }
 
     const login = async (email, password) => {

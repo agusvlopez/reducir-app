@@ -9,11 +9,12 @@ import { useAuth } from "../context/authContext.jsx";
 
 export function Profile () {
     const auth = useAuth();
+    console.log(auth.user.uid);
     const displayEmail = auth.user.email;
-
+    
     return (
         <>
-        <div className="lg:flex">
+        <div className="lg:flex container">
             <template className="hidden lg:block">
                 <Sidebar />
             </template>

@@ -10,6 +10,7 @@ menuRoutes.push({
   path: '/',
   name: 'Home',
   userAuthorization: false,
+  userLogged: true,
 });
 
 menuRoutes.push({     
@@ -17,45 +18,42 @@ menuRoutes.push({
   path: '/registrarse',
   name: 'Registrarse',
   userAuthorization: false,
+  userLogged: false,
+
 });
 
 menuRoutes.push({
   id: 3,
   path: '/config',
-  name: 'Configuración de la cuenta',
+  name: 'Configuración',
   userAuthorization: true,
+  userLogged: true,
 });
 
-menuRoutes.push({
-  id: 4,
-  path: '/compartir',
-  name: 'Compartir',
-  userAuthorization: true,
+
+menuRoutes.push({     
+  id: 4,    
+  path: '/bienvenida',
+  name: 'Rehacer test',
+  userAuthorization: true, 
+  userLogged: true,
 });
 
 menuRoutes.push({     
   id: 5,    
-  path: '/bienvenida',
-  name: 'Rehacer test',
-  userAuthorization: true, 
-});
-
-menuRoutes.push({     
-  id: 6,    
   path: '/perfil',
   name: 'Mi perfil',
   userAuthorization: true,
+  userLogged: false,
 });
 
 export default function NavbarWeb() {
   const auth = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const {displayName} = auth.user;
-  
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const displayEmail = auth?.user?.email;
-  console.log(displayName);
   console.log(displayEmail);
   const filteredMenuRoutes = menuRoutes.filter(item => item.userAuthorization === false);
+  const userMenuRoutes = menuRoutes.filter(item => item.userLogged === true);
 
   const handleLogout = () => {
     auth.logout();
@@ -87,7 +85,7 @@ export default function NavbarWeb() {
           </Link>
         </NavbarBrand>
         
-        { (displayEmail) && menuRoutes.map((item) => (
+        { (displayEmail) && userMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
           <Link color="foreground" href={item.path}>
            {item.name}
@@ -109,14 +107,23 @@ export default function NavbarWeb() {
       
         <NavbarItem>
           {(displayEmail) &&
-          <Button as={Link} 
-          color="warning" 
-          href="#" 
-          variant="flat"
-          onClick={() => handleLogout()}
-          >
-          Logout
-          </Button>
+          <div>
+            <Button as={Link} 
+            href="/perfil" 
+            variant="flat"
+            className="backgroundDarkGreen text-white mr-2 rounded-full hover:text-white"
+            >
+            App
+            </Button>
+            <Button as={Link} 
+            color="warning" 
+            href="#" 
+            variant="flat"
+            onClick={() => handleLogout()}
+            >
+            Logout
+            </Button>
+          </div>
           }
         </NavbarItem>
     
@@ -136,7 +143,7 @@ export default function NavbarWeb() {
       </NavbarContent>
 
       <NavbarMenu>
-        { (displayEmail) && menuRoutes.map((item) => (
+        { (displayEmail) && userMenuRoutes.map((item) => (
         <NavbarMenuItem key={item.id}>
           <Link color="foreground" href={item.path}>
            {item.name}

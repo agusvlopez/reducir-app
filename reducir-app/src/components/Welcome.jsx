@@ -25,7 +25,7 @@ export function Welcome () {
 
             <div className="flex justify-center mt-4">
                 <Button className="backgroundDarkGreen text-white w-full flex justify-between items-center">
-                Iniciar test <span className="arrowRight ml-6"></span>
+                <Link to="/test"> Iniciar test <span className="arrowRight ml-6"></span></Link>
                 </Button>
             </div>
         </div>

@@ -20,20 +20,19 @@ const ItemListContainer = () => {
         const q = category ? query(actionsRef, where("category", "==", category)) : actionsRef;
         getDocs(q)
         .then((res) => {
-            console.log(res.docs[0].data());
+            console.log(res.docs[0]?.data());
 
             setActions(
                 res.docs.map((doc) => {
-                    return {...doc.data(), id: doc.id }
+                    return {...doc?.data(), id: doc.id }
                 })
             );
         });
-    }, [])
+    }, [category])
 
     return (
-        <>
-        
-        <section className="backgroundDarkGreen min-h-screen rounded-t-lg p-2 pb-8 mx-auto">
+        <>   
+        <section className="backgroundDarkGreen min-h-screen rounded-t-lg p-2 pb-8 mx-auto container">
             <div className="flex gap-2 pt-4 pb-4 container mx-auto justify-center">
                 <Link to="/acciones">
                     <Chip size="md"  className="cursor-pointer">Todas</Chip>
@@ -52,18 +51,15 @@ const ItemListContainer = () => {
             {actions.map((action) => (
             <HorizontalCard
                 key={action.id}
-              titleCard={action.title}
-              descriptionCard={action.description}
-              imageCard={action.image}
-              categoryCard={action.category}
-              actionId={action.id}
-            />
-                
-            
+                titleCard={action.title}
+                descriptionCard={action.description}
+                imageCard={action.image}
+                categoryCard={action.category}
+                actionId={action.id}
+            />               
             ))}
             </div>
-        </section>  
-        
+        </section>       
         </>
     )
 }

@@ -14,8 +14,7 @@ export function Action () {
     const idAccion = useParams().idAccion;
 
     const collectionRef = collection(db, "actions")
-    const documentId = idAccion;
-
+    
     // Realizar la búsqueda
     getDocs(collectionRef)
     .then((doc) => {
@@ -42,7 +41,6 @@ export function Action () {
 
                 <div className="container p-4 mx-auto">
                     <h1 className="mb-2">Acción ...</h1>
-                    <p>Acá va la descripción de la acción.</p>
                 </div>
                 
                 <section className="backgroundDarkGreen min-h-screen rounded-t-lg p-4 pb-8 mx-auto">
@@ -51,8 +49,7 @@ export function Action () {
                     <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
                     <img src={RecycleImg} alt="" className="max-h-72 rounded-lg" />    
                     <div>
-                        <h2>Separar la basura</h2>
-                        <small>Categoría: Reciclaje</small>
+                        <p><span className="font-bold">Categoría:</span> Reciclaje</p>
                         <p>Separar la basura adecuadamente es una forma importante de contribuir al cuidado del medio ambiente y al reciclaje.Conoce las categorías de reciclaje: Aprende qué materiales son reciclables en tu área y cómo se deben separar. Por lo general, se pueden clasificar en papel y cartón, vidrio, plástico, metal y residuos orgánicos.
 
                         Contenedores de reciclaje: Utiliza contenedores de reciclaje para separar los materiales reciclables de los residuos no reciclables. Asegúrate de que estén claramente etiquetados y ubicados en lugares convenientes en tu hogar.</p>
