@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {Button} from "@nextui-org/react";
 import  NavbarWeb  from "./NavbarWeb";
 import { useAuth } from "../context/AuthContext";
-
+import warningIcon from "../covers/icons/warning-icon.png";
 
 export function Login () {
     const navigate = useNavigate();
@@ -14,13 +14,27 @@ export function Login () {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [validationMessage, setValidationMessage] = useState("");
+
     console.log(email, password, "estados de login");
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         console.log(email, password);
         e.preventDefault();
-        auth.login(email, password);     
-        navigate("/perfil");
+
+        if (!email || !password) {
+            setValidationMessage("Todos los campos son obligatorios.");
+            return;
+        }
+
+        try {
+            // Intenta realizar el inicio de sesión
+            await auth.login(email, password);
+            navigate("/perfil");
+        } catch (error) {
+            // Maneja errores de inicio de sesión aquí
+            setValidationMessage("Error al iniciar sesión. Verifica tus credenciales.");
+        }
        
     }
 
@@ -59,6 +73,14 @@ export function Login () {
         <div className="container p-8 mx-auto min-h-screen max-w-sm">
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Iniciar sesión</h1>
+
+        {validationMessage && (
+                        <div className="mb-4 flex items-center justify-center text-red-500">
+                            <img src={warningIcon} className="mr-2 w-8 h-8" />
+                            <span>{validationMessage}</span>
+                        </div>
+                    )}
+
         <form
         onSubmit={(e)=>handleLogin(e)}>
             <div className="mb-3">
@@ -89,7 +111,7 @@ export function Login () {
             <p className="text-center mt-8">¿Aún no tenes una cuenta?</p>  
             <div className="flex justify-center mt-3">
                 <Button className="backgroundDarkGreen">
-                    <Link className="text-white" to="">Registrarse</Link>
+                    <Link className="text-white hover:text-white" to="/registrarse">Registrarse</Link>
                 </Button>  
             </div>
             <div className="flex justify-center mt-3">

@@ -111,7 +111,9 @@ export default function NavbarWeb() {
             <Button as={Link} 
             href="/perfil" 
             variant="flat"
-            className="backgroundDarkGreen text-white mr-2 rounded-full hover:text-white"
+            radius="full"
+            size="sm"
+            className="backgroundDarkGreen text-white mr-2 text-sm hover:text-white"
             >
             App
             </Button>
@@ -119,6 +121,7 @@ export default function NavbarWeb() {
             color="warning" 
             href="#" 
             variant="flat"
+            className="text-sm"
             onClick={() => handleLogout()}
             >
             Logout
@@ -134,6 +137,7 @@ export default function NavbarWeb() {
           color="warning" 
           href="/iniciar-sesion" 
           variant="flat"
+          className="text-sm"
           >
           Login
           </Button>

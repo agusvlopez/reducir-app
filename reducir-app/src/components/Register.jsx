@@ -1,21 +1,46 @@
 import React, { useState, useRef } from "react";
-import logo from './../covers/logo-horizontal.png';
-import { useNavigate } from "react-router-dom";
+import warningIcon from './../covers/icons/warning-icon.png';
+import { Navigate, useNavigate } from "react-router-dom";
 import {Button} from "@nextui-org/react";
 import  NavbarWeb  from "./NavbarWeb";
 import {useAuth} from "../context/AuthContext";
 
+
 export function Register () {
     const auth = useAuth();
+    const navigate = useNavigate();
 
     const [emailRegister, setEmailRegister] = useState("");
     const [passwordRegister, setPasswordRegister] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
     const [favorites, setFavorites] = useState([]);
+    const [validationMessage, setValidationMessage] = useState("");
     //console.log(emailRegister, passwordRegister, "Estados del formulario en registro");
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
-        auth.register(emailRegister, passwordRegister, favorites);
+        if (!emailRegister || !passwordRegister || !passwordConfirm) {
+            setValidationMessage("Todos los campos son obligatorios.");
+            return;
+        }
+
+        if (passwordRegister !== passwordConfirm) {
+            setValidationMessage("Las contraseñas no coinciden.");
+            return;
+        }
+        if (passwordRegister.length < 6 || passwordConfirm < 6) {
+            setValidationMessage("La contraseña debe tener como mínimo 6 caracteres.");
+            return;
+        }
+
+        try {
+            // Tu lógica de registro aquí...
+            await auth.register(emailRegister, passwordRegister, favorites);
+            navigate("/perfil");
+        } catch (error) {
+            setValidationMessage("Error al registrar. Inténtalo de nuevo.");
+        }
+        // auth.register(emailRegister, passwordRegister, favorites);
 
     }
   
@@ -26,6 +51,13 @@ export function Register () {
         <div className="container p-8 mx-auto min-h-screen max-w-sm">
         <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
         <h1 className="text-2xl mt-2 mb-2 text-center">Registrarse</h1>
+
+        {validationMessage && (
+                <div className="mb-4 mt-4 flex items-center justify-center text-red-500">
+                    <img src={warningIcon} className="mr-2 w-8 h-8" />
+                    <span><span className="font-bold">¡Atención!</span> {validationMessage}</span>
+                </div>
+            )}
 
         <form action=""
         method=""
@@ -71,7 +103,7 @@ export function Register () {
                 <label className="mb-2 text-sm">Confirmar contraseña</label>
                 <input
                     name="confirm_password"   
-                    // ref={passConfirmRef}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
                     type="password" 
                     id="passwordConfirm"                   
                     placeholder="Confirmá tu contraseña"
