@@ -43,3 +43,4 @@ export async function createUserProfile(id, data) {
 // };
 
 // Llama a la función cuando tu aplicación se inicie
+

@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, limit, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
 
 //cache
@@ -10,22 +10,57 @@ const refUsers = collection(db, 'users');
 * @param {senderId: string, receiverId: string, message: string} data
 * @returns {Promise} 
 */
-export async function addToFavorites({userId, action}) {
-    
-    const userDoc = await getUser({userId});
-    
-    //Creo la referencia a la collection de messages.
-    const favoritesRef = collection(db, `users/${userDoc.id}/favorites`);
-
-    await addDoc(favoritesRef,{
-        userId,
-        action,
-        created_at: serverTimestamp(),
-    });
-
-    return true;
-
-}
+export async function addToFavorites({
+    titleCard,
+    descriptionCard,
+    imageCard,
+    categoryCard,
+    actionId,
+    userId, }) {
+    try {
+    //   // Verifica si userId y action están definidos
+    //   if (!userId || !action) {
+    //     throw new Error("userId y action son campos requeridos");
+    //   }
+  
+      // Obtiene el documento del usuario
+      const userRef = doc(db, `users/${userId}`);
+      const userDoc = await getDoc(userRef);
+  
+      if (!userDoc.exists()) {
+        throw new Error(`No se encontró el usuario con ID ${userId}`);
+      }
+  
+      // Obtiene el array "favorites" del documento del usuario
+      const favoritesArray = userDoc.data().favorites || [];
+  
+      // Verifica si la acción ya está en la lista de favoritos
+      const isActionInFavorites = favoritesArray.some(
+        (objeto) => objeto.actionId === actionId
+      );
+  
+      // Actualiza la lista de favoritos
+      const updatedFavorites = isActionInFavorites
+        ? favoritesArray.filter((objeto) => objeto.actionId !== actionId)
+        : {...favoritesArray,titleCard,
+            descriptionCard,
+            imageCard,
+            categoryCard,
+            actionId,
+            userId};
+  
+      // Actualiza el campo "favorites" en el documento del usuario
+      await updateDoc(userRef, {
+        favorites: updatedFavorites,
+      });
+  
+      return updatedFavorites;
+    } catch (error) {
+      console.error("Error al agregar el favorito:", error);
+      throw error; // Re-lanza el error para que pueda ser manejado en el componente
+    }
+  }
+  
 
 /**
  * 

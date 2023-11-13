@@ -1,143 +1,100 @@
 // Importa Firebase Firestore y tu instancia de Firestore
 import { collection, addDoc, getDocs, query, where, limit, deleteDoc, doc, updateDoc, getDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useAuth } from "../context/authContext";
 
-// export async function getPrivateChatDoc({senderId, receiverId}){
-    
+// Crear el thunk asincrónico
+export const addFavorite = createAsyncThunk("favoriteAction/addFavorite", async (payload) => {
+  const usersRef = doc(db, `users/${payload.userId}`);
+  const docSnapshot = await getDoc(usersRef);
 
-//   const favoritesRef = collection(db, 'favorites');
-//   let favoriteDoc;
+  if (docSnapshot.exists()) {
+    const favoritesArray = docSnapshot.data()["favorites"];
+    const isActionInFavorites = favoritesArray.some((objeto) => objeto.actionId === payload.actionId);
 
-//   const snapshot = await getDocs( 
-//       query(privateChatRef,
-//       where('users', '==', {
-//           [senderId]: true,
-//           [receiverId]: true,
-//       }),
-//       //cuando encuentra un documento con esos valores deje de buscar:
-//       limit(1),
-//    ));
+    const updatedFavorites = isActionInFavorites
+      ? favoritesArray.filter((objeto) => objeto.actionId !== payload.actionId)
+      : [...favoritesArray, payload];
 
-//   if(snapshot.empty){
-//       //Creo el documento para el chat privado
-//       privateChatDoc = await addDoc(privateChatRef, {
-//       users: {
-//            [senderId]: true,
-//            [receiverId]: true,
-//        }
-//    });
-//   }else{
-//       privateChatDoc = snapshot.docs[0];
+    await updateDoc(usersRef, {
+      "favorites": updatedFavorites,
+    });
 
-//   }
-
-//   console.log("Busco el documento");
-//   const privateChatRef = collection(db, 'private-chats');
-//   let privateChatDoc;
-
-//   const snapshot = await getDocs( 
-//       query(privateChatRef,
-//       where('users', '==', {
-//           [senderId]: true,
-//           [receiverId]: true,
-//       }),
-//       //cuando encuentra un documento con esos valores deje de buscar:
-//       limit(1),
-//    ));
-
-//   if(snapshot.empty){
-//       //Creo el documento para el chat privado
-//       privateChatDoc = await addDoc(privateChatRef, {
-//       users: {
-//            [senderId]: true,
-//            [receiverId]: true,
-//        }
-//    });
-//   }else{
-//       privateChatDoc = snapshot.docs[0];
-
-//   }
-//   addToCache({senderId, receiverId}, privateChatDoc);
-//    return privateChatDoc;
-// }
+    return updatedFavorites;
+  }
+});
 
 export const favoriteActionSlice = createSlice({
     name: "favoriteAction",
-    initialState: [],
+    initialState: {
+      favorites: [],
+      isLoading: true
+    },
     reducers: {
 
-        addFavoriteAction: async (state, action) => {
-          // const usersRef = collection(db, `users/${action.payload.userId}`);
-          const usersRef = doc(db, `users/${action.payload.userId}`);
+      // addFavoriteAction: async (state, action) => {
+      //   const usersRef = doc(db, `users/${action.payload.userId}`);
 
-          try {
-            // Utiliza getDoc para obtener el documento
-            const docSnapshot = await getDoc(usersRef);
-        
-            if (docSnapshot.exists()) {
-              // Si el documento existe, accede al campo deseado
-              const favoritesArray = docSnapshot.data()["favorites"];
+      //   // Utiliza getDoc para obtener el documento
+      //   const docSnapshot = await getDoc(usersRef);
+  
+      //   if (docSnapshot.exists()) {
+      //     // Si el documento existe, accede al campo deseado
+      //     const favoritesArray = docSnapshot.data()["favorites"];
+  
+      //     // Verifica si la acción ya está en la lista de favoritos
+      //     const isActionInFavorites = favoritesArray.some(
+      //       (objeto) => objeto.actionId === action.payload.actionId
+      //     );
+  
+      //     // Actualiza la lista de favoritos
+      //     const updatedFavorites = isActionInFavorites
+      //       ? favoritesArray.filter(
+      //           (objeto) => objeto.actionId !== action.payload.actionId
+      //         )
+      //       : [...favoritesArray, action.payload];
+  
+      //     const docRef = await updateDoc(usersRef, {
+      //       "favorites": updatedFavorites,
+      //     });
+  
+      //     state.favorites = updatedFavorites;
+      //     console.log(updatedFavorites);
+      //     return updatedFavorites;
+      //   }
+      // },
 
-              favoritesArray.forEach(objeto => {
-                // Realizar operaciones en cada objeto del array
-                console.log("Valor específico dentro de favorites:", objeto["actionId"]);
-                if(objeto["actionId"] === action.payload.actionId){
-                  console.log("Es igual!!!!!!!");
-                  const docRef = updateDoc(usersRef,{ 
-                    "favorites": arrayRemove({...action.payload}), 
-                  });
-                  return [...state, action.payload]
-                }else{
-                  console.log("este es un else");
-                }
-              });
+      setFavorites: (state, action) => {
+        state.favorites = action.payload;
+        state.isLoading = false; // Marcar como no está cargando después de obtener los datos
+      },
 
-              console.log(favoritesArray);
-              const docRef = updateDoc(usersRef,{ 
-                "favorites": arrayUnion({...action.payload}), 
-              });
-              // const docRef = addDoc(collection(db, `favorites/${docRef.id}/actions`), action.payload)
-                     
-                console.log(await docRef)
-    
-                return [...state, action.payload]
-              
-            } else{
-              // El documento no existe
-              console.log("El documento no existe");
-              
-              return null;
-            }
-          } catch (error) {
-            console.error("Error al obtener el documento:", error);
-            throw error;
-          }
+      setLoading: (state, action) => {
+        state.isLoading = action.payload;
+      },
 
-
-            //tambien guardar en bbdd
-        },
-
-        deleteFavoriteAction: (state, action) => {
-          const usersRef = collection(db, 'users');
-          const docRef = doc(usersRef, action.payload);
-
-        
-            deleteDoc(docRef);
-            // Actualizar el estado aquí si es necesario
-            // ...
-
-
-         return [...state, action.payload]
-        
-    }
+      extraReducers: (builder) => {
+        builder        
+        .addCase(addFavorite.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(addFavorite.fulfilled, (state, action) => {
+          state.favorites = action.payload;
+          state.isLoading = false;
+        })
+        .addCase(addFavorite.rejected, (state) => {
+          state.isLoading = false;
+        });
+      },
+      
   }
 });  
 
-export const selectFavoriteAction = (state) => state.favoriteAction;
+export const selectFavoriteAction = (state) => state.favoriteAction.favorites;
+export const selectLoading = (state) => state.favoriteAction.isLoading;
 export const {addFavoriteAction} = favoriteActionSlice.actions;
-export const {deleteFavoriteAction} = favoriteActionSlice.actions;
+export const {setFavorites, setLoading} = favoriteActionSlice.actions;
 export default favoriteActionSlice.reducer;
 
 export const { addDocument } = favoriteActionSlice.actions;

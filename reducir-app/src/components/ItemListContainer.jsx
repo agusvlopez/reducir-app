@@ -3,12 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
 import HorizontalCard from "./HorizontalCard";
-import { Chip } from "@nextui-org/react";
+import { Chip, Spinner } from "@nextui-org/react";
 
 const ItemListContainer = () => {
 
     const [actions, setActions] = useState([]);
     // const [title, setTitle] = useState("Actions");
+    const [loading, setLoading] = useState(true); // Nuevo estado para controlar la carga
 
     const category = useParams().categoria;
 
@@ -27,8 +28,10 @@ const ItemListContainer = () => {
                     return {...doc?.data(), id: doc.id }
                 })
             );
+            setLoading(false); // Cuando los datos se cargan, actualiza el estado de carga
         });
     }, [category])
+
 
     return (
         <>   
@@ -48,6 +51,11 @@ const ItemListContainer = () => {
                 </Link>
             </div>  
             <div className="mb-8 mt-4">
+            {loading &&
+                <div className="flex justify-center">
+                    <Spinner color="default" />
+                </div>
+            }
             {actions.map((action) => (
             <HorizontalCard
                 key={action.id}

@@ -1,17 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Menu } from './Menu.jsx'; 
 import userImg from './../covers/user.png';
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import NavbarWeb from "./NavbarWeb.jsx";
 import { useAuth } from "../context/authContext.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite, selectFavoriteAction, selectLoading, setFavorites, setLoading } from "../features/favoritesSlice.jsx";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/firebase.config.js";
+
 
 export function Profile () {
+    const dispatch = useDispatch();
     const auth = useAuth();
     console.log(auth.user.uid);
+    const userId = auth.user.uid;
     const displayEmail = auth.user.email;
+
+    const favorites = useSelector(selectFavoriteAction);
+    const loading = useSelector(selectLoading);
+
+    useEffect(() => {
+        dispatch(setLoading(true));
     
+        console.log("Entre al useEffect del HorizontalCard");
+    
+        const userRef = doc(db, `users/${userId}`);
+      
+        // Utiliza onSnapshot para suscribirte al documento del usuario
+        const unsubscribeUser = onSnapshot(userRef, (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            // Si el documento existe, accede al campo deseado (en este caso, "favorites")
+            const favorites = docSnapshot.data()["favorites"] || [];
+            dispatch(setFavorites(favorites));
+            dispatch(setLoading(false));
+          }      
+        });
+    
+        return () => {
+          // Desuscribirse cuando el componente se desmonte
+          unsubscribeUser();
+        };
+      }, [userId, dispatch]);
+      
+    console.log(favorites);
+
     return (
         <>
         <div className="lg:flex container">
@@ -32,11 +67,25 @@ export function Profile () {
                     </div>
                     <div className="mb-4">
                         <h2 className="text-lg font-semibold p-2">Mis acciones en proceso</h2>
-                        <div>
-                            <ul className="flex h-32">
-                                <div className="p-2 m-1 backgroundOrange text-white rounded-md shadow-md">Acción 1</div>
-                                <div className="p-2 m-1 backgroundOrange text-white rounded-md shadow-md">Accion 2</div>
+                       
+                        <div> {loading ? 
+                            <div className="flex justify-center">
+                                <Spinner color="success" />
+                            </div>
+                            :
+                            <ul className="flex min-h-32">
+                            {favorites?.map((fav => 
+                                <div key={fav.actionId}
+                                className="backgroundDarkGreen rounded-lg p-4 shadow-xl flex flex-col lg:flex-row  items-center ">
+                                <img src={fav.imageCard} alt="" className="w-32 h-32 rounded-lg" />
+                                <div className="p-2 m-1 text-white">
+                                    <h3 className="text-xl mb-2">{fav.titleCard}</h3>
+                                    <p className="text-base">CO2: - 100kg</p>
+                                </div>
+                                </div>
+                            ))}
                             </ul>
+                        }
                         </div>
                         <div className="flex justify-center mt-6 mb-8">
                         <Link to="/acciones">
