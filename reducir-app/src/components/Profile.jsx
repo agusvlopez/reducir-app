@@ -81,6 +81,9 @@ export function Profile () {
                                 <div className="p-2 m-1 text-white">
                                     <h3 className="text-xl mb-2">{fav.titleCard}</h3>
                                     <p className="text-base">CO2: - 100kg</p>
+                                    <div className="flex justify-end mt-4">
+                                        <Link to={`/accion/${fav.actionId}`} className="font-bold text-white hover:textWhite">Ver detalles</Link>
+                                    </div>
                                 </div>
                                 </div>
                             ))}

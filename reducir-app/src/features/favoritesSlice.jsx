@@ -67,7 +67,7 @@ export const favoriteActionSlice = createSlice({
 
       setFavorites: (state, action) => {
         state.favorites = action.payload;
-        state.isLoading = false; // Marcar como no está cargando después de obtener los datos
+        state.isLoading = false; 
       },
 
       setLoading: (state, action) => {
