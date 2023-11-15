@@ -73,11 +73,11 @@ export function Profile () {
                                 <Spinner color="success" />
                             </div>
                             :
-                            <ul className="flex min-h-32">
+                            <ul className="md:flex min-h-32">
                             {favorites?.map((fav => 
                                 <div key={fav.actionId}
-                                className="backgroundDarkGreen rounded-lg p-4 shadow-xl flex flex-col lg:flex-row  items-center ">
-                                <img src={fav.imageCard} alt="" className="w-32 h-32 rounded-lg" />
+                                className="backgroundDarkGreen rounded-lg p-4 shadow-xl flex flex-col lg:flex-row items-center m-2">
+                                <img src={fav.imageCard} alt={fav.titleCard} className="w-48 h-48 rounded-lg" />
                                 <div className="p-2 m-1 text-white">
                                     <h3 className="text-xl mb-2">{fav.titleCard}</h3>
                                     <p className="text-base">CO2: - 100kg</p>

@@ -12,7 +12,7 @@ import { Achievements } from './components/Achievements';
 import { Benefits } from './components/Benefits';
 import { Action } from './components/Action';
 import { AuthProvider } from './context/authContext';
-
+import  ActionsAdmin  from './pages/backOffice/ActionsAdmin'
 
 const routes = createBrowserRouter(createRoutesFromElements(
   <>
@@ -27,6 +27,7 @@ const routes = createBrowserRouter(createRoutesFromElements(
   <Route path="/beneficios" element={<Benefits />}/>
   <Route path="/acciones/:categoria" element={<Actions />}/>
   <Route path="/accion/:idAccion" element={<Action />}/>
+  <Route path="/admin" element={<ActionsAdmin />}/>
   </>
 ))
 

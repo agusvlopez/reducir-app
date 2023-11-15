@@ -36,13 +36,14 @@ export function AuthProvider({children}) {
           try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
 
-            createUserProfile(response.user.uid, {email, favorites});
+            createUserProfile(response.user.uid, {email, favorites, rol});
             console.log(response);
 
              return {
                  id: response.user.uid,
                  email: response.user.email,
                  favorites: favorites,
+                 rol: rol,
              }  
          } catch (error) {
              return {

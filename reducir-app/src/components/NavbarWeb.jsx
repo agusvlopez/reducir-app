@@ -47,6 +47,14 @@ menuRoutes.push({
   userLogged: false,
 });
 
+menuRoutes.push({     
+  id: 6,    
+  path: '/admin',
+  name: 'Administración',
+  userAuthorization: true,
+  userLogged: true,
+});
+
 export default function NavbarWeb() {
   const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -90,8 +98,18 @@ export default function NavbarWeb() {
           <Link color="foreground" href={item.path}>
            {item.name}
           </Link>
-        </NavbarItem>
+        </NavbarItem>     
          ))}
+          <Button as={Link} 
+            variant="flat"
+            radius="full"
+            size="sm"
+            className="backgroundDarkGreen text-white mr-2 text-sm hover:text-white"
+            >
+            <Link className="text-white" href="/perfil">
+              App
+            </Link>
+          </Button>
         { (!displayEmail) && filteredMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
           <Link color="foreground" href={item.path}>
@@ -99,27 +117,15 @@ export default function NavbarWeb() {
           </Link>
         </NavbarItem>
          ))}
-
       </NavbarContent>
 
       <NavbarContent justify="end">
-
       
         <NavbarItem>
           {(displayEmail) &&
           <div>
             <Button as={Link} 
-            href="/perfil" 
-            variant="flat"
-            radius="full"
-            size="sm"
-            className="backgroundDarkGreen text-white mr-2 text-sm hover:text-white"
-            >
-            App
-            </Button>
-            <Button as={Link} 
             color="warning" 
-            href="#" 
             variant="flat"
             className="text-sm"
             onClick={() => handleLogout()}
@@ -135,11 +141,12 @@ export default function NavbarWeb() {
           {(!displayEmail) &&
           <Button as={Link} 
           color="warning" 
-          href="/iniciar-sesion" 
           variant="flat"
           className="text-sm"
           >
-          Login
+            <Link href="/iniciar-sesion">
+              Login
+            </Link>
           </Button>
           }
         </NavbarItem>
@@ -149,14 +156,24 @@ export default function NavbarWeb() {
       <NavbarMenu>
         { (displayEmail) && userMenuRoutes.map((item) => (
         <NavbarMenuItem key={item.id}>
-          <Link color="foreground" href={item.path}>
+          <Link color="foreground" to={item.path}>
            {item.name}
           </Link>
           </NavbarMenuItem>
          ))}
+          <Button 
+            variant="flat"
+            radius="full"
+            size="sm"
+            className="backgroundDarkGreen text-white mr-2 text-sm "
+          >
+            <Link className="text-white" href="/perfil">
+              App
+            </Link>
+          </Button>
         { (!displayEmail) && filteredMenuRoutes.map((item) => (
         <NavbarMenuItem key={item.id}>
-          <Link color="foreground" href={item.path}>
+          <Link color="foreground" to={item.path}>
            {item.name}
           </Link>
         </NavbarMenuItem>
