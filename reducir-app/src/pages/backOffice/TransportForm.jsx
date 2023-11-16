@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const TransportForm = () => {
-    let resultTransport;
   const [transportSelected, setTransportSelected] = useState(''); // Estado para almacenar la opción seleccionada
-    const [carbonTransport, setCarbonTransport] = useState('');
+  const [carbonTransport, setCarbonTransport] = useState('');
   const data = {
     distance: 20,
     type: transportSelected,

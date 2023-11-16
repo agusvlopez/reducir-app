@@ -1,15 +1,16 @@
-import { useState } from "react";
-import { useFetch } from "../../functions/useFetch";
 import "../index.css";
-import TransportForm from "../pages/backOffice/TransportForm";
-
+import TestForm from "../pages/backOffice/TestForm";
 
 export function Test() {
 
     return (
         <>
-        <h1>Test</h1>
-        <TransportForm></TransportForm>
+        <div className="backgroundDarkGreen shadow-md">
+            <div className="p-4 text-white">
+                <h1>Test</h1>
+            </div>
+            <TestForm />
+        </div>
         </>
     )
 

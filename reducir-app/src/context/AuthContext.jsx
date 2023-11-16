@@ -32,18 +32,19 @@ export function AuthProvider({children}) {
         return () => suscribed()
     }, []);
 
-    const register = async (email, password, favorites) => {
+    const register = async (email, password, favorites, rol, carbon) => {
           try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
 
-            createUserProfile(response.user.uid, {email, favorites, rol});
+            createUserProfile(response.user.uid, {email, favorites, rol, carbon});
             console.log(response);
 
              return {
                  id: response.user.uid,
                  email: response.user.email,
                  favorites: favorites,
-                 rol: rol,
+                 rol: "cliente",
+                 carbon, carbon
              }  
          } catch (error) {
              return {

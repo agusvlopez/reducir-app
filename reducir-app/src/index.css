@@ -68,7 +68,7 @@ button:hover {
   border-color: #005840;
 }
 
- button:focus,
+button:focus,
 button:focus-visible {
   outline: 4px auto transparent;
 } 

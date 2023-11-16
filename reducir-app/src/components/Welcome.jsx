@@ -17,16 +17,18 @@ export function Welcome () {
         <img src={logo} alt="Logo de Reducir" />
         </div>
           <h1 className="mb-2 text-center pb-2">Bienvenido/a</h1>
-        <div className="backgroundWhite p-8 mt-2 rounded-2xl shadow-sm min-w-md">
+        <div className="backgroundWhite mt-2 rounded-2xl shadow-sm min-w-md container mx-auto max-w-2xl p-8">
           
             <p className="mb-2 pb-2 border-b-2 border-gray-300"><strong>Reducir</strong> fue diseñada para ayudarte a <strong>cambiar tus hábitos</strong> por unos más beneficiosos para el mundo y asi tambien <strong>reducir tu huella de carbono</strong>, que es una manera de medir tu impacto ambiental.</p>
 
             <p>Entonces, para <strong>medir tu huella de carbono</strong>, te invitamos a realizar un <span className="font-bold">test con 3 simples preguntas</span> acerca del transporte y energía por única vez.</p> 
 
             <div className="flex justify-center mt-4">
-                <Button className="backgroundDarkGreen text-white w-full flex justify-between items-center">
-                <Link to="/test"> Iniciar test <span className="arrowRight ml-6"></span></Link>
-                </Button>
+                <Link to="/test">
+                    <Button className="backgroundDarkGreen text-white w-full flex justify-between items-center">
+                        Iniciar test <span className="arrowRight ml-6"></span>
+                    </Button>
+                </Link>
             </div>
         </div>
     </div>

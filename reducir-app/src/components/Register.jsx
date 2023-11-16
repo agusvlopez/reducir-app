@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import warningIcon from './../covers/icons/warning-icon.png';
 import { Navigate, useNavigate } from "react-router-dom";
 import {Button} from "@nextui-org/react";
-import  NavbarWeb  from "./NavbarWeb";
+import NavbarWeb  from "./NavbarWeb";
 import {useAuth} from "../context/AuthContext";
 
 
@@ -14,6 +14,8 @@ export function Register () {
     const [passwordRegister, setPasswordRegister] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [favorites, setFavorites] = useState([]);
+    const [rol, setRol] = useState("");
+    const [carbon, setCarbon] = useState("");
     const [validationMessage, setValidationMessage] = useState("");
     //console.log(emailRegister, passwordRegister, "Estados del formulario en registro");
 
@@ -35,7 +37,7 @@ export function Register () {
 
         try {
             // Tu lógica de registro aquí...
-            await auth.register(emailRegister, passwordRegister, favorites);
+            await auth.register(emailRegister, passwordRegister, favorites, rol, carbon);
             navigate("/perfil");
         } catch (error) {
             setValidationMessage("Error al registrar. Inténtalo de nuevo.");
