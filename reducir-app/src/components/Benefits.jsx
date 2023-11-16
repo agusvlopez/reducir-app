@@ -25,14 +25,15 @@ export function Benefits () {
             <p>Acá encontrarás según tu ubicación los beneficios que podes canjear gracias a las acciones realizadas que compartiste.</p>
         </div>
         
-        <section className="backgroundDarkGreen min-h-screen rounded-t-lg p-4 pb-8 mx-auto">
+        <section className="backgroundDarkGreen min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
         <div className="mb-8 mt-4">
-            <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
+            <div className="p-4 md:flex gap-4">     
                 <div>
                     <VerticalCard
                         tituloCard="1253 puntos"
                         subtituloCard="30% de descuento en MERAKI"
-                        pCard={<Link to="https://merakisustentable.com/ar/">Visitar página de la marca</Link>}
+                        pCard={<Link to="https://merakisustentable.com/ar/"
+                        >Visitar página de la marca</Link>}
                         imgCard={Meraki}
                     ></VerticalCard>
                     <div className="flex justify-center">

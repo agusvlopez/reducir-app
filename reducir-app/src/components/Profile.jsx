@@ -28,7 +28,7 @@ export function Profile () {
         console.log("Entre al useEffect del HorizontalCard");
     
         const userRef = doc(db, `users/${userId}`);
-      
+        console.log(userId);
         // Utiliza onSnapshot para suscribirte al documento del usuario
         const unsubscribeUser = onSnapshot(userRef, (docSnapshot) => {
           if (docSnapshot.exists()) {
@@ -54,29 +54,29 @@ export function Profile () {
                 <Sidebar />
             </template>
 
-            <div className="flex-1 ">
+            <div className="flex-1">
             <NavbarWeb></NavbarWeb>
-                <div className="backgroundWhite min-h-full shadow-md rounded px-8 pb-8 mb-8 mx-auto container">
-                    <div className="mb-2">
+                <div className="backgroundDarkGreen shadow-md rounded container">
+                    <div className="mb-2 text-white p-4">
                         <h1 className="invisible">Mi perfil</h1>  
                         <h2 className="text-2xl font-bold text-center mb-4">¡Hola {displayEmail}!</h2>
                         <img src={userImg} alt="Foto de perfil" className="bg-white max-w-28 max-h-28 rounded-full mx-auto border-4 border-white shadow-md" />
                         
-                        <p className="text-gray-600 text-center mt-4">Mi huella de carbono este mes:</p>
-                        <p className="font-bold text-center">72kg de CO2</p>
+                        <p className="text-center mt-4">Mi huella de carbono este mes:</p>
+                        <p className="font-bold text-center mb-8">72kg de CO2</p>
                     </div>
-                    <div className="mb-4">
-                        <h2 className="text-lg font-semibold p-2">Mis acciones en proceso</h2>
+                    <div className="pb-8 h-fit backgroundWhite mx-auto container px-8 p-4 pt-8 rounded-t-[30px]">
+                        <h2 className="text-2xl font-semibold p-2">Mis acciones en proceso</h2>
                        
                         <div> {loading ? 
                             <div className="flex justify-center">
                                 <Spinner color="success" />
                             </div>
                             :
-                            <ul className="md:flex min-h-32">
+                            <ul className="md:flex md:flex-wrap min-h-32">
                             {favorites?.map((fav => 
                                 <div key={fav.actionId}
-                                className="backgroundDarkGreen rounded-lg p-4 shadow-xl flex flex-col lg:flex-row items-center m-2">
+                                className="backgroundDarkGreen rounded-lg p-2 shadow-xl flex flex-col items-center m-2 md:w-48">
                                 <img src={fav.imageCard} alt={fav.titleCard} className="w-48 h-48 rounded-lg" />
                                 <div className="p-2 m-1 text-white">
                                     <h3 className="text-xl mb-2">{fav.titleCard}</h3>
@@ -91,9 +91,10 @@ export function Profile () {
                         }
                         </div>
                         <div className="flex justify-center mt-6 mb-8">
-                        <Link to="/acciones">
-                            <Button className="buttonDarkGreen">Agregar un acción <span className="ml-6">+</span> </Button>
-                        </Link>
+                        
+                            <Button className="backgroundDarkGreen text-white  flex justify-between items-center">
+                                <Link to="/acciones" className="hover:text-white">Agregar un acción <span className="ml-6">+</span>  
+                                </Link></Button>
                         </div>
                     </div>
                 </div>

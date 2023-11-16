@@ -35,19 +35,19 @@ const ItemListContainer = () => {
 
     return (
         <>   
-        <section className="backgroundDarkGreen min-h-screen rounded-t-lg p-2 pb-8 mx-auto container">
+        <section className="backgroundDarkGreen min-h-screen rounded-t-[30px] p-2 pb-8 mx-auto container">
             <div className="flex gap-2 pt-4 pb-4 container mx-auto justify-center">
                 <Link to="/acciones">
-                    <Chip size="md"  className="cursor-pointer">Todas</Chip>
+                    <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Todas</Chip>
                 </Link>
                 <Link to="/acciones/energia">
-                    <Chip size="md" className="cursor-pointer">Energía</Chip>
+                    <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Energía</Chip>
                 </Link>
                 <Link to="/acciones/reciclaje">
-                    <Chip size="md" className="cursor-pointer">Reciclaje</Chip>
+                    <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Reciclaje</Chip>
                 </Link>
                 <Link to="/acciones/agua">
-                    <Chip size="md" className="cursor-pointer">Agua</Chip>
+                    <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Agua</Chip>
                 </Link>
             </div>  
             <div className="mb-8 mt-4">

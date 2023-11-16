@@ -47,7 +47,7 @@ const Sidebar = () => {
     };
 
   return (
-    <div className="border-r w-fit mr-4 p-4 container">
+    <div className="border-r w-fit p-4 container">
     <div className={`h-screen ${isOpen ? 'w-36' : 'w-fit'} p-4 transition-all duration-300 ease-in-out`}>
       <button onClick={toggleBar} className="py-1 px-1 sidebarButton">
        <span className={`${isOpen ? 'exitIcon' : 'moreIcon'} transition-all duration-300 ease-in-out `}></span> 

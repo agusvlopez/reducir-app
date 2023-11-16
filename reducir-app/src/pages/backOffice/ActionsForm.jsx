@@ -28,7 +28,7 @@ const ActionsForm = (props) => {
 
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="my-form">
         <div className="flex flex-wrap mb-6 md:mb-0 gap-4">
           <div className="w-full md:w-1/2">
             <Input

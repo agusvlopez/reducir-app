@@ -96,16 +96,6 @@ export default function HorizontalCard({
      console.log("Estado despues de agregar favorito:", state);
   }
 
-  if(loading){
-    return (
-      <>
-      <div className="flex justify-center">
-        <Spinner color="default" />
-      </div>
-      </>
-    )
-  }
-  else {
 
   return (
     <>
@@ -156,5 +146,5 @@ export default function HorizontalCard({
     </>
   );
   }
-}
+
 

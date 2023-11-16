@@ -15,9 +15,9 @@ const ActionAdmin = () => {
                 body: JSON.stringify(linkObjet)
               }      
               let res = await fetch('http://127.0.0.1:5001/reducir-app/us-central1/app/api/create', config);
-              let json = await res.json()
+              let data = await res.json()
       
-              console.log(json);
+              console.log(data);
             }
       
             catch(error){
@@ -26,11 +26,9 @@ const ActionAdmin = () => {
         }
     
     return (
-
-
         <>
-            <h1>Administrador</h1>
-            <ActionsForm addAction={addAction} />
+        <h1>Administración</h1>
+        <ActionsForm addAction={addAction} />
         </>
     )
 }

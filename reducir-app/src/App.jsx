@@ -13,6 +13,8 @@ import { Benefits } from './components/Benefits';
 import { Action } from './components/Action';
 import { AuthProvider } from './context/authContext';
 import  ActionsAdmin  from './pages/backOffice/ActionsAdmin'
+import TransportForm from './pages/backOffice/TransportForm';
+import EnergyForm from './pages/backOffice/EnergyForm';
 
 const routes = createBrowserRouter(createRoutesFromElements(
   <>
@@ -21,6 +23,8 @@ const routes = createBrowserRouter(createRoutesFromElements(
   <Route path="/registrarse" element={<Register />}/>
   <Route path="/bienvenida" element={<Welcome />}/>
   <Route path="/test" element={<Test />}/>
+  <Route path="/test/transporte" element={<TransportForm />}/>
+  <Route path="/test/energia" element={<EnergyForm />}/>
   <Route path="/perfil" element={<Profile />}/>
   <Route path="/acciones" element={<Actions />}/>
   <Route path="/logros" element={<Achievements />}/>
