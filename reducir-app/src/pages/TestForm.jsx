@@ -77,8 +77,8 @@ const TestForm = () => {
   console.log("carbon: ",carbon);
   return (
     <>
-    <div className='rounded-t-[30px] backgroundWhite p-2 h-full'>
-      <div className='container mx-auto max-w-2xl p-4 h-screen'>
+    <div className="rounded-t-[30px] backgroundWhite p-2 h-full">
+      <div className="container mx-auto max-w-2xl p-4 h-screen">
         <form action="" onSubmit={handleSubmit}>
         <div>
         <label htmlFor="kwh" className="mb-2 block text-base font-medium text-gray-700">Vamos a calcular aproximadamente el consumo de kwh por el tamaño de tu vivienda.</label>

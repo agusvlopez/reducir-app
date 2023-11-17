@@ -32,7 +32,7 @@ export default function HorizontalCard({
   const auth = useAuth();
   let userId = auth.user.uid;
   console.log(userId);
-
+  const [existingAchievement, setExistingAchievement] = useState(false);
   const state = useSelector(selectFavoriteAction);
   const loading = useSelector(selectLoading);
   console.log(state);
@@ -47,12 +47,29 @@ export default function HorizontalCard({
     const userRef = doc(db, `users/${userId}`);
   
     // Utiliza onSnapshot para suscribirte al documento del usuario
-    const unsubscribeUser = onSnapshot(userRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
+    const unsubscribeUser = onSnapshot(userRef, async (docSnapshot) => {
+      if (docSnapshot.exists()) {       
+        
         // Si el documento existe, accede al campo deseado (en este caso, "favorites")
         const favorites = docSnapshot.data()["favorites"] || [];
         dispatch(setFavorites(favorites));
         dispatch(setLoading(false));
+
+        const achievementsCollectionRef = collection(userRef, 'achievements');
+
+        // Verificar si la acción ya existe en la colección "achievements"
+        const existingAchievementQuery = query(
+          achievementsCollectionRef,
+          where('titleCard', '==', titleCard),
+        );
+        const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
+
+        if (!existingAchievementSnapshot.empty) {
+          setExistingAchievement(true);
+          console.log('La acción ya existe en achievements. No se agregará nuevamente.');
+          return;
+        }
+
       }      
     });
 
@@ -63,27 +80,7 @@ export default function HorizontalCard({
   }, [userId, dispatch]);
   
   const handleFavorite = async () => {
-    console.log("Estado antes de agregar favorito:", state);
-        //  // Realizar la operación asíncrona antes de despachar el action
-        //  const usersRef = doc(db, `users/${userId}`);
-        //  const docSnapshot = await getDoc(usersRef);
-    
-        //  if (docSnapshot.exists()) {
-        //    const favoritesArray = docSnapshot.data()["favorites"];
-    
-        //    const isActionInFavorites = favoritesArray.some(
-        //      (objeto) => objeto.actionId === actionId
-        //    );
-    
-        //    const updatedFavorites = isActionInFavorites
-        //      ? favoritesArray.filter((objeto) => objeto.actionId !== actionId)
-        //     : [...favoritesArray, { titleCard, descriptionCard, imageCard, categoryCard, actionId }];
-    
-        //    await updateDoc(usersRef, {
-        //      "favorites": updatedFavorites,
-        //    });
-        //    dispatch(setFavorites(updatedFavorites));
-        //   }
+
       dispatch(addFavorite({
         titleCard,
         descriptionCard,
@@ -130,6 +127,7 @@ export default function HorizontalCard({
                   <Link to={`/accion/${actionId}`} className="font-bold">Leer más</Link>
                 </div>
               </div>
+              {!existingAchievement ?
               <Button
                 isIconOnly
                 className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2"
@@ -142,6 +140,11 @@ export default function HorizontalCard({
                   fill={isActionLiked ? "currentColor" : "none"}
                 />
               </Button>
+              :
+              <div>
+               <p className="font-semibold text-center text-sm"> Acción lograda</p>
+              </div>
+            }
             </div>
           </div>
         </div>

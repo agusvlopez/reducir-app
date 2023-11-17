@@ -11,18 +11,15 @@ import { db } from "../firebase/firebase.config";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../context/authContext";
 import { addFavorite, selectFavoriteAction, selectLoading, setFavorites, setLoading } from "../features/favoritesSlice";
-import Modal from "./Modal.jsx";
 
 export function Action () {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loadingDocument, setLoadingDocument] = useState(true);
+    const [existingAchievement, setExistingAchievement] = useState(false);
     const [action, setAction] = useState({});
-    const [carbon, setCarbon] = useState("");
-    const [carbonUser, setCarbonUser] = useState(0);
     const favorites = useSelector(selectFavoriteAction);
     const loading = useSelector(selectLoading);
-    const [achievementExists, setAchievementExists] = useState(false);
     
     let titleCard = action.title;
     let descriptionCard = action.description;
@@ -45,13 +42,38 @@ export function Action () {
         const userRef = doc(db, `users/${userId}`);
       
         // Utiliza onSnapshot para suscribirte al documento del usuario
-        const unsubscribeUser = onSnapshot(userRef, (docSnapshot) => {
+        const unsubscribeUser = onSnapshot(userRef, async (docSnapshot) => {
           if (docSnapshot.exists()) {
             // Si el documento existe, accede al campo deseado (en este caso, "favorites")
             const favorites = docSnapshot.data()["favorites"] || [];
             dispatch(setFavorites(favorites));
-            dispatch(setLoading(false));
-          }      
+           
+            const actionRef = doc(db, `actions/${actionId}`);
+
+            try 
+            {
+              const actionDoc = await getDoc(actionRef);            
+              const achievementsCollectionRef = collection(userRef, 'achievements');
+
+              // Verificar si la acción ya existe en la colección "achievements"
+              const existingAchievementQuery = query(
+                achievementsCollectionRef,
+                where('titleCard', '==', actionDoc.data().title),
+              );
+              const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
+
+              if (!existingAchievementSnapshot.empty) {
+                setExistingAchievement(true);
+                return;
+              }
+              dispatch(setLoading(false));  
+            }
+            catch(err){
+              console.log(err);
+            }
+
+          }  
+            
         });
         
         const getDocument = async () => {
@@ -73,8 +95,7 @@ export function Action () {
               // Asegúrate de que setLoading se ejecute solo si el componente aún está montado
               // Puedes utilizar una referencia mutable para verificar esto
              
-                setLoadingDocument(false);
-             
+                setLoadingDocument(false);  
             }
           };
       
@@ -85,6 +106,7 @@ export function Action () {
       
           // La función de limpieza se ejecutará cuando el componente se desmonte
           return () => {
+           
             // mounted.current = false;
             unsubscribeUser();
           };
@@ -92,6 +114,7 @@ export function Action () {
     }, [actionId, userId, dispatch])
   
     const handleFavorite = async () => {
+
           dispatch(addFavorite({
             titleCard,
             descriptionCard,
@@ -117,7 +140,7 @@ export function Action () {
         const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
 
         if (!existingAchievementSnapshot.empty) {
-        
+          setExistingAchievement(true);
           console.log('La acción ya existe en achievements. No se agregará nuevamente.');
           return;
         }
@@ -159,7 +182,7 @@ export function Action () {
         await updateDoc(userDocRef, { carbon: newCarbon });
       
         console.log('Logro agregado y carbono actualizado correctamente.');
-        
+        setExistingAchievement(true);
       };
 
 
@@ -179,17 +202,18 @@ export function Action () {
 
                 <section className="backgroundDarkGreen min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
                 {loadingDocument ?
-                    <div className="flex justify-center">
-                        <Spinner color="default" />
-                    </div>
-                    :
+                <div className="flex justify-center">
+                    <Spinner color="default" />
+                </div>
+                :
                 <div className="mb-8 mt-4">
                     <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
                     <img src={action.image} alt="" className="max-h-72 rounded-lg" />    
                     <div className="mt-2">
                         <p className="mb-2"><span className="font-bold">Categoría:</span> {action.category}</p>
                         <p>{action.description}</p>
-                        <div className="flex justify-end">    
+                        <div className="flex justify-end">   
+                        {!existingAchievement ? 
                             <Button
                                 isIconOnly
                                 className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2 mr-2"
@@ -202,10 +226,15 @@ export function Action () {
                                     fill={isActionLiked ? "currentColor" : "none"}
                                 />
                             </Button>
+                            :
+                            <div>
+                               <p className="font-semibold text-center text-sm"> Acción lograda</p>
+                            </div>
+                        }
                         </div>
-
+                        {!existingAchievement && 
                          <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
-
+                        }
                     </div>
                     </div>
                 </div>

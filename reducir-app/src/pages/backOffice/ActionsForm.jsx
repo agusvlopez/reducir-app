@@ -1,4 +1,4 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Textarea } from "@nextui-org/react";
 import React, { useState } from "react";
 
 const ActionsForm = (props) => {
@@ -8,6 +8,7 @@ const ActionsForm = (props) => {
         title: "",
         description: "",
         image: "",
+        alt: "",
         category: "",
         carbon: "",
     };
@@ -28,9 +29,10 @@ const ActionsForm = (props) => {
 
 
     return (
-        <form onSubmit={handleSubmit} className="my-form">
-        <div className="flex flex-wrap mb-6 md:mb-0 gap-4">
-          <div className="w-full md:w-1/2">
+      <>
+      <h2 className="text-center font-semibold mb-4">Agregar una acción</h2>
+        <form onSubmit={handleSubmit} className="my-form container">
+        <div className="w-full mb-4">
             <Input
               type="text"
               variant="faded"
@@ -39,9 +41,9 @@ const ActionsForm = (props) => {
               value={values.title}
               onChange={handleChange}
             />
-          </div>
-          <div className="w-full md:w-1/2">
-            <Input
+        </div>
+        <div className="w-full mb-4">
+            <Textarea
               type="text"
               variant="faded"
               label="Descripción"
@@ -49,8 +51,9 @@ const ActionsForm = (props) => {
               value={values.description}
               onChange={handleChange}
             />
-          </div>
-          <div className="w-full md:w-1/2">
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="w-full">
             <Input
               type="text"
               variant="faded"
@@ -59,10 +62,20 @@ const ActionsForm = (props) => {
               value={values.image}
               onChange={handleChange}
             />
+          </div>        
+          <div className="w-full ">
+            <Input
+              type="text"
+              variant="faded"
+              label="Alt de la imagen"
+              name="alt"
+              value={values.alt}
+              onChange={handleChange}
+            />
           </div>
         </div>
-        <div className="flex flex-wrap mb-6 md:mb-0 gap-4">
-          <div className="w-full md:w-1/2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="w-full ">
             <Input
               type="text"
               variant="faded"
@@ -72,7 +85,7 @@ const ActionsForm = (props) => {
               onChange={handleChange}
             />
           </div>
-          <div className="w-full md:w-1/2">
+          <div className="w-full">
             <Input
               type="number"
               variant="faded"
@@ -83,10 +96,13 @@ const ActionsForm = (props) => {
             />
           </div>
         </div>
-        <Button type="submit" variant="primary">
-          Enviar
-        </Button>
+        <div className="flex justify-center">
+          <Button type="submit" className="backgroundDarkGreen text-white w-2/5">
+            Enviar
+          </Button>
+        </div>
       </form>
+    </>
     )
 }
 
