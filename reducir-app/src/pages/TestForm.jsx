@@ -1,8 +1,8 @@
 import { Button } from '@nextui-org/react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { db } from '../../firebase/firebase.config';
-import { useAuth } from '../../context/authContext';
+import { db } from '../firebase/firebase.config';
+import { useAuth } from '../context/authContext';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 
 const TestForm = () => {

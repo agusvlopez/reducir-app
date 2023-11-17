@@ -37,8 +37,8 @@ export function Register () {
 
         try {
             // Tu lógica de registro aquí...
-            await auth.register(emailRegister, passwordRegister, favorites, rol, carbon);
-            navigate("/perfil");
+            await auth.register(emailRegister, passwordRegister, favorites, "usuario", carbon);
+            navigate("/bienvenida");
         } catch (error) {
             setValidationMessage("Error al registrar. Inténtalo de nuevo.");
         }

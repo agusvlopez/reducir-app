@@ -64,6 +64,7 @@ const ItemListContainer = () => {
                 imageCard={action.image}
                 categoryCard={action.category}
                 actionId={action.id}
+                carbonCard={action.carbon}
             />               
             ))}
             </div>

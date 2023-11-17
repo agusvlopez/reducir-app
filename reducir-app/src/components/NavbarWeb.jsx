@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
 import ReducirLogo from './ReducirLogo';
 import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const menuRoutes = [];
 
@@ -56,16 +57,21 @@ menuRoutes.push({
 });
 
 export default function NavbarWeb() {
+  const navigate = useNavigate();
   const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const displayEmail = auth?.user?.email;
   console.log(displayEmail);
-  const filteredMenuRoutes = menuRoutes.filter(item => item.userAuthorization === false);
+  const filteredMenuRoutes = menuRoutes.filter(item => !item.userAuthorization || !!displayEmail);
   const userMenuRoutes = menuRoutes.filter(item => item.userLogged === true);
 
   const handleLogout = () => {
     auth.logout();
+    navigate("/");
   }
+
+   // Si el usuario no está autenticado y trata de acceder a una ruta autorizada, redirige al inicio ("/")
+
 
   return (
     <Navbar
@@ -100,16 +106,18 @@ export default function NavbarWeb() {
           </Link>
         </NavbarItem>     
          ))}
-          <Button as={Link} 
+        { (displayEmail) &&
+         <Link className="text-white" href="/perfil">
+          <Button 
             variant="flat"
             radius="full"
             size="sm"
             className="backgroundDarkGreen text-white mr-2 text-sm hover:text-white"
-            >
-            <Link className="text-white" href="/perfil">
-              App
-            </Link>
+            > 
+              App      
           </Button>
+          </Link>
+        }
         { (!displayEmail) && filteredMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
           <Link color="foreground" href={item.path}>

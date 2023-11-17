@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { collection, addDoc, getDocs, getDoc, query, where, doc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, query, where, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { Menu} from "./Menu";
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import {HeartIcon} from "./HeartIcon";
 import { Button, Spinner } from "@nextui-org/react";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../firebase/firebase.config";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../context/authContext";
 import { addFavorite, selectFavoriteAction, selectLoading, setFavorites, setLoading } from "../features/favoritesSlice";
+import Modal from "./Modal.jsx";
 
 export function Action () {
     const dispatch = useDispatch();
-    const [liked, setLiked] = useState(false);
+    const navigate = useNavigate();
     const [loadingDocument, setLoadingDocument] = useState(true);
     const [action, setAction] = useState({});
+    const [carbon, setCarbon] = useState("");
+    const [carbonUser, setCarbonUser] = useState(0);
     const favorites = useSelector(selectFavoriteAction);
     const loading = useSelector(selectLoading);
-
+    const [achievementExists, setAchievementExists] = useState(false);
+    
     let titleCard = action.title;
     let descriptionCard = action.description;
     let imageCard = action.image;
     let categoryCard = action.category;
-
+    let carbonCard = action.carbon;
 
     // const collectionRef = collection(db, "actions")
     const actionId = useParams().idAccion;
@@ -32,7 +36,7 @@ export function Action () {
     const userId = auth.user.uid;
 
     const isActionLiked = favorites?.some((s) => s.actionId === actionId);
-    console.log(actionId);
+   
     useEffect(() => {
         dispatch(setLoading(true));
     
@@ -75,13 +79,13 @@ export function Action () {
           };
       
           // Utiliza una referencia mutable para rastrear si el componente está montado
-          const mounted = { current: true };
+          // const mounted = { current: true };
       
           getDocument();
       
           // La función de limpieza se ejecutará cuando el componente se desmonte
           return () => {
-            mounted.current = false;
+            // mounted.current = false;
             unsubscribeUser();
           };
       
@@ -94,10 +98,69 @@ export function Action () {
             imageCard,
             categoryCard,
             actionId,
-            userId
+            userId,
+            carbonCard
           }));
 
       }
+
+      const addAsAchievement = async () => {
+        const userDocRef = doc(db, `users/${userId}`);
+        const achievementsCollectionRef = collection(userDocRef, 'achievements');
+
+        // Verificar si la acción ya existe en la colección "achievements"
+        const existingAchievementQuery = query(
+          achievementsCollectionRef,
+          where('titleCard', '==', action.title),
+        );
+
+        const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
+
+        if (!existingAchievementSnapshot.empty) {
+        
+          console.log('La acción ya existe en achievements. No se agregará nuevamente.');
+          return;
+        }
+        
+        const newAchievement = {
+          titleCard: action.title,
+          descriptionCard: action.description,
+          imageCard: action.image,
+          categoryCard: action.category,
+          carbonCard: action.carbon,
+        };
+      
+        // Agregar un nuevo documento a la colección "achievements"
+        const newAchievementRef = await addDoc(achievementsCollectionRef, newAchievement);
+        console.log(`Nuevo logro agregado con ID: ${newAchievementRef.id}`);
+        
+        const isActionInFavorites = favorites.some((f) => f.actionId === actionId);
+
+        if (isActionInFavorites) {
+          // Eliminar la acción de la colección "favorites"
+          const updatedFavorites = favorites.filter((f) => f.actionId !== actionId);
+          dispatch(setFavorites(updatedFavorites));
+          
+          // Actualizar el documento del usuario con los nuevos "favorites"
+          await updateDoc(userDocRef, { favorites: updatedFavorites });
+        }
+      
+        console.log('Logro agregado y acción eliminada de "favorites" correctamente.');
+        
+        // Restar el valor de carbono del logro al valor actual del usuario
+        const userSnapshot = await getDoc(userDocRef);
+        const currentUserData = userSnapshot.data();
+        const currentCarbon = currentUserData.carbon || 0;
+        const carbonAchievement = newAchievement.carbonCard || 0;
+      
+        const newCarbon = currentCarbon - carbonAchievement;
+      
+        // Actualizar el campo "carbon" del documento del usuario con el nuevo valor
+        await updateDoc(userDocRef, { carbon: newCarbon });
+      
+        console.log('Logro agregado y carbono actualizado correctamente.');
+        
+      };
 
 
     return (
@@ -113,7 +176,7 @@ export function Action () {
                 <div className="container p-4 mx-auto">
                     <h1 className="mb-2 ">{action.title}</h1>
                 </div>
-                
+
                 <section className="backgroundDarkGreen min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
                 {loadingDocument ?
                     <div className="flex justify-center">
@@ -141,10 +204,8 @@ export function Action () {
                             </Button>
                         </div>
 
-                        <form action="" method="post"
-                        onSubmit="" className="flex justify-center lg:justify-end">
-                            <Button type="submit" className="backgroundDarkGreen text-white">Agregar como logro +</Button>
-                        </form>
+                         <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
+
                     </div>
                     </div>
                 </div>

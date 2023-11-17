@@ -19,7 +19,8 @@ export default function HorizontalCard({
   descriptionCard,
   imageCard,
   categoryCard,
-  actionId
+  actionId,
+  carbonCard
 }
 ) {
   // // const [userLoading, setUserLoading] = useState(true);
@@ -89,7 +90,8 @@ export default function HorizontalCard({
         imageCard,
         categoryCard,
         actionId,
-        userId
+        userId,
+        carbonCard
       }));
       console.log("Loading after dispatch:", loading);
 
@@ -122,8 +124,11 @@ export default function HorizontalCard({
               <div className="flex flex-col gap-0"> 
                 <p className="text-large font-medium mt-2">{titleCard}</p>
                 <p className="text-small text-foreground/80">{descriptionCard}</p>
-                <p className="font-semibold text-foreground/90">{categoryCard}</p>
-                <Link to={`/accion/${actionId}`} className="font-bold">Leer más</Link>
+                <p className="mt-2 font-semibold text-foreground/90">Categoría: {categoryCard}</p>
+                <p className="font-semibold text-foreground/90">-{carbonCard} kg CO2 </p>
+                <div className="flex justify-end">
+                  <Link to={`/accion/${actionId}`} className="font-bold">Leer más</Link>
+                </div>
               </div>
               <Button
                 isIconOnly

@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Menu } from "./Menu";
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import { Button } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
+import { useAuth } from "../context/authContext";
 
 export function Achievements () {
-
 
     return (
     <> 

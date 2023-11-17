@@ -43,7 +43,7 @@ export function AuthProvider({children}) {
                  id: response.user.uid,
                  email: response.user.email,
                  favorites: favorites,
-                 rol: "cliente",
+                 rol: rol,
                  carbon, carbon
              }  
          } catch (error) {
@@ -68,7 +68,10 @@ export function AuthProvider({children}) {
     const logout = async () => {
         const response = await signOut(auth);
         console.log(response);
+      
     }
+
+
 
     return <authContext.Provider value={{
         register,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Menu } from './Menu.jsx'; 
 import userImg from './../covers/user.png';
 import { Button, Spinner } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import NavbarWeb from "./NavbarWeb.jsx";
 import { useAuth } from "../context/authContext.jsx";
@@ -15,6 +15,7 @@ import { db } from "../firebase/firebase.config.js";
 export function Profile () {
     const dispatch = useDispatch();
     const auth = useAuth();
+    const navigate = useNavigate();
     console.log(auth.user.uid);
     const userId = auth.user.uid;
     const displayEmail = auth.user.email;
@@ -23,11 +24,9 @@ export function Profile () {
     const loading = useSelector(selectLoading);
     const [carbon, setCarbon] = useState(null); // Nuevo estado para almacenar el valor de "carbon"
 
-    useEffect(() => {
+    useEffect(() => {         
         dispatch(setLoading(true));
-    
-        console.log("Entre al useEffect del HorizontalCard");
-    
+
         const userRef = doc(db, `users/${userId}`);
         console.log(userId);
         // Utiliza onSnapshot para suscribirte al documento del usuario
@@ -43,7 +42,7 @@ export function Profile () {
             dispatch(setLoading(false));
           }      
         });
-    
+
         return () => {
           // Desuscribirse cuando el componente se desmonte
           unsubscribeUser();
@@ -78,13 +77,13 @@ export function Profile () {
                                 <Spinner color="success" />
                             </div>
                             :
-                            <ul className="md:flex md:flex-wrap min-h-32">
+                            <div>
                             {favorites.length === 0 ?
                                 <div className="p-2">
                                     <p className="block">Aún no hay acciones en proceso.</p>
                                 </div>
                             :
-                            <div>
+                            <ul className="md:flex flex-wrap min-h-32">
                             {favorites?.map((fav => 
                                 <div key={fav.actionId}
                                 className="backgroundDarkGreen rounded-lg p-2 shadow-xl flex flex-col items-center m-2 md:w-48">
@@ -98,9 +97,9 @@ export function Profile () {
                                 </div>
                                 </div>
                                 
-                            ))}</div>
+                            ))}</ul>
                             }
-                            </ul>
+                            </div>
                         }
                     
                         </div>

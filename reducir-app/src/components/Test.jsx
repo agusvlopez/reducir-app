@@ -1,5 +1,5 @@
 import "../index.css";
-import TestForm from "../pages/backOffice/TestForm";
+import TestForm from "../pages/TestForm";
 
 export function Test() {
 

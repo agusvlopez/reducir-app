@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from './../covers/logo-horizontal.png';
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
+import { useAuth } from "../context/authContext";
 
 export function Welcome () {
-
+    const auth = useAuth();
+    console.log(auth.user);
 
     return (
     <>

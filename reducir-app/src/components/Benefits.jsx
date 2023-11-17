@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Menu } from "./Menu";
 import VerticalCard from "./VerticalCard";
 import Meraki from '../covers/benefits/meraki.jpg';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
+import { useAuth } from "../context/authContext";
 
 export function Benefits () {
-
-
+    const auth = useAuth();
+    const navigate = useNavigate();
+    useEffect(()=> {  
+        if(auth.user === ""){
+         navigate("/iniciar-sesion")
+        }   
+      },[])
     return (
     <>
     

@@ -1,14 +1,32 @@
 import Sidebar from "./Sidebar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {Menu} from "./Menu";
 import {Chip} from "@nextui-org/react";
 import HorizontalCard from "./HorizontalCard";
 import NavbarWeb from "./NavbarWeb";
 import ItemListContainer from "./ItemListContainer";
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 
 export function Actions () {
+   
+    // const auth = useAuth();
+    // console.log(auth);
+    // const userId = auth.user.uid;
+    
+    // const navigate = useNavigate();  
+    //ARREGLAR CON UNA FUNCION DE FIREBASE CREO, PARA esperara a que me lance que el usuario esta autenticado
+    //  useEffect(()=> {
+          
+    //       if(!auth.user.uid){
+    //      navigate("/iniciar-sesion")
+    //      setLoading(false)
+    //  }   
+    //  },[userId])
 
+
+ 
     return (
     <>
         <div className="lg:flex ">
@@ -36,4 +54,3 @@ export function Actions () {
     </>
     );
 }
-
