@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ActionsForm from "./ActionsForm";
 import NavbarWeb from "../../components/NavbarWeb";
 import Footer from "../../components/Footer";
 import ModalAction from "../../components/ModalAction.jsx";
-import { Card, CardBody, CardFooter, Image, Modal } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Modal, Spinner } from "@nextui-org/react";
+import ModalDelete from "../../components/ModalDelete.jsx";
+import MenuAdmin from "../../components/MenuAdmin.jsx";
 
 const ActionsAdmin = () => {
   const [data, setData] = useState([]);
@@ -13,6 +14,10 @@ const ActionsAdmin = () => {
     // Actualizar el estado con el nuevo item
     setData((prevData) => prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item)));
   };
+
+  const deleteData = (itemId) => {
+    setData((prevData) => prevData.filter((item) => item.id !== itemId));
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,15 +40,24 @@ const ActionsAdmin = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+    <>
+    <div className="flex justify-center container p-4 mx-auto">
+      <Spinner color="success" />
+    </div>
+    </>
+    )
   }
   
     return (
         <>
+        
         <div className="h-screen">
         <NavbarWeb></NavbarWeb>
         <div className="p-4 mb-8">
-          <h2 className=" border-b-2 border-gray-500 pb-2 mb-4">Todas las acciones</h2>
+        <h1 className=" border-b-2 border-gray-500 pb-2 mb-4">Administración</h1>
+          <MenuAdmin></MenuAdmin>
+          <h2 className="pb-2 mb-4">Todas las acciones</h2>
 
           <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 container mx-auto">
             {data.map((item) => (
@@ -63,8 +77,10 @@ const ActionsAdmin = () => {
                 </CardBody>
                 <CardFooter className="text-small justify-between gap-2">
                   <b>{item.title}</b>
-                  {/* <p className="text-default-500">{item.category}</p> */}
-                  <ModalAction item={item} updateData={updateData} />
+                  <div className="flex flex-col align-center gap-2">
+                    <ModalAction item={item} updateData={updateData} />
+                    <ModalDelete item={item} deleteData={deleteData} />
+                  </div>
                 </CardFooter>
               </Card>
             ))}

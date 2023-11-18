@@ -13,7 +13,6 @@ const ActionsForm = (props) => {
         category: "",
         carbon: "",
         points: "",
-        id: ""
     };
 
     const [values, setValues] = useState(initialStateValues);
@@ -25,7 +24,7 @@ const ActionsForm = (props) => {
     };
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
+     
       props.addAction(values);
 
     };
