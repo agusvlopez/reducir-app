@@ -7,10 +7,13 @@ const ActionsForm = (props) => {
     {
         title: "",
         description: "",
+        tip: "",
         image: "",
         alt: "",
         category: "",
         carbon: "",
+        points: "",
+        id: ""
     };
 
     const [values, setValues] = useState(initialStateValues);
@@ -30,7 +33,6 @@ const ActionsForm = (props) => {
 
     return (
       <>
-      <h2 className="text-center font-semibold mb-4">Agregar una acción</h2>
         <form onSubmit={handleSubmit} className="my-form container">
         <div className="w-full mb-4">
             <Input
@@ -49,6 +51,16 @@ const ActionsForm = (props) => {
               label="Descripción"
               name="description"
               value={values.description}
+              onChange={handleChange}
+            />
+        </div>
+        <div className="w-full mb-4">
+            <Textarea
+              type="text"
+              variant="faded"
+              label="Tip"
+              name="tip"
+              value={values.tip}
               onChange={handleChange}
             />
         </div>
@@ -96,6 +108,16 @@ const ActionsForm = (props) => {
             />
           </div>
         </div>
+        <div className="w-full mb-4">
+            <Input
+              type="number"
+              variant="faded"
+              label="Puntos"
+              name="points"
+              value={values.points}
+              onChange={handleChange}
+            />
+          </div>
         <div className="flex justify-center">
           <Button type="submit" className="backgroundDarkGreen text-white w-2/5">
             Enviar

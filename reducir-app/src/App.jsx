@@ -12,7 +12,9 @@ import { Achievements } from './components/Achievements';
 import { Benefits } from './components/Benefits';
 import { Action } from './components/Action';
 import { AuthProvider } from './context/authContext';
-import ActionsAdmin  from './pages/backOffice/ActionsAdmin'
+import Admin  from './pages/backOffice/Admin'
+import NewActionAdmin from './pages/backOffice/NewActionAdmin';
+import ActionsAdmin from './pages/backOffice/ActionsAdmin';
 
 const routes = createBrowserRouter(createRoutesFromElements(
   <>
@@ -27,7 +29,9 @@ const routes = createBrowserRouter(createRoutesFromElements(
   <Route path="/beneficios" element={<Benefits />}/>
   <Route path="/acciones/:categoria" element={<Actions />}/>
   <Route path="/accion/:idAccion" element={<Action />}/>
-  <Route path="/admin" element={<ActionsAdmin />}/>
+  <Route path="/admin" element={<Admin />}/>
+  <Route path="/admin/acciones" element={<ActionsAdmin />}/> 
+  <Route path="/admin/acciones/new" element={<NewActionAdmin />}/>
   </>
 ))
 

@@ -58,7 +58,7 @@ export function Profile () {
                 <Sidebar />
             </template>
 
-            <div className="flex-1">
+            <div className="flex-1 pb-8">
             <NavbarWeb></NavbarWeb>
                 <div className="backgroundDarkGreen shadow-md container mx-auto">
                     <div className="mb-2 text-white p-4">
@@ -69,7 +69,7 @@ export function Profile () {
                         <p className="text-center mt-4">Mi huella de carbono este mes:</p>
                         <p className="font-bold text-center mb-8">{carbon !== null ? `${carbon} kg de CO2` : "Cargando..."}</p>
                     </div>
-                    <div className="pb-8 h-screen backgroundWhite mx-auto container px-8 p-4 pt-8 rounded-t-[30px]">
+                    <div className="pb-8 h-full backgroundWhite mx-auto container px-8 p-4 pt-8 rounded-t-[30px]">
                         <h2 className="text-2xl font-semibold p-2">Mis acciones en proceso</h2>
                        
                         <div> {loading ? 
@@ -103,10 +103,10 @@ export function Profile () {
                         }
                     
                         </div>
-                        <div className="flex justify-center mt-6 mb-8">
+                        <div className="flex justify-center mt-6 pb-8">
                         
                             <Button className="backgroundDarkGreen text-white flex justify-between items-center">
-                                <Link to="/acciones" className="hover:text-white">Agregar un acción <span className="ml-6">+</span>  
+                                <Link to="/acciones" className="hover:text-white">Agregar una acción <span className="ml-6">+</span>  
                                 </Link></Button>
                         </div>
                     </div>
