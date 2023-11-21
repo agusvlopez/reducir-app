@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody} from "@nextui-org/react";
 
-export default function ModalActionDetail({item}) {
-  const {isOpen, onOpen, onClose} = useDisclosure();
-  const [backdrop, setBackdrop] = useState('opaque')
-  // const [data, setData] = useState([]);
-  
-  const backdrops = ["Ver detalle"];
-  console.log(item);
-
-  const handleOpen = (backdrop) => {
-    setBackdrop(backdrop)
-    onOpen();
-  }
+export default function ModalActionDetail({item, isOpen, onClose}) {
 
 
   useEffect(() => {
@@ -36,25 +25,9 @@ export default function ModalActionDetail({item}) {
   }, []);
   
   return (
-    <>
-      <div className="flex flex-wrap gap-3">
-        {backdrops.map((b) => (
-          <Button  
-            key={b}
-            variant="flat" 
-            color="default" 
-            onPress={() => handleOpen(b)}
-            className="capitalize"
-          >
-           {b}
-          </Button>
-        ))}  
-      </div>
-     
-      <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
-      
+    <>     
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalContent>
-          {(onClose) => (
             <>
             <ModalHeader className="flex flex-col gap-1">{item.title}</ModalHeader>
               <ModalBody>
@@ -73,9 +46,7 @@ export default function ModalActionDetail({item}) {
                   </div>
               </ModalBody>             
             </>
-          )}
         </ModalContent> 
-      
       </Modal>
       
     </>

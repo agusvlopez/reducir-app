@@ -127,8 +127,7 @@ export default function NavbarWeb() {
          ))}
       </NavbarContent>
 
-      <NavbarContent justify="end">
-      
+      <NavbarContent justify="end">  
         <NavbarItem>
           {(displayEmail) &&
           <div>
@@ -142,23 +141,20 @@ export default function NavbarWeb() {
             </Button>
           </div>
           }
-        </NavbarItem>
-    
-       
+        </NavbarItem>   
         <NavbarItem> 
+        <Link href="/iniciar-sesion">
           {(!displayEmail) &&
           <Button as={Link} 
           color="warning" 
           variant="flat"
           className="text-sm"
           >
-            <Link href="/iniciar-sesion">
-              Login
-            </Link>
+            Login 
           </Button>
           }
-        </NavbarItem>
-    
+          </Link>
+        </NavbarItem>  
       </NavbarContent>
 
       <NavbarMenu>

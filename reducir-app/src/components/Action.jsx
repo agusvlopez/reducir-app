@@ -124,7 +124,6 @@ export function Action () {
             userId,
             carbonCard
           }));
-
       }
 
       const addAsAchievement = async () => {
@@ -146,11 +145,14 @@ export function Action () {
         }
         
         const newAchievement = {
-          titleCard: action.title,
-          descriptionCard: action.description,
-          imageCard: action.image,
-          categoryCard: action.category,
-          carbonCard: action.carbon,
+          title: action.title,
+          description: action.description,
+          tip: action.tip,
+          image: action.image,
+          alt: action.alt,
+          category: action.category,
+          carbon: action.carbon,
+          points: action.points
         };
       
         // Agregar un nuevo documento a la colección "achievements"
@@ -174,7 +176,7 @@ export function Action () {
         const userSnapshot = await getDoc(userDocRef);
         const currentUserData = userSnapshot.data();
         const currentCarbon = currentUserData.carbon || 0;
-        const carbonAchievement = newAchievement.carbonCard || 0;
+        const carbonAchievement = newAchievement.carbon || 0;
       
         const newCarbon = currentCarbon - carbonAchievement;
       

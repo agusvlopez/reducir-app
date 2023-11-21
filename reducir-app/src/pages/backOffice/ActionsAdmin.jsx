@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavbarWeb from "../../components/NavbarWeb";
 import Footer from "../../components/Footer";
 import ModalAction from "../../components/ModalAction.jsx";
-import { Button, Card, CardBody, CardFooter, Image, Modal, Spinner } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, Image, Modal, Spinner, useDisclosure } from "@nextui-org/react";
 import ModalDelete from "../../components/ModalDelete.jsx";
 import MenuAdmin from "../../components/MenuAdmin.jsx";
 import ModalActionDetail from "../../components/ModalActionDetail.jsx";
@@ -11,6 +11,8 @@ import AdminLayout from "./AdminLayout.jsx";
 const ActionsAdmin = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const updateData = (updatedItem) => {
     // Actualizar el estado con el nuevo item
@@ -20,6 +22,16 @@ const ActionsAdmin = () => {
   const deleteData = (itemId) => {
     setData((prevData) => prevData.filter((item) => item.id !== itemId));
   }
+
+  const openModal = (item) => {
+    setSelectedItem(item);
+    onOpen();
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+    onClose();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +67,7 @@ const ActionsAdmin = () => {
               <Card shadow="sm" 
               key={item.id} 
               isPressable
+              onPress={() => openModal(item)}
               >
                 <CardBody className="overflow-visible p-0">
                   <Image
@@ -71,7 +84,7 @@ const ActionsAdmin = () => {
                   <div className="flex flex-col align-center gap-2">
                     <ModalAction item={item} updateData={updateData} />
                     <ModalDelete item={item} deleteData={deleteData} />
-                    <ModalActionDetail item={item} />
+                    <ModalActionDetail item={item} isOpen={selectedItem === item} onClose={closeModal} />
                   </div>
                 </CardFooter>
               </Card>
