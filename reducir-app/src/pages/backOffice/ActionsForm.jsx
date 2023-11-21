@@ -29,7 +29,6 @@ const ActionsForm = (props) => {
 
     };
 
-
     return (
       <>
         <form onSubmit={handleSubmit} className="my-form container">

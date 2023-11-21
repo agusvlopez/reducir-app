@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import NavbarWeb from "../../components/NavbarWeb";
 import Footer from "../../components/Footer";
 import ModalAction from "../../components/ModalAction.jsx";
-import { Card, CardBody, CardFooter, Image, Modal, Spinner } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, Image, Modal, Spinner } from "@nextui-org/react";
 import ModalDelete from "../../components/ModalDelete.jsx";
 import MenuAdmin from "../../components/MenuAdmin.jsx";
+import ModalActionDetail from "../../components/ModalActionDetail.jsx";
+import AdminLayout from "./AdminLayout.jsx";
 
 const ActionsAdmin = () => {
   const [data, setData] = useState([]);
@@ -38,32 +40,21 @@ const ActionsAdmin = () => {
 
     fetchData();
   }, []);
-
-  if (loading) {
+ 
     return (
-    <>
-    <div className="flex justify-center container p-4 mx-auto">
-      <Spinner color="success" />
-    </div>
-    </>
-    )
-  }
-  
-    return (
-        <>
-        
-        <div className="h-screen">
-        <NavbarWeb></NavbarWeb>
-        <div className="p-4 mb-8">
-        <h1 className=" border-b-2 border-gray-500 pb-2 mb-4">Administración</h1>
-          <MenuAdmin></MenuAdmin>
+        <>   
+         <AdminLayout pageTitle="Administración">
           <h2 className="pb-2 mb-4">Todas las acciones</h2>
-
+        {loading &&
+          <div className="flex justify-center container p-4 mx-auto">
+            <Spinner color="success" />
+          </div>
+        }
           <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 container mx-auto">
             {data.map((item) => (
               <Card shadow="sm" 
               key={item.id} 
-              isPressable onPress={() => console.log("item pressed")}
+              isPressable
               >
                 <CardBody className="overflow-visible p-0">
                   <Image
@@ -80,15 +71,13 @@ const ActionsAdmin = () => {
                   <div className="flex flex-col align-center gap-2">
                     <ModalAction item={item} updateData={updateData} />
                     <ModalDelete item={item} deleteData={deleteData} />
+                    <ModalActionDetail item={item} />
                   </div>
                 </CardFooter>
               </Card>
             ))}
           </div>
-        </div>
-        <Footer />
-        </div>
-        
+        </AdminLayout>
         </>
     )
 }

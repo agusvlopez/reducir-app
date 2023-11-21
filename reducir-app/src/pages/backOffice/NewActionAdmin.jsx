@@ -1,7 +1,7 @@
 import React from "react";
 import ActionsForm from "./ActionsForm";
-import NavbarWeb from "../../components/NavbarWeb";
-import Footer from "../../components/Footer";
+import AdminLayout from "./AdminLayout";
+
 const NewActionAdmin = () => {
 
         const addAction = async (linkObjet) => {
@@ -28,12 +28,12 @@ const NewActionAdmin = () => {
     
     return (
         <>
-
+      <AdminLayout pageTitle="Administración">
         <div className="p-4  mb-8">
           <h2 className="text-center font-semibold mb-4">Agregar una acción</h2>
           <ActionsForm addAction={addAction} />
         </div>
-
+      </AdminLayout>
         </>
     )
 }

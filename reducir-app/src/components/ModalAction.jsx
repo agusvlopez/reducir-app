@@ -84,7 +84,7 @@ export default function ModalAction({ item, updateData }) {
           {(onClose) => (
             <>
             
-              <ModalHeader className="flex flex-col gap-1"></ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">{formData.title}</ModalHeader>
               <ModalBody>
               <div className="flex">
                 <div>

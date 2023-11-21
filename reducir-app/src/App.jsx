@@ -12,7 +12,7 @@ import { Achievements } from './components/Achievements';
 import { Benefits } from './components/Benefits';
 import { Action } from './components/Action';
 import { AuthProvider } from './context/authContext';
-import Admin  from './pages/backOffice/Admin'
+import Admin from './pages/backOffice/Admin';
 import NewActionAdmin from './pages/backOffice/NewActionAdmin';
 import ActionsAdmin from './pages/backOffice/ActionsAdmin';
 

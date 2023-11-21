@@ -14,17 +14,6 @@ export default function ModalDelete({ item, deleteData }) {
     onOpen();
   }
 
-  const [formData, setFormData] = useState({
-    title: item.title,
-    description: item.description,
-    tip: item.tip,
-    image: item.image,
-    alt: item.alt,
-    category: item.category,
-    carbon: item.carbon,
-    points: item.points,
-    id: item.id,
-  });
 
 // console.log(formData);
   const handleDeleteAction = async (e) => {
@@ -76,11 +65,10 @@ export default function ModalDelete({ item, deleteData }) {
         <ModalContent>
           {(onClose) => (
             <>
-            <ModalHeader className="flex flex-col gap-1">{}</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">{item.title}</ModalHeader>
               <ModalBody>
-                <p>{item.title}</p>
-                <p></p>
-                <p></p>
+                <p>Titulo: {item.title}</p>
+                <p>Categoría: {item.category}</p>
               </ModalBody>
               <ModalFooter>
                 <p>¿Confirma eliminación?</p>
