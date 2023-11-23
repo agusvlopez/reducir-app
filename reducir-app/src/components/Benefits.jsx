@@ -18,7 +18,6 @@ export function Benefits () {
       },[])
     return (
     <>
-    
         <div className="lg:flex">
             <template className="hidden lg:block">
                 <Sidebar />
@@ -26,7 +25,7 @@ export function Benefits () {
 
         <div className="flex-1">
         <NavbarWeb></NavbarWeb>
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-6">
             <h1 className="mb-2">Beneficios</h1>
             <p>Acá encontrarás según tu ubicación los beneficios que podes canjear gracias a las acciones realizadas que compartiste.</p>
         </div>

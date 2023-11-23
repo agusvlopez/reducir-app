@@ -5,6 +5,8 @@ import { db } from "../firebase/firebase.config";
 import HorizontalCard from "./HorizontalCard";
 import { Chip, Spinner } from "@nextui-org/react";
 
+const MAX_DESCRIPTION_LENGTH = 150;
+
 const ItemListContainer = () => {
 
     const [actions, setActions] = useState([]);
@@ -35,7 +37,7 @@ const ItemListContainer = () => {
 
     return (
         <>   
-        <section className="backgroundDarkGreen min-h-screen rounded-t-[30px] p-2 pb-8 mx-auto container">
+        <section className="backgroundTrama min-h-screen rounded-t-[30px] p-2 pb-8 mx-auto container">
             <div className="flex gap-2 pt-4 pb-4 container mx-auto justify-center">
                 <Link to="/acciones">
                     <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Todas</Chip>
@@ -60,7 +62,10 @@ const ItemListContainer = () => {
             <HorizontalCard
                 key={action.id}
                 titleCard={action.title}
-                descriptionCard={action.description}
+                descriptionCard={action.description.length > MAX_DESCRIPTION_LENGTH ?
+                    action.description.slice(0, MAX_DESCRIPTION_LENGTH) + "..." :
+                    action.description
+                }
                 imageCard={action.image}
                 categoryCard={action.category}
                 actionId={action.id}

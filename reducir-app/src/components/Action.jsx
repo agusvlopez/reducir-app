@@ -3,7 +3,7 @@ import { collection, addDoc, getDocs, getDoc, query, where, doc, onSnapshot, upd
 import { Menu} from "./Menu";
 import RecycleImg from "../covers/actions/recycle.jpg";  
 import {HeartIcon} from "./HeartIcon";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Chip, Spinner } from "@nextui-org/react";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { db } from "../firebase/firebase.config";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../context/authContext";
 import { addFavorite, selectFavoriteAction, selectLoading, setFavorites, setLoading } from "../features/favoritesSlice";
+import ChipArrow from "./ChipArrow";
 
 export function Action () {
     const dispatch = useDispatch();
@@ -36,7 +37,7 @@ export function Action () {
    
     useEffect(() => {
         dispatch(setLoading(true));
-    
+      
         console.log("Entre al useEffect del HorizontalCard");
     
         const userRef = doc(db, `users/${userId}`);
@@ -58,7 +59,7 @@ export function Action () {
               // Verificar si la acción ya existe en la colección "achievements"
               const existingAchievementQuery = query(
                 achievementsCollectionRef,
-                where('titleCard', '==', actionDoc.data().title),
+                where('id', '==', actionDoc.data().id),
               );
               const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
 
@@ -133,7 +134,7 @@ export function Action () {
         // Verificar si la acción ya existe en la colección "achievements"
         const existingAchievementQuery = query(
           achievementsCollectionRef,
-          where('titleCard', '==', action.title),
+          where('id', '==', action.id),
         );
 
         const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
@@ -145,6 +146,7 @@ export function Action () {
         }
         
         const newAchievement = {
+          id: action.id,
           title: action.title,
           description: action.description,
           tip: action.tip,
@@ -198,11 +200,11 @@ export function Action () {
             <div className="flex-1">
             <NavbarWeb></NavbarWeb>
 
-                <div className="container p-4 mx-auto">
+                <div className="container p-6 mx-auto">
                     <h1 className="mb-2 ">{action.title}</h1>
                 </div>
 
-                <section className="backgroundDarkGreen min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
+                <section className="backgroundTrama min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
                 {loadingDocument ?
                 <div className="flex justify-center">
                     <Spinner color="default" />
@@ -212,8 +214,10 @@ export function Action () {
                     <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
                     <img src={action.image} alt="" className="max-h-72 rounded-lg" />    
                     <div className="mt-2">
-                        <p className="mb-2"><span className="font-bold">Categoría:</span> {action.category}</p>
-                        <p>{action.description}</p>
+                        <p className="mb-2"><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{action.category}</Chip></p>
+                        <p className="pb-2">{action.description}</p>
+                        <div className="border-2 border-transparent rounded-xl border-s-orange-600 p-2 backgroundSoftOrange"><span className="iconTip"><span className="invisible">Tip:</span></span> {action.tip}</div>
+                        <p className="text-foreground/90 mt-4"><ChipArrow> -{action.carbon} kg CO2 </ChipArrow></p>
                         <div className="flex justify-end">   
                         {!existingAchievement ? 
                             <Button
@@ -235,7 +239,7 @@ export function Action () {
                         }
                         </div>
                         {!existingAchievement && 
-                         <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
+                         <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white flex">Agregar como logro +</Button>
                         }
                     </div>
                     </div>

@@ -71,8 +71,6 @@ export function AuthProvider({children}) {
       
     }
 
-
-
     return <authContext.Provider value={{
         register,
         login,

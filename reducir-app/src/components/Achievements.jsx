@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Menu } from "./Menu";
 import RecycleImg from "../covers/actions/recycle.jpg";  
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
@@ -11,6 +11,8 @@ import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 
 export function Achievements () {
     const [achievements, setAchievements] = useState([]);
+    const [loadingDocument, setLoadingDocument] = useState(true);
+    const [message, setMessage] = useState("");
     const auth = useAuth();
     const userId = auth.user.uid;
   
@@ -28,12 +30,18 @@ export function Achievements () {
 
               const achievementSnapshot = await getDocs(achievementsCollectionRef);
               const achievementData = achievementSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
+              
               if (!achievementSnapshot.empty) {
                 setAchievements(achievementData);
                 console.log(achievementData);
+                setLoadingDocument(false);
                 return;
-              }  
+              } 
+              else{
+                setMessage("Aún no hay logros.");
+                setLoadingDocument(false);
+                return
+              } 
             }
             catch(err){
               console.log(err);
@@ -41,7 +49,7 @@ export function Achievements () {
 
           }  
             return () => {        
-                // mounted.current = false;
+              
                 unsubscribeUser();
             };
         });
@@ -52,18 +60,23 @@ export function Achievements () {
 
     return (
     <> 
-        <div className="lg:flex">
+      <div className="lg:flex">
             <template className="hidden lg:block">
                 <Sidebar />
             </template>
 
         <div className="flex-1">
         <NavbarWeb></NavbarWeb>
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-6">
             <h1 className="mb-2">Logros</h1>
             <p>Tus logros realizados se encuentran acá... ¡compartilos con todos en las redes sociales!</p>
         </div>
-        <section className="backgroundDarkGreen min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
+        <section className="backgroundTrama min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
+        {loadingDocument &&
+          <div className="flex justify-center">
+            <Spinner color="default" />
+          </div>
+        }
         {achievements.map((achievement) => (
         <div key={achievement.id} className="mb-8 mt-4">
             <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
@@ -80,11 +93,13 @@ export function Achievements () {
                 </div>
             </div>
         </div>  
-        ))}   
-        </section>
-        
+        ))}  
+        <div>
+          <p className="text-white text-center">{message}</p>
         </div>
+        </section>  
         </div>
+      </div>
         <div className="block lg:hidden mt-8">
             <Menu></Menu>
         </div>

@@ -40,7 +40,7 @@
 
 const admin = require('firebase-admin');
 
-admin.initializeApp(/* your Firebase config */);
+admin.initializeApp();
 const db = admin.firestore();
 
 async function createAction(action) {

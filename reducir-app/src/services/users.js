@@ -1,5 +1,7 @@
 import { addDoc, collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
+import { useAuth } from "../context/authContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 //cache
 const usersCache = {};
@@ -247,3 +249,13 @@ export async function getUsersDocs(idUser){
         console.log(usersDocId);
         return usersDocId;
 }
+
+// export function AuthRoute (props){
+//     const auth = useAuth();
+//     const navigate = useNavigate();
+//     if(!auth.user.uid){
+//         return <Navigate to="/iniciar-sesion" />;
+//     }
+//     return props.children
+    
+// }

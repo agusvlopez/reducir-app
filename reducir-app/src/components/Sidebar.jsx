@@ -4,8 +4,7 @@ import user from '../covers/icons/user-icon.png';
 import actions from '../covers/icons/actions-icon.png';
 import achievements from '../covers/icons/achievements-icon.png';
 import benefits from '../covers/icons/benefits-icon.png';
-import exit from '../covers/icons/exit.png';
-import more from '../covers/icons/more-vertical.png';
+import config from '../covers/icons/config-icon.png';
 
 const sidebarRoutes = [];
 
@@ -41,21 +40,19 @@ sidebarRoutes.push({
 const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(true); // Estado para controlar si la barra está abierta
-
     const toggleBar = () => {
       setIsOpen(!isOpen); // Cambia el estado para abrir o cerrar la barra
     };
 
   return (
-    <div className="border-r w-fit p-4 container">
+    <div className="border-r w-fit p-4 container backgroundWhite">
     <div className={`h-screen ${isOpen ? 'w-36' : 'w-fit'} p-4 transition-all duration-300 ease-in-out`}>
       <button onClick={toggleBar} className="py-1 px-1 sidebarButton">
        <span className={`${isOpen ? 'exitIcon' : 'moreIcon'} transition-all duration-300 ease-in-out `}></span> 
       </button>
-      <ul className="flex flex-col space-y-4">
+        <ul className="flex flex-col space-y-4 justify-between">
             {sidebarRoutes.map(route => {
-
-                return (
+                return (                  
                     <li key={route.id}
                     className='mt-4'
                     >
@@ -63,14 +60,16 @@ const Sidebar = () => {
                           <img className="widthIcon block" src={route.icon} alt={route.alt} />  
                          <span className={`text-sm ${isOpen ? 'textDarkGreen' : 'hidden'}`}>{route.name}</span>  
                         </Link>
-                    </li>)
-                }
-            )}
-            
-        </ul>
+                    </li>
+                )               
+            })}   
+        </ul>            
+        <div className="py-12 flex flex-col space-y-4 justify-between">
+            <Link to="/config" className="py-1 px-1 flex gap-2 items-center">
+                <img src={config} className="widthIcon block"/>
+            </Link>
+        </div> 
     </div>
-     
-
   </div>
   );
 };

@@ -53,23 +53,22 @@ export function Profile () {
 
     return (
         <>
-        <div className="lg:flex container">
+        <div className="lg:flex">
             <template className="hidden lg:block">
                 <Sidebar />
             </template>
 
-            <div className="flex-1 pb-8">
+            <div className="flex-1">
             <NavbarWeb></NavbarWeb>
-                <div className="backgroundDarkGreen shadow-md container mx-auto">
-                    <div className="mb-2 text-white p-4">
+                <div className="backgroundTrama shadow-md mx-auto w-full">
+                    <div className=" text-white p-4">
                         <h1 className="invisible">Mi perfil</h1>  
                         <h2 className="text-2xl font-bold text-center mb-4">¡Hola {displayEmail}!</h2>
-                        <img src={userImg} alt="Foto de perfil" className="bg-white max-w-28 max-h-28 rounded-full mx-auto border-4 border-white shadow-md" />
-                        
+                        <img src={userImg} alt="Foto de perfil" className="bg-white max-w-28 max-h-28 rounded-full mx-auto border-4 border-white shadow-md" />       
                         <p className="text-center mt-4">Mi huella de carbono este mes:</p>
                         <p className="font-bold text-center mb-8">{carbon !== null ? `${carbon} kg de CO2` : "Cargando..."}</p>
                     </div>
-                    <div className="pb-8 h-full backgroundWhite mx-auto container px-8 p-4 pt-8 rounded-t-[30px]">
+                    <div className="pb-8 h-full backgroundWhite mx-auto px-8 p-4 pt-8 rounded-t-[30px]">
                         <h2 className="text-2xl font-semibold p-2">Mis acciones en proceso</h2>
                        
                         <div> {loading ? 
@@ -90,7 +89,7 @@ export function Profile () {
                                 <img src={fav.imageCard} alt={fav.titleCard} className="w-48 rounded-lg" />
                                 <div className="p-2 m-1 text-white">
                                     <h3 className="text-xl mb-2">{fav.titleCard}</h3>
-                                    <p className="text-base">CO2: - 100kg</p>
+                                    <p className="text-base">CO2: - {fav.carbonCard}</p>
                                     <div className="flex justify-end mt-4">
                                         <Link to={`/accion/${fav.actionId}`} className="font-bold text-white hover:textWhite">Ver detalles</Link>
                                     </div>
@@ -100,20 +99,20 @@ export function Profile () {
                             ))}</ul>
                             }
                             </div>
-                        }
-                    
+                        }             
                         </div>
                         <div className="flex justify-center mt-6 pb-8">
-                        
-                            <Button className="backgroundDarkGreen text-white flex justify-between items-center">
-                                <Link to="/acciones" className="hover:text-white">Agregar una acción <span className="ml-6">+</span>  
-                                </Link></Button>
+                            <Link to="/acciones" className="hover:text-white">  
+                                <Button className="backgroundDarkGreen text-white flex justify-between items-center">
+                                    Agregar una acción <span className="ml-6">+</span>   
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
             </div> 
         </div> 
-        <div className="block lg:hidden">
+        <div className="block lg:hidden mt-8">
             <Menu></Menu>
         </div>
         </>

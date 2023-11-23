@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Card, CardBody, Image, Button, Spinner} from "@nextui-org/react";
+import {Card, CardBody, Image, Button, Spinner, Chip} from "@nextui-org/react";
 import {HeartIcon} from "./HeartIcon";
 import { Link } from "react-router-dom";
 import { selectFavoriteAction, addFavoriteAction, setLoading, setFavorites, selectLoading, addFavorite } from "../features/favoritesSlice";
@@ -10,6 +10,7 @@ import { useFavContext } from "../context/FavsContext";
 import { data } from "autoprefixer";
 import { db } from "../firebase/firebase.config";
 import { collection, doc, getDoc, getDocs, limit, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import ChipArrow from "./ChipArrow";
 
 
 //esta data se va a sacar de la base de datos.
@@ -115,14 +116,13 @@ export default function HorizontalCard({
               width="100%"
             />
           </div>
-
           <div className="flex flex-col col-span-6 md:col-span-8">
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0"> 
                 <p className="text-large font-medium mt-2">{titleCard}</p>
+                <p className="mt-1 mb-2 font-semibold text-foreground/90"><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{categoryCard}</Chip></p>
                 <p className="text-small text-foreground/80">{descriptionCard}</p>
-                <p className="mt-2 font-semibold text-foreground/90">Categoría: {categoryCard}</p>
-                <p className="font-semibold text-foreground/90">-{carbonCard} kg CO2 </p>
+                <p className="text-foreground/90 mt-4"><ChipArrow> -{carbonCard} kg CO2 </ChipArrow></p>
                 <div className="flex justify-end">
                   <Link to={`/accion/${actionId}`} className="font-bold">Leer más</Link>
                 </div>
@@ -148,8 +148,7 @@ export default function HorizontalCard({
             </div>
           </div>
         </div>
-      </CardBody>
-      
+      </CardBody>      
     </Card>
     </>
   );

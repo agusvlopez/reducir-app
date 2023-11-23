@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import warningIcon from './../covers/icons/warning-icon.png';
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {Button} from "@nextui-org/react";
 import NavbarWeb  from "./NavbarWeb";
 import {useAuth} from "../context/AuthContext";
-
+import logo from '../covers/logo-horizontal.png';
 
 export function Register () {
     const auth = useAuth();
@@ -18,6 +18,17 @@ export function Register () {
     const [carbon, setCarbon] = useState("");
     const [validationMessage, setValidationMessage] = useState("");
     //console.log(emailRegister, passwordRegister, "Estados del formulario en registro");
+
+    const handleEmailChange = (e) => {
+        setEmailRegister(e.target.value)
+    }
+
+    const handlePasswordChange = (e) => {
+        setPasswordRegister(e.target.value)
+    }
+    const handlePasswordConfirm = (e) => {
+        setPasswordConfirm(e.target.value)
+    }
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -43,17 +54,22 @@ export function Register () {
             setValidationMessage("Error al registrar. Inténtalo de nuevo.");
         }
         // auth.register(emailRegister, passwordRegister, favorites);
-
     }
   
-
     return (
         <>
-        <NavbarWeb></NavbarWeb>
-        <div className="container p-8 mx-auto min-h-screen max-w-sm">
-        <div className="backgroundWhite p-6 mt-2 rounded-2xl shadow-sm min-w-md">
-        <h1 className="text-2xl mt-2 mb-2 text-center">Registrarse</h1>
-
+        <div className="container p-8 mx-auto min-h-screen backgroundTrama">
+        <Link className="pl-2 text-white font-bold hover:textWhite" to="/">
+                Volver al inicio
+        </Link>
+        <div className="max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
+        <div className="p-2">
+            <div className="flex justify-center mb-4">
+                <img src={logo} />
+            </div>        
+           
+        </div> 
+        <h1 className="text-2xl mt-1 mb-2">Registrarse</h1>
         {validationMessage && (
                 <div className="mb-4 mt-4 flex items-center justify-center text-red-500">
                     <img src={warningIcon} className="mr-2 w-8 h-8" />
@@ -67,10 +83,8 @@ export function Register () {
         >
             <div className="mb-3">
                 <label className="mb-2 text-sm">Nombre</label>
-                <input 
-                    
-                    name="name"    
-                    // ref={nameRef}
+                <input    
+                    name="name"
                     type="text" 
                     id="name" 
                     placeholder="Ingresá tu nombre"
@@ -80,7 +94,7 @@ export function Register () {
             <div className="mb-3">
                 <label className="mb-2 text-sm">Email</label>
                 <input 
-                    onChange={(e) => setEmailRegister(e.target.value)}
+                    onChange={handleEmailChange}
                     name="email"       
                     // ref={emailRef}
                     type="email" 
@@ -92,7 +106,7 @@ export function Register () {
             <div className="mb-6">
                 <label className="mb-2 text-sm">Contraseña</label>
                 <input
-                    onChange={(e) => setPasswordRegister(e.target.value)}
+                    onChange={handlePasswordChange}
                     name="password"   
                     // ref={passRef}
                     type="password" 
@@ -105,7 +119,7 @@ export function Register () {
                 <label className="mb-2 text-sm">Confirmar contraseña</label>
                 <input
                     name="confirm_password"   
-                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                    onChange={handlePasswordConfirm}
                     type="password" 
                     id="passwordConfirm"                   
                     placeholder="Confirmá tu contraseña"
@@ -119,8 +133,15 @@ export function Register () {
                 </Button>
             </div>
         </form>
+        <div className="text-center mt-8">¿Ya tenés una cuenta?      
+            <Link className="pl-2 textDarkGreen font-bold" to="/iniciar-sesion">
+                Iniciar sesión
+            </Link>
+          </div>   
         </div>
         </div>
         </>
     )
 }
+
+export default Register;

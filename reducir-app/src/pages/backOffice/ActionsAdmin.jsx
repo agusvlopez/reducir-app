@@ -62,7 +62,7 @@ const ActionsAdmin = () => {
             <Spinner color="success" />
           </div>
         }
-          <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 container mx-auto">
+          <div className="gap-2 grid grid-cols-1 sm:grid-cols-4 container mx-auto">
             {data.map((item) => (
               <Card shadow="sm" 
               key={item.id} 

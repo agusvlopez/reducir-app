@@ -8,9 +8,9 @@ import VerticalCard from './VerticalCard';
 import benefitsCard from '../covers/benefits.jpg';
 import tipsCard from '../covers/tips.jpg';
 import worldCard from '../covers/world.jpg';
+import vectorMiniHojas from '../covers/vector-mini-2.png';
 
 export function Home () {
-
 
     return (
     <>    
@@ -19,13 +19,23 @@ export function Home () {
         <div>
         <section className="container mx-auto p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="text-center md:text-left">
-                <h1 className="text-4xl font-bold text-gray-800 mb-4">App Reducir</h1>
-                <p className="text-gray-600 mb-4">Reducir es una aplicación web y <span lang="en">mobile</span> que te acompaña en tu dia a dia ayudandote a incorporar hábitos mas amigables con el medio ambiente.</p>
-                <p className="text-gray-600 mb-4">Animate a dar el primer paso para construir un mundo mejor. <span className="font-bold">¡Registrate ahora!</span></p>
-                <Link to="/registrarse">
-                    <Button className="backgroundDarkGreen text-white rounded-full py-2 px-4 transition duration-300">Registrarse</Button>
-                </Link>
+            <div className="text-center md:text-left md:p-4">
+                <h1 className="invisible">App Reducir</h1>
+                <div className="relative p-2">
+                    <div className="absolute top-[-25px] left-[-25px]">
+                        <img src={vectorMiniHojas} />
+                    </div>
+                    <h2 className="text-5xl text-gray-800 mb-6 p-1 relative z-10 text-left">
+                        Estás a un <span className="font-bold">click</span> de <strong>cambiar tus hábitos</strong> y el <span className="font-bold">mundo</span>
+                    </h2>
+                </div>
+                <div className="pl-3 text-left">
+                    <p className="text-gray-600 mb-4"><strong>Reducir</strong> es una <strong>aplicación web</strong> y <strong><span lang="en" >mobile</span></strong> que te acompaña en tu día a día ayudándote a <span className="font-bold">incorporar hábitos amigables con el medio ambiente</span>.</p>
+                    <p className="text-gray-600 mb-6">Animate a dar el primer paso para construir un mundo mejor. <span className="font-bold">¡Registrate ahora!</span></p>
+                    <Link to="/registrarse">
+                        <Button className="backgroundDarkGreen text-white rounded-full py-4 px-4 transition duration-300">Registrarse</Button>
+                    </Link>
+                </div>
             </div>
             <div className="text-center">
                 <img src={homeApp} alt="Captura de pantalla de la aplicación" className="w-full rounded-lg shadow-lg" />
@@ -37,7 +47,31 @@ export function Home () {
     
         </div>
     </div>
-        {/* Sección de características */}
+    <div className="backgroundTrama container p-4 mx-auto">
+        <div>
+            <section className="container mx-auto p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div className="text-center">
+                    <img src={homeApp} alt="Captura de pantalla de la aplicación" className="w-full rounded-lg shadow-lg" />
+                </div>
+                <div className="text-center md:text-left">
+                    {/* <div className="relative p-2">
+                        <div className="absolute top-[-25px] left-[-25px]">
+                            <img src={vectorMiniHojas} />
+                        </div>
+                        <h2 className="text-5xl text-gray-800 mb-6 p-1 relative z-10 text-left">
+                            Estás a un <span className="font-bold">click</span> de <strong>cambiar tus hábitos</strong> y el <span className="font-bold">mundo</span>
+                        </h2>
+                    </div> */}
+                    <div className="pl-3 text-left">
+                    </div>
+                </div>
+                </div>
+                
+            </section>
+        </div>
+    </div>
+        {/* Sección de características
         <section className="mx-auto mt-8 pb-6 p-2 backgroundTrama">
             <div className="flex justify-center">
             <h2 className="text-2xl font-bolder m-4 text-center bg-white rounded-lg p-2 w-fit">¿Por qué deberías instalar nuestra App?</h2>
@@ -65,7 +99,7 @@ export function Home () {
             >    
             </VerticalCard>
             </div>
-        </section>
+        </section> */}
     <Footer></Footer>
     </>
     );
