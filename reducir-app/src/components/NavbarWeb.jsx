@@ -5,52 +5,32 @@ import { useAuth } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
+import { Link as RouterLink } from "react-router-dom";
 
-const menuRoutes = [];
-
-menuRoutes.push({     
-  id: 1,    
-  path: '/registrarse',
-  name: 'Registrarse',
-  userAuthorization: false,
-  userLogged: false,
-
-});
-
-menuRoutes.push({     
-  id: 2,    
-  path: '/bienvenida',
-  name: 'Rehacer test',
-  userAuthorization: true, 
-  userLogged: false,
-});
-
-menuRoutes.push({     
-  id: 3,    
-  path: '/perfil',
-  name: 'Mi perfil',
-  userAuthorization: true,
-  userLogged: false,
-});
-
-menuRoutes.push({     
-  id: 4,    
-  path: '/admin/acciones',
-  name: 'Administración',
-  userAuthorization: true,
-  userLogged: true,
-});
+const menuRoutes = [
+  { id: 1, path: "/registrarse", name: "Registrarse", userAuthorization: false, userLogged: false, adminLogged: false },
+  { id: 2, path: "/bienvenida", name: "Rehacer test", userAuthorization: true, userLogged: true, adminLogged: true },
+  { id: 3, path: "/perfil", name: "Mi perfil", userAuthorization: true, userLogged: true, adminLogged: true },
+  { id: 4, path: "/admin/acciones", name: "Administración", userAuthorization: true, userLogged: false, adminLogged: true }
+];
 
 export default function NavbarWeb() {
   const navigate = useNavigate();
   const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [userRole, setUserRole] = useState(null); // Nuevo estado para almacenar el rol del usuario
+  const [userRole, setUserRole] = useState(null);
+
   const displayEmail = auth?.user?.email;
   const filteredMenuRoutes = menuRoutes.filter(item => !item.userAuthorization || !!displayEmail);
+
   const userMenuRoutes = menuRoutes.filter((item) => {
-    // Filtra las rutas de administración si el usuario tiene el rol "cliente"
-    return item.userLogged && (!userRole || userRole !== "usuario");
+    // Filtra las rutas de administración si el usuario tiene el rol "usuario"
+    return item.userLogged && (userRole || userRole !== "usuario");
+  });
+
+  const adminMenuRoutes = menuRoutes.filter((item) => {
+    // Filtra las rutas de administración si el usuario tiene el rol "usuario"
+    return item.adminLogged && (userRole || userRole !== "admin");
   });
 
   useEffect(() => {
@@ -91,28 +71,37 @@ export default function NavbarWeb() {
 
       <NavbarContent className="sm:hidden" justify="center">
         <NavbarBrand>
-          <Link href="/">
+          <RouterLink to="/">
             <ReducirLogo />
-          </Link>
+          </RouterLink>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex " justify="center">
         <NavbarBrand>
-        <Link href="/">
+        <RouterLink to="/">
           <ReducirLogo />
-          </Link>
+          </RouterLink>
         </NavbarBrand>
         
-        { (displayEmail) && userMenuRoutes.map((item) => (
+        { (displayEmail && userRole === "usuario") && 
+        userMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
-          <Link color="foreground" href={item.path}>
+          <RouterLink  color="foreground" to={item.path}>
            {item.name}
-          </Link>
+          </RouterLink>
         </NavbarItem>     
-         ))}
-        { (displayEmail) &&
-         <Link className="text-white" href="/perfil">
+        ))}
+        { (displayEmail && userRole === "admin") &&
+        adminMenuRoutes.map((item) => (  
+          <NavbarItem>
+            <RouterLink color="foreground" to={item.path}>
+            {item.name}
+            </RouterLink>
+          </NavbarItem>
+        ))}
+
+         <RouterLink className="text-white" to="/perfil">
           <Button 
             variant="flat"
             radius="full"
@@ -121,13 +110,12 @@ export default function NavbarWeb() {
             > 
               App      
           </Button>
-          </Link>
-        }
+        </RouterLink> 
         { (!displayEmail) && filteredMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
-          <Link color="foreground" href={item.path}>
+          <RouterLink  color="foreground" to={item.path}>
            {item.name}
-          </Link>
+          </RouterLink>
         </NavbarItem>
          ))}
       </NavbarContent>
@@ -136,7 +124,7 @@ export default function NavbarWeb() {
         <NavbarItem>
           {(displayEmail) &&
           <div>
-            <Button as={Link} 
+            <Button 
             color="warning" 
             variant="flat"
             className="text-sm backgroundOrange text-white hover:text-white"
@@ -148,9 +136,9 @@ export default function NavbarWeb() {
           }
         </NavbarItem>   
         <NavbarItem> 
-        <Link href="/iniciar-sesion">
+        <RouterLink to="/iniciar-sesion">
           {(!displayEmail) &&
-          <Button as={Link} 
+          <Button 
           color="warning" 
           variant="flat"
           className="text-sm backgroundOrange text-white hover:text-white"
@@ -158,33 +146,44 @@ export default function NavbarWeb() {
             Login 
           </Button>
           }
-          </Link>
+          </RouterLink>
         </NavbarItem>  
       </NavbarContent>
 
       <NavbarMenu>
-        {(displayEmail) && userMenuRoutes.map((item) => (
-        <NavbarMenuItem key={item.id}>
-          <Link color="foreground" href={item.path}>
-           {item.name}
-          </Link>
+        {(displayEmail && userRole === "usuario") && 
+        userMenuRoutes.map((item) => (
+          <NavbarMenuItem key={item.id}>
+            <RouterLink  color="foreground" to={item.path}>
+            {item.name}
+            </RouterLink>
           </NavbarMenuItem>
         ))}
+        {(displayEmail && userRole === "admin") && 
+        adminMenuRoutes.map((item) => (       
+          <NavbarMenuItem>
+            <RouterLink  color="foreground" to={item.path}>
+            {item.name}
+            </RouterLink>
+          </NavbarMenuItem>
+        ))}
+        {(displayEmail) &&
+          <RouterLink className="text-white w-full" to="/perfil">
           <Button 
             variant="flat"
             radius="full"
             size="sm"
             className="backgroundDarkGreen text-white text-sm "
           >
-            <Link className="text-white" href="/perfil">
-              App
-            </Link>
+            App
           </Button>
+          </RouterLink>
+        }
         { (!displayEmail) && filteredMenuRoutes.map((item) => (
         <NavbarMenuItem key={item.id}>
-          <Link color="foreground" href={item.path}>
+          <RouterLink  color="foreground" to={item.path}>
            {item.name}
-          </Link>
+          </RouterLink>
         </NavbarMenuItem>
         ))}
       </NavbarMenu>

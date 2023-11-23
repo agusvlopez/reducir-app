@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Menu } from "./Menu";
 import RecycleImg from "../covers/actions/recycle.jpg";  
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Chip, Spinner } from "@nextui-org/react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
 import { useAuth } from "../context/authContext";
 import { db } from "../firebase/firebase.config";
 import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
+import ChipArrow from "./ChipArrow";
 
 export function Achievements () {
     const [achievements, setAchievements] = useState([]);
@@ -77,23 +78,26 @@ export function Achievements () {
             <Spinner color="default" />
           </div>
         }
-        {achievements.map((achievement) => (
-        <div key={achievement.id} className="mb-8 mt-4">
-            <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
-            <img src={achievement.image} alt={achievement.alt} className="max-h-72 rounded-lg" />    
-                <div>
-                    <h2>{achievement.title}</h2>
-                    <small>Categoría: {achievement.category}</small>
-                    <p>{achievement.description}</p>
-                    <div className="flex justify-end">  
-                    <Link to="">
-                        <span className="iconShare mr-2 mt-4"></span>
-                    </Link>
-                    </div>
-                </div>
-            </div>
-        </div>  
-        ))}  
+        <div className="lg:flex lg:flex-wrap">
+          {achievements.map((achievement) => (
+          <div key={achievement.id} className="mb-8 mt-4">
+              <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
+              <img src={achievement.image} alt={achievement.alt} className="max-h-48 rounded-lg" />    
+                  <div className="flex flex-col justify-between">
+                      <h2>{achievement.title}</h2>
+                      <p><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{achievement.category}</Chip></p>
+                      <p><span className="font-semibold">Puntos ganados:</span> {achievement.points}</p>
+                      <p><span className="font-semibold">Carbono reducido:</span> {achievement.carbon} kg.</p>
+                      <div className="flex justify-end">  
+                      <Link to="">
+                          <span className="iconShare mr-2 mt-4"></span>
+                      </Link>
+                      </div>
+                  </div>
+              </div>
+          </div>  
+          ))}  
+        </div>
         <div>
           <p className="text-white text-center">{message}</p>
         </div>

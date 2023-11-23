@@ -1,9 +1,13 @@
 import React from "react";
 import {Chip} from "@nextui-org/react";
-import arrowIcon from "../covers/icons/down-arrow.png";
 
 export default function ChipArrow({children}) {
   return (
-    <Chip className="shadow-md borderOrange" variant="bordered"> <img src={arrowIcon} className="inline-block" /> {children}</Chip>
+    <Chip className="shadow-md borderOrange backgroundOrangeChip text-white" variant="light">
+      <span className="flex flex-wrap font-semibold">
+         <span className="iconArrow mr-1"></span>{children} 
+      </span>
+    </Chip>
+     
   );
 }

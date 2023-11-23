@@ -61,7 +61,7 @@ button:focus-visible {
   background-color: #e7824465;
 }
 .backgroundOrangeChip {
-  background-color: rgba(230, 93, 8, 0.589);
+  background-color: #ed6d1dc4;
 }
 .backgroundDarkGreen {
   background-color: #005840;
@@ -188,6 +188,16 @@ button:focus-visible {
   content: '';
   width: 24px;
   height: 24px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+}
+
+.iconArrow {
+  background-image: url('./covers/icons/arrow-down.png');
+  content: '';
+  width: 22px;
+  height: 22px;
   background-repeat: no-repeat;
   background-size: contain;
   display: inline-block;

@@ -107,7 +107,6 @@ export function Action () {
       
           // La función de limpieza se ejecutará cuando el componente se desmonte
           return () => {
-           
             // mounted.current = false;
             unsubscribeUser();
           };
@@ -115,80 +114,77 @@ export function Action () {
     }, [actionId, userId, dispatch])
   
     const handleFavorite = async () => {
+        dispatch(addFavorite({
+          titleCard,
+          descriptionCard,
+          imageCard,
+          categoryCard,
+          actionId,
+          userId,
+          carbonCard
+        }));
+    }
+    const addAsAchievement = async () => {
+      const userDocRef = doc(db, `users/${userId}`);
+      const achievementsCollectionRef = collection(userDocRef, 'achievements');
 
-          dispatch(addFavorite({
-            titleCard,
-            descriptionCard,
-            imageCard,
-            categoryCard,
-            actionId,
-            userId,
-            carbonCard
-          }));
-      }
+      // Verificar si la acción ya existe en la colección "achievements"
+      const existingAchievementQuery = query(
+        achievementsCollectionRef,
+        where('id', '==', action.id),
+      );
 
-      const addAsAchievement = async () => {
-        const userDocRef = doc(db, `users/${userId}`);
-        const achievementsCollectionRef = collection(userDocRef, 'achievements');
+      const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
 
-        // Verificar si la acción ya existe en la colección "achievements"
-        const existingAchievementQuery = query(
-          achievementsCollectionRef,
-          where('id', '==', action.id),
-        );
-
-        const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
-
-        if (!existingAchievementSnapshot.empty) {
-          setExistingAchievement(true);
-          console.log('La acción ya existe en achievements. No se agregará nuevamente.');
-          return;
-        }
-        
-        const newAchievement = {
-          id: action.id,
-          title: action.title,
-          description: action.description,
-          tip: action.tip,
-          image: action.image,
-          alt: action.alt,
-          category: action.category,
-          carbon: action.carbon,
-          points: action.points
-        };
-      
-        // Agregar un nuevo documento a la colección "achievements"
-        const newAchievementRef = await addDoc(achievementsCollectionRef, newAchievement);
-        console.log(`Nuevo logro agregado con ID: ${newAchievementRef.id}`);
-        
-        const isActionInFavorites = favorites.some((f) => f.actionId === actionId);
-
-        if (isActionInFavorites) {
-          // Eliminar la acción de la colección "favorites"
-          const updatedFavorites = favorites.filter((f) => f.actionId !== actionId);
-          dispatch(setFavorites(updatedFavorites));
-          
-          // Actualizar el documento del usuario con los nuevos "favorites"
-          await updateDoc(userDocRef, { favorites: updatedFavorites });
-        }
-      
-        console.log('Logro agregado y acción eliminada de "favorites" correctamente.');
-        
-        // Restar el valor de carbono del logro al valor actual del usuario
-        const userSnapshot = await getDoc(userDocRef);
-        const currentUserData = userSnapshot.data();
-        const currentCarbon = currentUserData.carbon || 0;
-        const carbonAchievement = newAchievement.carbon || 0;
-      
-        const newCarbon = currentCarbon - carbonAchievement;
-      
-        // Actualizar el campo "carbon" del documento del usuario con el nuevo valor
-        await updateDoc(userDocRef, { carbon: newCarbon });
-      
-        console.log('Logro agregado y carbono actualizado correctamente.');
+      if (!existingAchievementSnapshot.empty) {
         setExistingAchievement(true);
+        console.log('La acción ya existe en achievements. No se agregará nuevamente.');
+        return;
+      }
+        
+      const newAchievement = {
+        id: action.id,
+        title: action.title,
+        description: action.description,
+        tip: action.tip,
+        image: action.image,
+        alt: action.alt,
+        category: action.category,
+        carbon: action.carbon,
+        points: action.points
       };
+      
+      // Agregar un nuevo documento a la colección "achievements"
+      const newAchievementRef = await addDoc(achievementsCollectionRef, newAchievement);
+      console.log(`Nuevo logro agregado con ID: ${newAchievementRef.id}`);
+        
+      const isActionInFavorites = favorites.some((f) => f.actionId === actionId);
 
+      if (isActionInFavorites) {
+        // Eliminar la acción de la colección "favorites"
+        const updatedFavorites = favorites.filter((f) => f.actionId !== actionId);
+        dispatch(setFavorites(updatedFavorites));
+          
+        // Actualizar el documento del usuario con los nuevos "favorites"
+        await updateDoc(userDocRef, { favorites: updatedFavorites });
+      }
+      
+      console.log('Logro agregado y acción eliminada de "favorites" correctamente.');
+        
+      // Restar el valor de carbono del logro al valor actual del usuario
+      const userSnapshot = await getDoc(userDocRef);
+      const currentUserData = userSnapshot.data();
+      const currentCarbon = currentUserData.carbon || 0;
+      const carbonAchievement = newAchievement.carbon || 0;
+      
+      const newCarbon = currentCarbon - carbonAchievement;
+      
+      // Actualizar el campo "carbon" del documento del usuario con el nuevo valor
+      await updateDoc(userDocRef, { carbon: newCarbon });
+      
+      console.log('Logro agregado y carbono actualizado correctamente.');
+      setExistingAchievement(true);
+    };
 
     return (
     <>
@@ -199,11 +195,9 @@ export function Action () {
 
             <div className="flex-1">
             <NavbarWeb></NavbarWeb>
-
                 <div className="container p-6 mx-auto">
                     <h1 className="mb-2 ">{action.title}</h1>
                 </div>
-
                 <section className="backgroundTrama min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
                 {loadingDocument ?
                 <div className="flex justify-center">
@@ -212,12 +206,14 @@ export function Action () {
                 :
                 <div className="mb-8 mt-4">
                     <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
-                    <img src={action.image} alt="" className="max-h-72 rounded-lg" />    
+                    <img src={action.image} alt={action.alt} className="max-h-72 rounded-lg" />    
                     <div className="mt-2">
-                        <p className="mb-2"><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{action.category}</Chip></p>
-                        <p className="pb-2">{action.description}</p>
-                        <div className="border-2 border-transparent rounded-xl border-s-orange-600 p-2 backgroundSoftOrange"><span className="iconTip"><span className="invisible">Tip:</span></span> {action.tip}</div>
-                        <p className="text-foreground/90 mt-4"><ChipArrow> -{action.carbon} kg CO2 </ChipArrow></p>
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <p><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{action.category}</Chip></p>
+                        <p className="text-foreground/90 "><ChipArrow> -{action.carbon} kg CO2 </ChipArrow></p>
+                      </div>
+                        <p className="mb-3">{action.description}</p>
+                        <div className="mb-2 border-2 border-transparent rounded-xl border-s-orange-600 p-2 backgroundSoftOrange font-semibold text-orange-800"><span className="iconTip"><span className="invisible">Tip:</span></span> {action.tip}</div>
                         <div className="flex justify-end">   
                         {!existingAchievement ? 
                             <Button
@@ -239,7 +235,7 @@ export function Action () {
                         }
                         </div>
                         {!existingAchievement && 
-                         <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white flex">Agregar como logro +</Button>
+                         <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
                         }
                     </div>
                     </div>
