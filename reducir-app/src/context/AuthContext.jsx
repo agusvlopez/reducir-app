@@ -16,17 +16,30 @@ export const useAuth = () => {
     }
     return context;
 }
+
+let userData = {
+    id: null,
+    email: null,
+}
 //se va a encargar de globalizar todo nuestro contexto
 export function AuthProvider({children}) {
-    const [user, setUser] = useState("");
+    const [user, setUser] = useState(null);
+    //Si el usuario figuraba como autenticado, lo marcamos como tal inmediatamente.
 
     useEffect(() => {
         const suscribed = onAuthStateChanged(auth, (currentUser) => {
+                
+            if(!currentUser && localStorage.getItem('user')){
+                currentUser = JSON.parse(localStorage.getItem('user'));
+            };
             if(!currentUser){
                 console.log("No hay usuario suscrito");
-                setUser("");
+                setUser(null);
+                localStorage.removeItem('user');
+                
             }else {
                 setUser(currentUser);
+                localStorage.setItem('user', JSON.stringify(currentUser))
             }
         })
         return () => suscribed()
@@ -68,7 +81,7 @@ export function AuthProvider({children}) {
     const logout = async () => {
         const response = await signOut(auth);
         console.log(response);
-      
+        localStorage.removeItem('user');
     }
 
     return <authContext.Provider value={{

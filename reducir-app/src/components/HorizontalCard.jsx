@@ -136,13 +136,13 @@ export default function HorizontalCard({
                 onPress={handleFavorite}
               >
                 <HeartIcon
-                  className={isActionLiked ? "[&>path]:stroke-transparent" : ""}
+                  className={isActionLiked ? "[&>path]:stroke-transparent" : "animate__bounceIn"}
                   fill={isActionLiked ? "currentColor" : "none"}
                 />
               </Button>
               :
               <div>
-               <p className="font-semibold text-center text-sm"> Acción lograda</p>
+               <p className="font-semibold text-center text-sm">Acción lograda</p>
               </div>
             }
             </div>

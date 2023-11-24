@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, selectFavoriteAction, selectLoading, setFavorites, setLoading } from "../features/favoritesSlice.jsx";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase.config.js";
+import { useGetFavoritesQuery } from "../features/fetchFirebase.jsx";
 
 
 export function Profile () {
@@ -23,33 +24,33 @@ export function Profile () {
     const favorites = useSelector(selectFavoriteAction);
     const loading = useSelector(selectLoading);
     const [carbon, setCarbon] = useState(null); // Nuevo estado para almacenar el valor de "carbon"
+    const {data: favoriteData, isLoading, isError, error} = useGetFavoritesQuery(userId);
+    // useEffect(() => {         
+    //     dispatch(setLoading(true));
 
-    useEffect(() => {         
-        dispatch(setLoading(true));
+    //     const userRef = doc(db, `users/${userId}`);
+    //     console.log(userId);
+    //     // Utiliza onSnapshot para suscribirte al documento del usuario
+    //     const unsubscribeUser = onSnapshot(userRef, (docSnapshot) => {
+    //       if (docSnapshot.exists()) {
+    //         // Si el documento existe, accede al campo deseado (en este caso, "favorites")
+    //         const favorites = docSnapshot.data()["favorites"] || [];
+    //         dispatch(setFavorites(favorites));
 
-        const userRef = doc(db, `users/${userId}`);
-        console.log(userId);
-        // Utiliza onSnapshot para suscribirte al documento del usuario
-        const unsubscribeUser = onSnapshot(userRef, (docSnapshot) => {
-          if (docSnapshot.exists()) {
-            // Si el documento existe, accede al campo deseado (en este caso, "favorites")
-            const favorites = docSnapshot.data()["favorites"] || [];
-            dispatch(setFavorites(favorites));
+    //         const userCarbon = docSnapshot.data()["carbon"] || null;
+    //         setCarbon(userCarbon);
 
-            const userCarbon = docSnapshot.data()["carbon"] || null;
-            setCarbon(userCarbon);
+    //         dispatch(setLoading(false));
+    //       }      
+    //     });
 
-            dispatch(setLoading(false));
-          }      
-        });
-
-        return () => {
-          // Desuscribirse cuando el componente se desmonte
-          unsubscribeUser();
-        };
-      }, [userId, dispatch]);
+    //     return () => {
+    //       // Desuscribirse cuando el componente se desmonte
+    //       unsubscribeUser();
+    //     };
+    //   }, [userId, dispatch]);
       
-    console.log(favorites);
+    console.log(favoriteData);
 
     return (
         <>
@@ -59,31 +60,31 @@ export function Profile () {
             </template>
 
             <div className="flex-1">
-            <NavbarWeb></NavbarWeb>
+            <NavbarWeb />
                 <div className="backgroundTrama shadow-md mx-auto w-full">
                     <div className=" text-white p-4">
                         <h1 className="invisible">Mi perfil</h1>  
-                        <h2 className="text-2xl font-bold text-center mb-4">¡Hola {displayEmail}!</h2>
-                        <img src={userImg} alt="Foto de perfil" className="bg-white max-w-28 max-h-28 rounded-full mx-auto border-4 border-white shadow-md" />       
-                        <p className="text-center mt-4">Mi huella de carbono este mes:</p>
-                        <p className="font-bold text-center mb-8">{carbon !== null ? `${carbon} kg de CO2` : "Cargando..."}</p>
+                        <h2 className="text-2xl font-bold text-center mb-4 text-white">¡Hola {displayEmail}!</h2>
+                        <img src={userImg} alt="Foto de perfil" className="bg-white max-w-28 max-h-28 rounded-full mx-auto border-4 borderOrangeProfile shadow-md" />       
+                        <p className="text-center mt-4 text-white text-[18px]">Mi huella de carbono este mes:</p>
+                        <p className="font-bold text-center mb-8 textOrange text-[20px]">{carbon !== null ? `${carbon} kg de CO2` : "Cargando..."}</p>
                     </div>
                     <div className="pb-8 h-full backgroundWhite mx-auto px-8 p-4 pt-8 rounded-t-[30px]">
                         <h2 className="text-2xl font-semibold p-2">Mis acciones en proceso</h2>
                        
-                        <div> {loading ? 
+                        <div> {isLoading ? 
                             <div className="flex justify-center">
                                 <Spinner color="success" />
                             </div>
                             :
                             <div>
-                            {favorites.length === 0 ?
+                            {favoriteData.length === 0 ?
                                 <div className="p-2">
                                     <p className="block">Aún no hay acciones en proceso.</p>
                                 </div>
                             :
                             <ul className="md:flex flex-wrap min-h-32">
-                            {favorites?.map((fav => 
+                            {favoriteData?.favorites.map((fav => 
                                 <div key={fav.actionId}
                                 className="backgroundDarkGreen rounded-lg p-2 shadow-xl flex flex-col items-center m-2 md:w-48">
                                 <img src={fav.imageCard} alt={fav.titleCard} className="w-48 rounded-lg" />
@@ -103,7 +104,7 @@ export function Profile () {
                         </div>
                         <div className="flex justify-center mt-6 pb-8">
                             <Link to="/acciones" className="hover:text-white">  
-                                <Button className="backgroundDarkGreen text-white flex justify-between items-center">
+                                <Button className="backgroundDarkGreen text-white flex justify-between items-center font-semibold text-base">
                                     Agregar una acción <span className="ml-6">+</span>   
                                 </Button>
                             </Link>

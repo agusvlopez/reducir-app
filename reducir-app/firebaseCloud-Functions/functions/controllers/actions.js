@@ -71,10 +71,32 @@ const deleteAction = async (req, res) => {
   }
 };
 
+//favorites
+const getFavorites = async (req, res) => {
+  const userId = req.params.userId;
+    try {
+      //setLoading(true);
+      
+      const favorites = await ActionsService.getFavoritesByUserId(userId);
+      return res.status(201).json({favorites});
+      // Actualiza el estado de Redux con los favoritos obtenidos
+      //setFavorites(favorites);
+  
+      //setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los favoritos:', error);
+      res.status(500).json({ error: 'Error interno del servidor:' + error });
+    } 
+  //   finally {
+  //     setLoading(false);
+  //   }
+  };
+
 module.exports = {
   createAction,
   getActionById,
   getAllActions,
   updateAction,
-  deleteAction
+  deleteAction,
+  getFavorites
 };

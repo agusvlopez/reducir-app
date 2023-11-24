@@ -194,9 +194,9 @@ export function Action () {
             </template>
 
             <div className="flex-1">
-            <NavbarWeb></NavbarWeb>
+            <NavbarWeb />
                 <div className="container p-6 mx-auto">
-                    <h1 className="mb-2 ">{action.title}</h1>
+                    <h1 className="mb-2">{action.title}</h1>
                 </div>
                 <section className="backgroundTrama min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
                 {loadingDocument ?
@@ -205,38 +205,39 @@ export function Action () {
                 </div>
                 :
                 <div className="mb-8 mt-4">
-                    <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
+                    <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4 items-center">     
                     <img src={action.image} alt={action.alt} className="max-h-72 rounded-lg" />    
-                    <div className="mt-2">
+                    <div className="mt-2 p-2">
                       <div className="flex flex-wrap items-center gap-2 mb-2">
                         <p><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{action.category}</Chip></p>
                         <p className="text-foreground/90 "><ChipArrow> -{action.carbon} kg CO2 </ChipArrow></p>
                       </div>
-                        <p className="mb-3">{action.description}</p>
-                        <div className="mb-2 border-2 border-transparent rounded-xl border-s-orange-600 p-2 backgroundSoftOrange font-semibold text-orange-800"><span className="iconTip"><span className="invisible">Tip:</span></span> {action.tip}</div>
-                        <div className="flex justify-end">   
+                        <p className="mb-3 mt-3">{action.description}</p>
+                        <div className="mb-2 border-2 border-transparent rounded-xl border-s-orange-600 p-2 backgroundSoftOrange font-semibold text-orange-800 italic inline-block"><span className="iconTip"><span className="invisible">Tip:</span></span> {action.tip}</div>
+
+                        <div className="flex justify-end pt-2">   
                         {!existingAchievement ? 
-                            <Button
-                                isIconOnly
-                                className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2 mr-2"
-                                radius="full"
-                                variant="light"
-                                onPress={handleFavorite}
-                            >
-                                <HeartIcon
-                                    className={isActionLiked ? "[&>path]:stroke-transparent" : ""}
-                                    fill={isActionLiked ? "currentColor" : "none"}
-                                />
-                            </Button>
-                            :
-                            <div>
-                               <p className="font-semibold text-center text-sm"> Acción lograda</p>
-                            </div>
+                        <>
+                          <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
+                          <Button
+                            isIconOnly
+                            className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2 mr-2"
+                            radius="full"
+                            variant="light"
+                            onPress={handleFavorite}
+                          >
+                          <HeartIcon
+                            className={isActionLiked ? "[&>path]:stroke-transparent" : "animate__bounceIn  animate__delay-2s"}
+                            fill={isActionLiked ? "currentColor" : "none"}
+                          />
+                          </Button>
+                        </>
+                          :
+                          <div>
+                            <p className="font-semibold text-center text-sm"><span className="iconAchievement"><span className="invisible">Acción lograda</span></span></p>
+                          </div>
                         }
-                        </div>
-                        {!existingAchievement && 
-                         <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
-                        }
+                        </div>                       
                     </div>
                     </div>
                 </div>

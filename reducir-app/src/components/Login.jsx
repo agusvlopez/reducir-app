@@ -9,9 +9,9 @@ import logo from '../covers/logo-horizontal.png';
 export function Login () {
     const navigate = useNavigate();
     const auth = useAuth();
-    const {displayName} = auth.user;
-    const displayEmail = auth.user.email;
-    console.log(displayName);
+    // const {displayName} = auth.user;
+    // const displayEmail = auth.user.email;
+    // console.log(displayName);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

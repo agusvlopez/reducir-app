@@ -79,7 +79,7 @@ button:focus-visible {
   color: #005840;
 }
 .textOrange{
-  color: #ed6C1D;
+  color: #ed6d1dea;
 }
 .textWhite {
   color: #F1EDEC;
@@ -178,9 +178,14 @@ button:focus-visible {
   border-width: 0.5px;
 }
 
+.borderOrangeProfile {
+  border-color: #ed6C1D;
+  border-width: 6px;
+}
+
 .borderOrange {
   border-color: #ed6C1D;
-  border-width: 0.5px;
+  border-width: 1px;
 }
 
 .iconTip {
@@ -191,6 +196,8 @@ button:focus-visible {
   background-repeat: no-repeat;
   background-size: contain;
   display: inline-block;
+  animation: swing; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 2s;
 }
 
 .iconArrow {
@@ -201,6 +208,30 @@ button:focus-visible {
   background-repeat: no-repeat;
   background-size: contain;
   display: inline-block;
+}
+
+.iconAchievement {
+  background-image: url('./covers/icons/achievements.png');
+  content: '';
+  width: 28px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  animation: swing; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 2s;
+}
+
+strong {
+  color: #005840;
+}
+
+p {
+  color: #00271d;
+}
+
+h2 {
+  color: #00271d;
 }
 /* @media (prefers-color-scheme: light) {
   :root {

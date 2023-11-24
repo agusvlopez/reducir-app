@@ -14,13 +14,15 @@ const menuRoutes = [
   { id: 4, path: "/admin/acciones", name: "Administración", userAuthorization: true, userLogged: false, adminLogged: true }
 ];
 
-export default function NavbarWeb() {
+const NavbarWeb = React.memo(() => {
   const navigate = useNavigate();
   const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
 
   const displayEmail = auth?.user?.email;
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  console.log(storedUser);
   const filteredMenuRoutes = menuRoutes.filter(item => !item.userAuthorization || !!displayEmail);
 
   const userMenuRoutes = menuRoutes.filter((item) => {
@@ -35,22 +37,31 @@ export default function NavbarWeb() {
 
   useEffect(() => {
     // Función asincrónica para obtener el campo "rol" del usuario actual
+    if (storedUser && storedUser.rol) {
+      setUserRole(storedUser.rol);
+    } else {
     const getUserRole = async () => {
-      const userDoc = doc(db, "users", auth.user.uid);
+        const userDoc = doc(db, "users", auth.user.uid);
 
-      try {
-        const userSnapshot = await getDoc(userDoc);
-        if (userSnapshot.exists()) {
-          setUserRole(userSnapshot.data().rol);
+        try {
+          const userSnapshot = await getDoc(userDoc);
+          if (userSnapshot.exists()) {
+            const newUserRole = userSnapshot.data().rol;
+            setUserRole(newUserRole);
+            if (newUserRole) {
+              localStorage.setItem('user', JSON.stringify({ rol: newUserRole }));
+              console.log("Rol del usuario obtenido de Firebase:", newUserRole);
+            }
+          }
+        } catch (error) {
+          console.error("Error obteniendo el rol del usuario:", error);
         }
-      } catch (error) {
-        console.error("Error obteniendo el rol del usuario:", error);
-      }
     };
 
     // Llamada a la función al cargar el componente o cuando cambie el usuario
-    getUserRole();
-  }, [auth.user]);
+      getUserRole();
+    }
+  }, [auth.user, storedUser]);
 
   const handleLogout = () => {
     auth.logout();
@@ -100,7 +111,7 @@ export default function NavbarWeb() {
             </RouterLink>
           </NavbarItem>
         ))}
-
+        {(displayEmail) &&
          <RouterLink className="text-white" to="/perfil">
           <Button 
             variant="flat"
@@ -111,6 +122,7 @@ export default function NavbarWeb() {
               App      
           </Button>
         </RouterLink> 
+        }
         { (!displayEmail) && filteredMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
           <RouterLink  color="foreground" to={item.path}>
@@ -189,4 +201,6 @@ export default function NavbarWeb() {
       </NavbarMenu>
     </Navbar>
   );
-}
+})
+
+export default NavbarWeb;

@@ -9,12 +9,12 @@ import benefitsCard from '../covers/benefits.jpg';
 import tipsCard from '../covers/tips.jpg';
 import worldCard from '../covers/world.jpg';
 import vectorMiniHojas from '../covers/vector-mini-2.png';
+import 'animate.css';
 
 export function Home () {
-
     return (
     <>    
-    <NavbarWeb></NavbarWeb>
+    <NavbarWeb />
     <div className="container p-4 mx-auto">
         <div>
         <section className="container mx-auto p-4">
@@ -25,13 +25,13 @@ export function Home () {
                     <div className="absolute top-[-25px] left-[-25px]">
                         <img src={vectorMiniHojas} />
                     </div>
-                    <h2 className="text-5xl text-gray-800 mb-6 p-1 relative z-10 text-left">
-                        Estás a un <span className="font-bold">click</span> de <strong>cambiar tus hábitos</strong> y el <span className="font-bold">mundo</span>
+                    <h2 className="text-5xl mb-6 p-1 relative z-10 text-left">
+                        Estás a un <span className="font-semibold textDarkGreen">click</span> de <span className="textDarkGreen font-semibold">cambiar tus hábitos</span> y el <span className="font-semibold textDarkGreen">mundo</span>
                     </h2>
                 </div>
                 <div className="pl-3 text-left">
-                    <p className="text-gray-600 mb-4"><strong>Reducir</strong> es una <strong>aplicación web</strong> y <strong><span lang="en" >mobile</span></strong> que te acompaña en tu día a día ayudándote a <span className="font-bold">incorporar hábitos amigables con el medio ambiente</span>.</p>
-                    <p className="text-gray-600 mb-6">Animate a dar el primer paso para construir un mundo mejor. <span className="font-bold">¡Registrate ahora!</span></p>
+                    <p className="mb-4"><strong>Reducir</strong> es una <strong>aplicación web</strong> y <strong><span lang="en" >mobile</span></strong> que te acompaña en tu día a día ayudándote a <span className="font-bold textDarkGreen">incorporar hábitos amigables con el medio ambiente</span>.</p>
+                    <p className="mb-6">Animate a dar el primer paso para construir un mundo mejor. <span className="font-semibold textDarkGreen">¡Registrate ahora!</span></p>
                     <Link to="/registrarse">
                         <Button className="backgroundDarkGreen text-white rounded-full py-4 px-4 transition duration-300">Registrarse</Button>
                     </Link>

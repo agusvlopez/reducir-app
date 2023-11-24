@@ -1,45 +1,5 @@
-// // import admin from 'firebase-admin';
-
-
-// // // var serviceAccount = require("./serviceAccountKey.json");
-// // import * as serviceAccount from '../serviceAccountKey.json' assert { type: 'json' };
-
-// const admin = require('firebase-admin');
-// var serviceAccount = require("../serviceAccountKey.json");
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
-
-// // var serviceAccount = require("./serviceAccountKey.json");
-// //Main database reference
-// const db = admin.firestore();
-
-// async function createAction(action) {
-//     (async () => {
-       
-//            // Accede a los datos de la solicitud utilizando req.body después de configurar el middleware express.json()
-//             // const { title, description, image, category, carbon } = req.body;
-//             return await db.collection("actions").doc(`/${Date.now()}/`).create({
-//                 id: Date.now(),
-//                 ...action
-//                 // title: req.body.title,
-//                 // description: req.body.description,
-//                 // image: req.body.image,
-//                 // category: req.body.category,
-//                 // carbon: req.body.carbon
-//             });
-
-
-//     });
-// }
-
-// module.exports = { createAction };
-
-
-// functions/services/actionsService.js
-
+const { doc, getDoc } = require('firebase/firestore');
 const admin = require('firebase-admin');
-
 admin.initializeApp();
 const db = admin.firestore();
 
@@ -141,10 +101,25 @@ const deleteAction = async (itemId) => {
   }
 };
 
+const getFavoritesByUserId = async (userId) => {
+  const userRef = db.collection('users').doc(userId);
+ //const docSnapshot = doc(db, `users/${userId}`);
+  //  const docSnapshot = await getDoc(userRef);
+  const userDetail = await userRef.get();
+  
+   if (userDetail) {
+     const favorites = userDetail.data()?.favorites || [];
+     return favorites;
+   }
+ 
+   throw new Error('Usuario no encontrado');
+ };
+
 module.exports = {
   createAction,
   getActionById,
   getAllActions,
   updateAction,
-  deleteAction
+  deleteAction,
+  getFavoritesByUserId
 };

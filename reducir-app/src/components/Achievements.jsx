@@ -67,7 +67,7 @@ export function Achievements () {
             </template>
 
         <div className="flex-1">
-        <NavbarWeb></NavbarWeb>
+        <NavbarWeb />
         <div className="container mx-auto p-6">
             <h1 className="mb-2">Logros</h1>
             <p>Tus logros realizados se encuentran acá... ¡compartilos con todos en las redes sociales!</p>
