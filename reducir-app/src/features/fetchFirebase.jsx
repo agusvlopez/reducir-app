@@ -9,9 +9,13 @@ export const apiFirebaseSlice = createApi({
     endpoints: (builder) => ({
         getFavorites: builder.query({
             query: (userId) => `api/users/get/${userId}/favorites`
-        })
+        }),
+        getCarbon: builder.query({
+            // Define la lógica de tu nuevo endpoint aquí
+            query: (userId) => `/api/users/get/${userId}/carbon`, // Puedes ajustar la URL según tus necesidades
+        }),
     })
 });
 
-export const {useGetFavoritesQuery} = apiFirebaseSlice;
+export const {useGetFavoritesQuery, useGetCarbonQuery} = apiFirebaseSlice;
 

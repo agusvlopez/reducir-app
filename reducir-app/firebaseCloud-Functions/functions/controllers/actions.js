@@ -90,7 +90,28 @@ const getFavorites = async (req, res) => {
   //   finally {
   //     setLoading(false);
   //   }
-  };
+};
+
+//carbon
+const getCarbon = async (req, res) => {
+  const userId = req.params.userId;
+    try {
+      //setLoading(true);
+      
+      const carbon = await ActionsService.getCarbonByUserId(userId);
+      return res.status(201).json(carbon);
+      // Actualiza el estado de Redux con los favoritos obtenidos
+      //setFavorites(favorites);
+  
+      //setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los favoritos:', error);
+      res.status(500).json({ error: 'Error interno del servidor:' + error });
+    } 
+  //   finally {
+  //     setLoading(false);
+  //   }
+};
 
 module.exports = {
   createAction,
@@ -98,5 +119,6 @@ module.exports = {
   getAllActions,
   updateAction,
   deleteAction,
-  getFavorites
+  getFavorites,
+  getCarbon
 };

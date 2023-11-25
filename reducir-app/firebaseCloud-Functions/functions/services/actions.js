@@ -113,7 +113,21 @@ const getFavoritesByUserId = async (userId) => {
    }
  
    throw new Error('Usuario no encontrado');
- };
+};
+
+const getCarbonByUserId = async (userId) => {
+  const userRef = db.collection('users').doc(userId);
+ //const docSnapshot = doc(db, `users/${userId}`);
+  //  const docSnapshot = await getDoc(userRef);
+  const userDetail = await userRef.get();
+  
+   if (userDetail) {
+     const carbon = userDetail.data()?.carbon || "";
+     return carbon;
+   }
+ 
+   throw new Error('Usuario no encontrado');
+};
 
 module.exports = {
   createAction,
@@ -121,5 +135,6 @@ module.exports = {
   getAllActions,
   updateAction,
   deleteAction,
-  getFavoritesByUserId
+  getFavoritesByUserId,
+  getCarbonByUserId
 };

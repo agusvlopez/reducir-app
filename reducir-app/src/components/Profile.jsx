@@ -1,55 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Menu } from './Menu.jsx'; 
 import userImg from './../covers/user.png';
 import { Button, Spinner } from "@nextui-org/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import NavbarWeb from "./NavbarWeb.jsx";
 import { useAuth } from "../context/authContext.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import { addFavorite, selectFavoriteAction, selectLoading, setFavorites, setLoading } from "../features/favoritesSlice.jsx";
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase/firebase.config.js";
-import { useGetFavoritesQuery } from "../features/fetchFirebase.jsx";
-
+import { useGetCarbonQuery, useGetFavoritesQuery } from "../features/fetchFirebase.jsx";
 
 export function Profile () {
-    const dispatch = useDispatch();
     const auth = useAuth();
-    const navigate = useNavigate();
-    console.log(auth.user.uid);
     const userId = auth.user.uid;
     const displayEmail = auth.user.email;
-
-    const favorites = useSelector(selectFavoriteAction);
-    const loading = useSelector(selectLoading);
-    const [carbon, setCarbon] = useState(null); // Nuevo estado para almacenar el valor de "carbon"
     const {data: favoriteData, isLoading, isError, error} = useGetFavoritesQuery(userId);
-    // useEffect(() => {         
-    //     dispatch(setLoading(true));
-
-    //     const userRef = doc(db, `users/${userId}`);
-    //     console.log(userId);
-    //     // Utiliza onSnapshot para suscribirte al documento del usuario
-    //     const unsubscribeUser = onSnapshot(userRef, (docSnapshot) => {
-    //       if (docSnapshot.exists()) {
-    //         // Si el documento existe, accede al campo deseado (en este caso, "favorites")
-    //         const favorites = docSnapshot.data()["favorites"] || [];
-    //         dispatch(setFavorites(favorites));
-
-    //         const userCarbon = docSnapshot.data()["carbon"] || null;
-    //         setCarbon(userCarbon);
-
-    //         dispatch(setLoading(false));
-    //       }      
-    //     });
-
-    //     return () => {
-    //       // Desuscribirse cuando el componente se desmonte
-    //       unsubscribeUser();
-    //     };
-    //   }, [userId, dispatch]);
-      
+    const {data: carbonData, isLoading: carbonIsLoading, isError: carbonIsError} = useGetCarbonQuery(userId);      
     console.log(favoriteData);
 
     return (
@@ -67,7 +31,7 @@ export function Profile () {
                         <h2 className="text-2xl font-bold text-center mb-4 text-white">¡Hola {displayEmail}!</h2>
                         <img src={userImg} alt="Foto de perfil" className="bg-white max-w-28 max-h-28 rounded-full mx-auto border-4 borderOrangeProfile shadow-md" />       
                         <p className="text-center mt-4 text-white text-[18px]">Mi huella de carbono este mes:</p>
-                        <p className="font-bold text-center mb-8 textOrange text-[20px]">{carbon !== null ? `${carbon} kg de CO2` : "Cargando..."}</p>
+                        <p className="font-bold text-center mb-8 textOrange text-[20px]">{carbonData !== null ? `${carbonData} kg de CO2` : "Cargando..."}</p>
                     </div>
                     <div className="pb-8 h-full backgroundWhite mx-auto px-8 p-4 pt-8 rounded-t-[30px]">
                         <h2 className="text-2xl font-semibold p-2">Mis acciones en proceso</h2>

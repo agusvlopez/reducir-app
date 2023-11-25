@@ -10,5 +10,6 @@ router.put('/api/update/:id', ActionsController.updateAction);
 router.delete('/api/delete/:id', ActionsController.deleteAction);
 
 router.get('/api/users/get/:userId/favorites', ActionsController.getFavorites);
+router.get('/api/users/get/:userId/carbon', ActionsController.getCarbon);
 
 module.exports = router;
