@@ -9,55 +9,13 @@ import { useAuth } from "../context/authContext";
 import { db } from "../firebase/firebase.config";
 import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 import ChipArrow from "./ChipArrow";
+import { useGetAchievementsQuery } from "../features/fetchFirebase";
 
 export function Achievements () {
-    const [achievements, setAchievements] = useState([]);
-    const [loadingDocument, setLoadingDocument] = useState(true);
     const [message, setMessage] = useState("");
     const auth = useAuth();
     const userId = auth.user.uid;
-  
-    useEffect(() => {
-        const userDocRef = doc(db, `users/${userId}`);
-    
-      if (userDocRef) {
-
-        const unsubscribeUser = onSnapshot(userDocRef, async (docSnapshot) => {
-          if (docSnapshot.exists()) {
-
-            try 
-            {          
-              const achievementsCollectionRef = collection(userDocRef, 'achievements');
-
-              const achievementSnapshot = await getDocs(achievementsCollectionRef);
-              const achievementData = achievementSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              
-              if (!achievementSnapshot.empty) {
-                setAchievements(achievementData);
-                console.log(achievementData);
-                setLoadingDocument(false);
-                return;
-              } 
-              else{
-                setMessage("Aún no hay logros.");
-                setLoadingDocument(false);
-                return
-              } 
-            }
-            catch(err){
-              console.log(err);
-            }
-
-          }  
-            return () => {        
-              
-                unsubscribeUser();
-            };
-        });
-
-
-      }
-    }, [userId]);
+    const {data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
 
     return (
     <> 
@@ -73,13 +31,13 @@ export function Achievements () {
             <p>Tus logros realizados se encuentran acá... ¡compartilos con todos en las redes sociales!</p>
         </div>
         <section className="backgroundTrama min-h-screen rounded-t-[30px] p-4 pb-8 mx-auto">
-        {loadingDocument &&
+        {achievementsLoading &&
           <div className="flex justify-center">
             <Spinner color="default" />
           </div>
         }
         <div className="lg:flex lg:flex-wrap">
-          {achievements.map((achievement) => (
+          {achievementsData?.map((achievement) => (
           <div key={achievement.id} className="mb-8 mt-4">
               <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
               <img src={achievement.image} alt={achievement.alt} className="max-h-48 rounded-lg" />    
@@ -98,9 +56,12 @@ export function Achievements () {
           </div>  
           ))}  
         </div>
+        {(achievementsData?.length === 0) &&
         <div>
-          <p className="text-white text-center">{message}</p>
+          <p className="text-white text-center">Aún no hay logros.</p>
         </div>
+        }
+
         </section>  
         </div>
       </div>
