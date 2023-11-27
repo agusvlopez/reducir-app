@@ -14,8 +14,7 @@ export function Profile () {
     const displayEmail = auth.user.email;
     const {data: favoriteData, isLoading, isError, error} = useGetFavoritesQuery(userId);
     const {data: carbonData, isLoading: carbonIsLoading, isError: carbonIsError} = useGetCarbonQuery(userId);      
-    console.log(favoriteData);
-
+    
     return (
         <>
         <div className="lg:flex">

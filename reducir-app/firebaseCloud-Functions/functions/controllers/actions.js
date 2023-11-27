@@ -74,22 +74,27 @@ const deleteAction = async (req, res) => {
 //favorites
 const getFavorites = async (req, res) => {
   const userId = req.params.userId;
-    try {
-      //setLoading(true);
-      
+    try {      
       const favorites = await ActionsService.getFavoritesByUserId(userId);
       return res.status(201).json({favorites});
-      // Actualiza el estado de Redux con los favoritos obtenidos
-      //setFavorites(favorites);
-  
-      //setLoading(false);
+
     } catch (error) {
       console.error('Error al obtener los favoritos:', error);
       res.status(500).json({ error: 'Error interno del servidor:' + error });
     } 
-  //   finally {
-  //     setLoading(false);
-  //   }
+
+};
+
+const addToFavorites = async (req, res) => {
+  const userId = req.params.userId;
+  const newFavorite = req.body;
+
+  try {
+    const updatedFavorites = await ActionsService.addToFavorites(userId, newFavorite);
+    return res.status(201).json({ favorites: updatedFavorites });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
 };
 
 //carbon
@@ -108,9 +113,64 @@ const getCarbon = async (req, res) => {
       console.error('Error al obtener los favoritos:', error);
       res.status(500).json({ error: 'Error interno del servidor:' + error });
     } 
-  //   finally {
-  //     setLoading(false);
-  //   }
+};
+
+const updateCarbon = async (req, res) => {
+  const userId = req.params.userId;
+  const newCarbon = req.body.carbon;
+
+  try {      
+   await ActionsService.updateCarbon(userId, newCarbon);
+    return res.status(201).json({ carbon: newCarbon });
+  } catch (error) {
+    console.error('Error al actualizar el valor de carbono:', error);
+    res.status(500).json({ error: 'Error interno del servidor:' + error.message });
+  } 
+};
+
+const getAchievements = async (req, res) => { 
+  const userId = req.params.userId;
+  try {
+    const achievements = await ActionsService.getAchievementsByUserId(userId);
+  
+    // Devolver los logros en la respuesta
+    return res.status(201).json(achievements);
+  } catch (error) {
+    console.error('Error en el controlador getAchievements:', error);
+  
+    // Manejar errores específicos
+    if (error.message === 'Usuario no encontrado') {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+  
+    // Devolver un código de estado 500 y un mensaje de error genérico
+    return res.status(500).json({ error: 'Error interno del servidor', error });
+  }
+}
+
+const addToAchievements = async (req, res) => {
+  const userId = req.params.userId;
+  const newAchievement = req.body;
+
+  try {
+    const updatedAchievements = await ActionsService.addToAchievements(userId, newAchievement);
+    return res.status(201).json(updatedAchievements);
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const deleteFavorite = async (req, res) => {
+  try {
+      const userId = req.params.userId;
+      const favoriteId = req.params.favoriteId;
+      const response = await ActionsService.deleteFavorite(userId, favoriteId);
+
+      return res.status(201).json(response);
+  } catch (error) {
+      console.log(error);
+      return res.status(500).json({ msg: error.msg });
+  }
 };
 
 module.exports = {
@@ -120,5 +180,10 @@ module.exports = {
   updateAction,
   deleteAction,
   getFavorites,
-  getCarbon
+  getCarbon,
+  addToFavorites,
+  getAchievements,
+  addToAchievements,
+  deleteFavorite,
+  updateCarbon
 };

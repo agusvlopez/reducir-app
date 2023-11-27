@@ -1,6 +1,11 @@
-const { doc, getDoc } = require('firebase/firestore');
+const { doc, getDoc, getDocs } = require('firebase/firestore');
 const admin = require('firebase-admin');
 admin.initializeApp();
+
+//   {
+//   credential: admin.credential.applicationDefault()
+// }
+
 const db = admin.firestore();
 
 async function createAction(action) {
@@ -115,6 +120,42 @@ const getFavoritesByUserId = async (userId) => {
    throw new Error('Usuario no encontrado');
 };
 
+const addToFavorites = async (userId, newFavorite) => {
+  const userRef = db.collection('users').doc(userId);
+  
+  try {
+    // Obtiene el documento del usuario
+    const userDetail = await userRef.get();
+
+    // Inicializa 'favorites' como un array vacío si no existe
+    const favorites = userDetail.data()?.favorites || [];
+
+    // Filtra los elementos indefinidos o nulos antes de actualizar
+    //const updatedFavorites = [...favorites, newFavorite].filter(item => item !== undefined && item !== null);
+
+    const favoriteExistsIndex = favorites.findIndex((favorite) => favorite.actionId === newFavorite.actionId);
+
+    if (favoriteExistsIndex !== -1) {
+      // El favorito ya existe en la lista, elimínalo
+      favorites.splice(favoriteExistsIndex, 1);
+    } else {
+      // Si no existe, agrégalo
+      favorites.push(newFavorite);
+    }
+    
+    // Actualiza 'favorites' en el documento del usuario
+    await userRef.update({
+      favorites: favorites
+    });
+
+    // Devuelve la lista actualizada de favoritos
+    return getFavoritesByUserId(userId);
+  } catch (error) {
+    // Maneja el error según tus necesidades
+    throw new Error('Error al agregar a favoritos: ' + error.message);
+  }
+};
+
 const getCarbonByUserId = async (userId) => {
   const userRef = db.collection('users').doc(userId);
  //const docSnapshot = doc(db, `users/${userId}`);
@@ -122,11 +163,103 @@ const getCarbonByUserId = async (userId) => {
   const userDetail = await userRef.get();
   
    if (userDetail) {
-     const carbon = userDetail.data()?.carbon || "";
+     let carbon = userDetail.data()?.carbon || 0;
      return carbon;
    }
  
    throw new Error('Usuario no encontrado');
+};
+
+const updateCarbon = async (userId, newCarbon) => {
+  const userRef = db.collection('users').doc(userId);
+  const userDetail = await userRef.get();
+
+  if (userDetail.exists) {
+    // Obtiene el valor actual de carbono del documento
+    const currentCarbon = userDetail.data()?.carbon || 0;
+
+    // Actualiza el valor de carbono en el documento con el nuevo valor
+    const doc = await userRef.set({ carbon: newCarbon }, { merge: true });
+   
+
+    return doc
+  }
+
+  throw new Error('Usuario no encontrado');
+};
+
+const getAchievementsByUserId = async (userId) => {
+  try {
+    const query = db.collection(`users/${userId}/achievements`);
+    let response = [];
+
+    const data = await query.get();
+    let docs = data.docs;
+
+    docs.map((doc) => {
+         const selectedItem = {
+             title: doc.data().title,
+             description: doc.data().description,
+             tip: doc.data().tip,
+             image: doc.data().image,
+             alt: doc.data().alt,
+             category: doc.data().category,
+             carbon: doc.data().carbon,
+             points: doc.data().points,
+             id: doc.data().id,
+      };
+
+      response.push(selectedItem);
+    });
+
+    return response;
+  } catch (error) {
+      console.log(error);
+      throw new Error(error);
+  }
+};
+
+
+const addToAchievements = async (userId, newData) => {
+  const achievementsCollectionRef = db.collection(`users/${userId}/achievements`);
+  try {
+    // Utilize the add() method to add a new document with an automatically generated ID
+    const newAchievementRef = await achievementsCollectionRef.add(newData);
+
+    // Retrieve the newly added achievement using the reference
+    const newAchievementSnapshot = await newAchievementRef.get();
+    const newAchievement = newAchievementSnapshot.data();
+
+    // Return the newly added achievement
+    return newAchievement;
+  } catch (error) {
+    // Handle the error according to your needs
+    throw new Error('Error al agregar a logros: ' + error.message);
+  }
+};
+
+const deleteFavorite = async (userId, favoriteId) => {
+  const userRef = db.collection('users').doc(userId);
+
+  try {
+    const userDetail = await userRef.get();
+    const favorites = userDetail.data()?.favorites || [];
+    const favoriteIndex = favorites.findIndex(favorite => favorite.actionId === favoriteId);
+
+    if (favoriteIndex !== -1) {
+      favorites.splice(favoriteIndex, 1);
+    } else {
+      throw new Error('Favorito no encontrado.');
+    }
+
+    await userRef.update({
+      favorites: favorites
+    });
+    
+    return getFavoritesByUserId(userId);
+  } catch (error) {
+    throw new Error('Error al eliminar favorito: ' + error.message);
+  }
 };
 
 module.exports = {
@@ -136,5 +269,10 @@ module.exports = {
   updateAction,
   deleteAction,
   getFavoritesByUserId,
-  getCarbonByUserId
+  getCarbonByUserId,
+  addToFavorites,
+  getAchievementsByUserId,
+  addToAchievements,
+  deleteFavorite,
+  updateCarbon
 };
