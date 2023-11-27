@@ -130,18 +130,18 @@ const addToFavorites = async (userId, newFavorite) => {
     // Inicializa 'favorites' como un array vacío si no existe
     const favorites = userDetail.data()?.favorites || [];
 
-    // Filtra los elementos indefinidos o nulos antes de actualizar
-    //const updatedFavorites = [...favorites, newFavorite].filter(item => item !== undefined && item !== null);
+    // // Filtra los elementos indefinidos o nulos antes de actualizar
+    // //const updatedFavorites = [...favorites, newFavorite].filter(item => item !== undefined && item !== null);
 
-    const favoriteExistsIndex = favorites.findIndex((favorite) => favorite.actionId === newFavorite.actionId);
+    // const favoriteExistsIndex = favorites.findIndex((favorite) => favorite.actionId === newFavorite.actionId);
 
-    if (favoriteExistsIndex !== -1) {
-      // El favorito ya existe en la lista, elimínalo
-      favorites.splice(favoriteExistsIndex, 1);
-    } else {
+    // if (favoriteExistsIndex !== -1) {
+    //   // El favorito ya existe en la lista, elimínalo
+    //   favorites.splice(favoriteExistsIndex, 1);
+    // } else {
       // Si no existe, agrégalo
       favorites.push(newFavorite);
-    }
+    //}
     
     // Actualiza 'favorites' en el documento del usuario
     await userRef.update({
@@ -244,7 +244,7 @@ const deleteFavorite = async (userId, favoriteId) => {
   try {
     const userDetail = await userRef.get();
     const favorites = userDetail.data()?.favorites || [];
-    const favoriteIndex = favorites.findIndex(favorite => favorite.actionId === favoriteId);
+    const favoriteIndex = favorites.findIndex(favorite => favorite.actionId == favoriteId);
 
     if (favoriteIndex !== -1) {
       favorites.splice(favoriteIndex, 1);
