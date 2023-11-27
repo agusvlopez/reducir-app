@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Menu } from "./Menu";
-import RecycleImg from "../covers/actions/recycle.jpg";  
-import { Button, Chip, Spinner } from "@nextui-org/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Chip, Spinner } from "@nextui-org/react";
+import { Link} from "react-router-dom";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
 import { useAuth } from "../context/authContext";
-import { db } from "../firebase/firebase.config";
-import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
-import ChipArrow from "./ChipArrow";
+
 import { useGetAchievementsQuery } from "../features/fetchFirebase";
 
 export function Achievements () {
-    const [message, setMessage] = useState("");
     const auth = useAuth();
     const userId = auth.user.uid;
     const {data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
@@ -36,13 +32,13 @@ export function Achievements () {
             <Spinner color="default" />
           </div>
         }
-        <div className="lg:flex lg:flex-wrap">
+        <div className="lg:flex lg:flex-wrap gap-4">
           {achievementsData?.map((achievement) => (
           <div key={achievement.id} className="mb-8 mt-4">
-              <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4">     
-              <img src={achievement.image} alt={achievement.alt} className="max-h-48 rounded-lg" />    
+              <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4 lg:max-w-[480px]">     
+              <img src={achievement.image} alt={achievement.alt} className="w-100 lg:max-h-48 rounded-lg" />    
                   <div className="flex flex-col justify-between">
-                      <h2>{achievement.title}</h2>
+                      <h2 className="text-xl font-semibold">{achievement.title}</h2>
                       <p><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{achievement.category}</Chip></p>
                       <p><span className="font-semibold">Puntos ganados:</span> {achievement.points}</p>
                       <p><span className="font-semibold">Carbono reducido:</span> {achievement.carbon} kg.</p>
