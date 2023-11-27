@@ -1,39 +1,15 @@
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../firebase/firebase.config";
 import HorizontalCard from "./HorizontalCard";
 import { Chip, Spinner } from "@nextui-org/react";
+import { useGetActionsQuery } from "../features/fetchFirebase";
 
 const MAX_DESCRIPTION_LENGTH = 150;
 
 const ItemListContainer = () => {
+    const { data: actionsData, isLoading: actionsLoading, isError: actionsError } = useGetActionsQuery();
+    const { categoria: category } = useParams();
 
-    const [actions, setActions] = useState([]);
-    // const [title, setTitle] = useState("Actions");
-    const [loading, setLoading] = useState(true); // Nuevo estado para controlar la carga
-
-    const category = useParams().categoria;
-
-    console.log(category);
-    useEffect(() => {
-
-        const actionsRef = collection(db, "actions");
-
-        const q = category ? query(actionsRef, where("category", "==", category)) : actionsRef;
-        getDocs(q)
-        .then((res) => {
-            console.log(res.docs[0]?.data());
-
-            setActions(
-                res.docs.map((doc) => {
-                    return {...doc?.data(), id: doc.id }
-                })
-            );
-            setLoading(false); // Cuando los datos se cargan, actualiza el estado de carga
-        });
-    }, [category])
-
+    const filteredActions = actionsData?.filter(action => !category || action.category === category);
 
     return (
         <>   
@@ -53,12 +29,12 @@ const ItemListContainer = () => {
                 </Link>
             </div>  
             <div className="mb-8 mt-4">
-            {loading &&
+            {actionsLoading &&
                 <div className="flex justify-center">
                     <Spinner color="default" />
                 </div>
             }
-            {actions.map((action) => (
+            {filteredActions?.map((action) => (
             <HorizontalCard
                 key={action.id}
                 titleCard={action.title}
