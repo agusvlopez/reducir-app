@@ -7,16 +7,21 @@ import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import bike from "../covers/icons/bike-icon.png";
 import car from "../covers/icons/car-icon.png";
 import train from "../covers/icons/train-icon.png";
+import bus from "../covers/icons/bus-icon.png";
+import subway from "../covers/icons/subway-icon.png";
+import walk from "../covers/icons/walk-icon.png";
+import motorbike from "../covers/icons/motorbike-icon.png";
+import taxi from "../covers/icons/taxi-icon.png";
 
 const options = [
   { id: 1, label: "Bici", imageUrl: bike, value: "0" },
   { id: 2, label: 'Auto', imageUrl: car, value: '6,3873' },
-  { id: 3, label: 'Taxi', imageUrl: 'url_de_imagen_taxi.jpg', value: '5,3097' },
-  { id: 4, label: 'Colectivo', imageUrl: 'url_de_imagen_taxi.jpg', value: '4,4958' },
+  { id: 3, label: 'Taxi', imageUrl: taxi, value: '5,3097' },
+  { id: 4, label: 'Colectivo', imageUrl: bus, value: '4,4958' },
   { id: 5, label: 'Tren', imageUrl: train, value: '2,2977' },
-  { id: 6, label: 'Subte', imageUrl: 'url_de_imagen_taxi.jpg', value: '2,4462' },
-  { id: 7, label: 'Moto', imageUrl: 'url_de_imagen_taxi.jpg', value: '3,8151' },
-  { id: 8, label: 'A pie', imageUrl: 'url_de_imagen_taxi.jpg', value: '0' },
+  { id: 6, label: 'Subte', imageUrl: subway, value: '2,4462' },
+  { id: 7, label: 'Moto', imageUrl: motorbike, value: '3,8151' },
+  { id: 8, label: 'A pie', imageUrl: walk, value: '0' },
 ];
 
 const dietOptions = [
@@ -230,11 +235,10 @@ const TestForm = () => {
               {/* Agrega más opciones según sea necesario */}
             {/* </select>
           </div> */} 
-          
-          <p>La suma es: {carbon}</p>
+
           <Button 
           type='submit'
-          className='text-base'
+          className='text-base mt-4'
           >
           Enviar</Button>
         

@@ -233,6 +233,16 @@ p {
 h2 {
   color: #00271d;
 }
+
+.vector-hoja {
+  background-image: url('./covers/vector-hoja.png');
+  content: '';
+  width: 28px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+}
 /* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

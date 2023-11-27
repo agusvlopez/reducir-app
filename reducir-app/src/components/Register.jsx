@@ -69,7 +69,7 @@ export function Register () {
             </div>        
            
         </div> 
-        <h1 className="text-2xl mt-1 mb-2">Registrarse</h1>
+        <h1 className="text-2xl mt-1 mb-2 text-center">Registrarse</h1>
         {validationMessage && (
                 <div className="mb-4 mt-4 flex items-center justify-center text-red-500">
                     <img src={warningIcon} className="mr-2 w-8 h-8" />

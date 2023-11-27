@@ -31,7 +31,7 @@ export function Profile () {
                         <div className="animate__animated animate__pulse">
                             <img src={userImg} alt="Foto de perfil" className="bg-white max-w-28 max-h-28 rounded-full mx-auto border-4 borderOrangeProfile shadow-md" />  
                         </div>     
-                        <p className="text-center mt-4 text-white text-[18px]">Mi huella de carbono este mes:</p>
+                        <p className="text-center mt-4 text-white text-[18px]">Mi huella de carbono de este mes:</p>
                         <p className="font-bold text-center mb-8 textOrange text-[20px] animate__animated animate__pulse">{!carbonIsLoading ? `${carbonData} kg de CO2` : "Cargando..."}</p>
                     </div>
                     <div className="pb-8 h-full backgroundWhite mx-auto px-8 p-4 pt-8 rounded-t-[30px]">
