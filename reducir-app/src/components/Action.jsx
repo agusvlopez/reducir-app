@@ -25,7 +25,7 @@ export function Action () {
   const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(userId);
   const {data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
 
-
+console.log(favoritesData);
     const handleFavorite = async () => {
       const newFavorite = {
         titleCard: actionData?.title || '',

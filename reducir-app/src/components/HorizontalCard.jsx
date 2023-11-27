@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {Card, CardBody, Image, Button, Spinner, Chip} from "@nextui-org/react";
 import {HeartIcon} from "./HeartIcon";
 import { Link } from "react-router-dom";
-import { selectFavoriteAction, addFavoriteAction, setLoading, setFavorites, selectLoading, addFavorite } from "../features/favoritesSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { getAuth } from "firebase/auth";
 import { useAuth } from "../context/authContext";
-import { useFavContext } from "../context/FavsContext";
-import { data } from "autoprefixer";
-import { db } from "../firebase/firebase.config";
-import { collection, doc, getDoc, getDocs, limit, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import ChipArrow from "./ChipArrow";
-
-
-//esta data se va a sacar de la base de datos.
+import { useCreateFavoritesMutation, useGetAchievementsQuery, useGetActionQuery, useGetFavoritesQuery } from "../features/fetchFirebase";
 
 export default function HorizontalCard({
   titleCard,
@@ -24,78 +15,38 @@ export default function HorizontalCard({
   carbonCard
 }
 ) {
-  // // const [userLoading, setUserLoading] = useState(true);
-  // const [users, setUsers] = useState([]);
-  // const [user, setUser] = useState({});
+    const auth = useAuth();
+    let userId = auth.user.uid;
 
-  // const favorites = useSelector(selectFavoriteAction);
-  const dispatch = useDispatch();
-  const auth = useAuth();
-  let userId = auth.user.uid;
-  console.log(userId);
-  const [existingAchievement, setExistingAchievement] = useState(false);
-  const state = useSelector(selectFavoriteAction);
-  const loading = useSelector(selectLoading);
-  console.log(state);
+    const [createFavorites] = useCreateFavoritesMutation();
 
-  const isActionLiked = state?.some((s) => s.actionId === actionId);
+    const { data: actionData, isLoading: actionLoading, isError: actionError } = useGetActionQuery(actionId);
+    const {data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
+    const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(userId);
 
-  useEffect(() => {
-    dispatch(setLoading(true));
+    console.log(favoritesData);
 
-    console.log("Entre al useEffect del HorizontalCard");
-
-    const userRef = doc(db, `users/${userId}`);
-  
-    // Utiliza onSnapshot para suscribirte al documento del usuario
-    const unsubscribeUser = onSnapshot(userRef, async (docSnapshot) => {
-      if (docSnapshot.exists()) {       
-        
-        // Si el documento existe, accede al campo deseado (en este caso, "favorites")
-        const favorites = docSnapshot.data()["favorites"] || [];
-        dispatch(setFavorites(favorites));
-        dispatch(setLoading(false));
-
-        const achievementsCollectionRef = collection(userRef, 'achievements');
-
-        // Verificar si la acción ya existe en la colección "achievements"
-        const existingAchievementQuery = query(
-          achievementsCollectionRef,
-          where('titleCard', '==', titleCard),
-        );
-        const existingAchievementSnapshot = await getDocs(existingAchievementQuery);
-
-        if (!existingAchievementSnapshot.empty) {
-          setExistingAchievement(true);
-          console.log('La acción ya existe en achievements. No se agregará nuevamente.');
-          return;
-        }
-
-      }      
-    });
-
-    return () => {
-      // Desuscribirse cuando el componente se desmonte
-      unsubscribeUser();
-    };
-  }, [userId, dispatch]);
-  
-  const handleFavorite = async () => {
-
-      dispatch(addFavorite({
-        titleCard,
-        descriptionCard,
-        imageCard,
-        categoryCard,
+    const handleFavorite = async () => {
+      const newFavorite = {
+        titleCard: actionData?.title || '',
+        descriptionCard: actionData?.description || '',
+        tipCard: actionData?.tip || '',
+        imageCard: actionData?.image || '',
+        altCard: actionData?.alt || '',
+        categoryCard: actionData?.category || '',
         actionId,
         userId,
-        carbonCard
-      }));
-      console.log("Loading after dispatch:", loading);
+        carbonCard: actionData?.carbon || '',
+        pointsCard: actionData?.points || '',
+      };
 
-     console.log("Estado despues de agregar favorito:", state);
-  }
-
+      try {
+        const result = await createFavorites( newFavorite );
+      
+      } catch (error) {
+        console.error("Error al agregar a favoritos:", error);
+      }
+  };
 
   return (
     <>
@@ -127,7 +78,7 @@ export default function HorizontalCard({
                   <Link to={`/accion/${actionId}`} className="font-bold">Leer más</Link>
                 </div>
               </div>
-              {!existingAchievement ?
+              {!achievementsData?.find((a) => a.title === titleCard) ?
               <Button
                 isIconOnly
                 className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2"
@@ -136,14 +87,14 @@ export default function HorizontalCard({
                 onPress={handleFavorite}
               >
                 <HeartIcon
-                  className={isActionLiked ? "[&>path]:stroke-transparent" : "animate__bounceIn"}
-                  fill={isActionLiked ? "currentColor" : "none"}
+                  className={favoritesData?.favorites.find((s) => s.actionId === actionId) ? "[&>path]:stroke-transparent" : "animate__bounceIn"}
+                  fill={favoritesData?.favorites.find((s) => s.actionId === actionId) ? "currentColor" : "none"}
                 />
               </Button>
               :
               <div>
-               <p className="font-semibold text-center text-sm">Acción lograda</p>
-              </div>
+              <p className="font-semibold text-center text-sm"><span className="iconAchievement"><span className="invisible">Acción lograda</span></span></p>
+            </div>
             }
             </div>
           </div>
