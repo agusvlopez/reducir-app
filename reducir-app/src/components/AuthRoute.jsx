@@ -22,6 +22,7 @@ export default function AuthRoute(props) {
                 return navigate("/iniciar-sesion");
             } 
         });
+        
     })
 
     if (loading) {

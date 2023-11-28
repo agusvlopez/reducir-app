@@ -2,6 +2,12 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import React, { useState } from "react";
 
 const ActionsForm = (props) => {
+  const [errors, setErrors] = useState({});
+
+  const validate = (value) => {
+    // Lógica de validación para el campo title
+    return value ? "" : "Este campo es obligatorio.";
+  };
 
     const initialStateValues = 
     {
@@ -24,7 +30,6 @@ const ActionsForm = (props) => {
     };
 
     const handleSubmit = async (e) => {
-     
       props.addAction(values);
 
     };
@@ -40,6 +45,8 @@ const ActionsForm = (props) => {
               name="title"
               value={values.title}
               onChange={handleChange}
+              onBlur={() => setErrors({ ...errors, title: validate(values.title) })}
+              required
             />
         </div>
         <div className="w-full mb-4">
@@ -50,6 +57,7 @@ const ActionsForm = (props) => {
               name="description"
               value={values.description}
               onChange={handleChange}
+              required
             />
         </div>
         <div className="w-full mb-4">
@@ -60,6 +68,7 @@ const ActionsForm = (props) => {
               name="tip"
               value={values.tip}
               onChange={handleChange}
+              required
             />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -71,6 +80,7 @@ const ActionsForm = (props) => {
               name="image"
               value={values.image}
               onChange={handleChange}
+              required
             />
           </div>        
           <div className="w-full ">
@@ -81,6 +91,7 @@ const ActionsForm = (props) => {
               name="alt"
               value={values.alt}
               onChange={handleChange}
+              required
             />
           </div>
         </div>
@@ -93,6 +104,7 @@ const ActionsForm = (props) => {
               name="category"
               value={values.category}
               onChange={handleChange}
+              required
             />
           </div>
           <div className="w-full">
@@ -103,6 +115,7 @@ const ActionsForm = (props) => {
               name="carbon"
               value={values.carbon}
               onChange={handleChange}
+              required
             />
           </div>
         </div>
@@ -114,13 +127,21 @@ const ActionsForm = (props) => {
               name="points"
               value={values.points}
               onChange={handleChange}
+              required
             />
           </div>
         <div className="flex justify-center">
-          <Button type="submit" className="backgroundDarkGreen text-white w-2/5">
+          <Button 
+          type="submit" 
+          className={`backgroundDarkGreen text-white w-2/5 ${!values.title || !values.description || !values.tip || !values.image || !values.alt || !values.category || !values.carbon || !values.points ? 'opacity-70' : ''}`}
+          disabled={!values.title || !values.description || !values.tip || !values.image || !values.alt || !values.category || !values.carbon || !values.points} 
+          >
             Enviar
           </Button>
         </div>
+        <p 
+          className={`text-sm mt-4  ${!values.title || !values.description || !values.tip || !values.image || !values.alt || !values.category || !values.carbon || !values.points ? 'block' : 'none'}`}
+        > Faltan completar campos.</p>
       </form>
     </>
     )

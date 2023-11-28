@@ -18,6 +18,7 @@ import ActionsAdmin from './pages/backOffice/ActionsAdmin';
 import AuthRoute from './components/AuthRoute';
 import AuthAdminRoute from './components/AuthAdminRoute';
 import NavbarWeb from './components/NavbarWeb';
+import PageNotFound from './pages/PageNotFound';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
         <Route path="/admin/acciones" element={<AuthAdminRoute><ActionsAdmin /></AuthAdminRoute>}/> 
         <Route path="/admin/acciones/new" element={<AuthAdminRoute><NewActionAdmin /></AuthAdminRoute>}/>
+        <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Router>
     </AuthProvider>
