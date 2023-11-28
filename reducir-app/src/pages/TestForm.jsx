@@ -1,9 +1,9 @@
-import { Button } from '@nextui-org/react';
+import { Button, Spinner } from '@nextui-org/react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firebase/firebase.config';
 import { useAuth } from '../context/authContext';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import bike from "../covers/icons/bike-icon.png";
 import car from "../covers/icons/car-icon.png";
 import train from "../covers/icons/train-icon.png";
@@ -62,6 +62,7 @@ const TestForm = () => {
   const auth = useAuth();
   const userId = auth.user.uid;
   
+  const [isLoading, setIsLoading] = useState(false);
   //energia
   const [kwhSelected, setKwhSelected] = useState('');
   const [transportSelected, setTransportSelected] = useState(''); 
@@ -91,6 +92,7 @@ const TestForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     setCarbon(sumaCarbon);
 
@@ -99,7 +101,7 @@ const TestForm = () => {
  
     try {
       await updateDoc(userRef, { carbon: sumaCarbon });
-      
+      setIsLoading(false);
       navigate("/perfil");
     } catch (error) {
       console.error('Error al actualizar el documento:', error);
@@ -182,6 +184,11 @@ const TestForm = () => {
           disabled={!kwhSelected || !transportSelected || !dietSelected}
           >
           Enviar</Button>
+          {isLoading && 
+        <div className="inline-block ml-2 pt-4">
+          <Spinner color="success" size='sm' />
+        </div>
+      }
         </form>
         <p 
           className={`text-sm mt-4 ${!kwhSelected || !transportSelected || !dietSelected ? 'block' : 'none'}`}

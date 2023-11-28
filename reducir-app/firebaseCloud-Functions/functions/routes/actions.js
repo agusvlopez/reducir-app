@@ -9,10 +9,12 @@ router.get('/api/getAll', ActionsController.getAllActions);
 router.put('/api/update/:id', ActionsController.updateAction);
 router.delete('/api/delete/:id', ActionsController.deleteAction);
 
+//user
+router.get('/api/user/:userId', ActionsController.getUserById);
+
 router.get('/api/users/get/:userId/favorites', ActionsController.getFavorites);
 router.post('/api/users/create/:userId/favorites', ActionsController.addToFavorites);
 router.delete('/api/users/delete/:userId/favorites/:favoriteId', ActionsController.deleteFavorite);
-
 
 //carbon
 router.get('/api/users/get/:userId/carbon', ActionsController.getCarbon);

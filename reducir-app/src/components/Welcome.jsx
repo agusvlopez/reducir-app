@@ -11,10 +11,6 @@ export function Welcome () {
     return (
     <>
     <div className="container p-8 mx-auto min-h-screen max-w-fit">
-        <Link to="/"
-        className="text-sm">
-            Volver al inicio
-        </Link>
         <div className="flex justify-center w-full p-2 mb-6">
         <img src={logo} alt="Logo de Reducir" />
         </div>

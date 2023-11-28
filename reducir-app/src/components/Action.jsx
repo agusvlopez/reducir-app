@@ -12,7 +12,7 @@ import { useCreateAchievementsMutation, useCreateCarbonMutation, useCreateFavori
 export function Action () {
   const { idAccion: actionId } = useParams();
   const auth = useAuth();
-  const userId = auth.user.uid;
+  const userId = auth?.user?.uid;
   console.log(actionId);
   
   const [createFavorites] = useCreateFavoritesMutation();
@@ -110,7 +110,6 @@ export function Action () {
             </template>
 
             <div className="flex-1">
-            <NavbarWeb />
                 <div className="container p-6 mx-auto">
                     <h1 className="mb-2">{actionData?.title}</h1>
                 </div>

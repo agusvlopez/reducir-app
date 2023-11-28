@@ -12,7 +12,7 @@ export function Benefits () {
     const auth = useAuth();
     const navigate = useNavigate();
     useEffect(()=> {  
-        if(auth.user === ""){
+        if(auth?.user === ""){
          navigate("/iniciar-sesion")
         }   
       },[])
@@ -24,7 +24,6 @@ export function Benefits () {
             </template>
 
         <div className="flex-1">
-        <NavbarWeb />
         <div className="container mx-auto p-6">
             <h1 className="mb-2">Beneficios</h1>
             <p>Acá encontrarás según tu ubicación los beneficios que podes canjear gracias a las acciones realizadas que compartiste.</p>

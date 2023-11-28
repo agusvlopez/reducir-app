@@ -39,7 +39,11 @@ export function AuthProvider({children}) {
                 
             }else {
                 setUser(currentUser);
-                localStorage.setItem('user', JSON.stringify(currentUser))
+                userData = {
+                    id: currentUser.uid,
+                    email: currentUser.email,
+                }
+                localStorage.setItem('user', JSON.stringify(userData))
             }
         })
         return () => suscribed()

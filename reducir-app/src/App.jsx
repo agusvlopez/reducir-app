@@ -1,6 +1,6 @@
 import './index.css';
 import React from "react";
-import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Home } from "./components/Home";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
@@ -17,36 +17,32 @@ import NewActionAdmin from './pages/backOffice/NewActionAdmin';
 import ActionsAdmin from './pages/backOffice/ActionsAdmin';
 import AuthRoute from './components/AuthRoute';
 import AuthAdminRoute from './components/AuthAdminRoute';
-
-const routes = createBrowserRouter(createRoutesFromElements(
-  <>
-    <Route path="/" element={<Home />} />
-    <Route path="/iniciar-sesion" element={<Login />}/>
-    <Route path="/registrarse" element={<Register />}/>
-    <Route path="/bienvenida" element={<AuthRoute><Welcome /></AuthRoute>}/>
-    <Route path="/test" element={<AuthRoute><Test /></AuthRoute>}/>
-    <Route path="/perfil" element={<AuthRoute><Profile /></AuthRoute>}/>
-    <Route path="/acciones" element={<AuthRoute><Actions /></AuthRoute>}/>
-    <Route path="/logros" element={<AuthRoute><Achievements /></AuthRoute>}/>
-    <Route path="/beneficios" element={<AuthRoute><Benefits /></AuthRoute>}/>
-    <Route path="/acciones/:categoria" element={<AuthRoute><Actions /></AuthRoute>}/>
-    <Route path="/accion/:idAccion" element={<AuthRoute><Action /></AuthRoute>}/>
-    {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
-    <Route path="/admin/acciones" element={<AuthAdminRoute><ActionsAdmin /></AuthAdminRoute>}/> 
-    <Route path="/admin/acciones/new" element={<AuthAdminRoute><NewActionAdmin /></AuthAdminRoute>}/>
-  </>
-))
-
+import NavbarWeb from './components/NavbarWeb';
 
 function App() {
-  
   return (
-    <>
-      <AuthProvider>
-        <RouterProvider router={routes} />
-      </AuthProvider>
-    </>
-  )
+    <AuthProvider>
+      <Router>
+        <NavbarWeb />
+        <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/iniciar-sesion" element={<Login />}/>
+        <Route path="/registrarse" element={<Register />}/>
+        <Route path="/bienvenida" element={<AuthRoute><Welcome /></AuthRoute>}/>
+        <Route path="/test" element={<AuthRoute><Test /></AuthRoute>}/>
+        <Route path="/perfil" element={<AuthRoute><Profile /></AuthRoute>}/>
+        <Route path="/acciones" element={<AuthRoute><Actions /></AuthRoute>}/>
+        <Route path="/logros" element={<AuthRoute><Achievements /></AuthRoute>}/>
+        <Route path="/beneficios" element={<AuthRoute><Benefits /></AuthRoute>}/>
+        <Route path="/acciones/:categoria" element={<AuthRoute><Actions /></AuthRoute>}/>
+        <Route path="/accion/:idAccion" element={<AuthRoute><Action /></AuthRoute>}/>
+        {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
+        <Route path="/admin/acciones" element={<AuthAdminRoute><ActionsAdmin /></AuthAdminRoute>}/> 
+        <Route path="/admin/acciones/new" element={<AuthAdminRoute><NewActionAdmin /></AuthAdminRoute>}/>
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

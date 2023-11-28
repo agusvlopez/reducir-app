@@ -13,7 +13,6 @@ import 'animate.css';
 export function Home () {
     return (
     <>    
-    <NavbarWeb />
     <div className="container p-4 mx-auto">
         <div>
         <section className="container mx-auto p-4">

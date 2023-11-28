@@ -7,6 +7,9 @@ export const apiFirebaseSlice = createApi({
         baseUrl: `http://127.0.0.1:5001/reducir-app/us-central1/app/`
     }),
     endpoints: (builder) => ({
+        getUser: builder.query({
+            query: (userId) => `/api/user/${userId}`
+        }),
         getAction: builder.query({
             query: (id) => `/api/get/${id}`
         }),
@@ -59,5 +62,5 @@ export const apiFirebaseSlice = createApi({
     })
 });
 
-export const {useGetFavoritesQuery, useGetCarbonQuery, useCreateCarbonMutation, useGetActionsQuery, useGetActionQuery, useCreateFavoritesMutation, useGetAchievementsQuery, useCreateAchievementsMutation, useDeleteFavoriteMutation} = apiFirebaseSlice;
+export const {useGetUserQuery,useGetFavoritesQuery, useGetCarbonQuery, useCreateCarbonMutation, useGetActionsQuery, useGetActionQuery, useCreateFavoritesMutation, useGetAchievementsQuery, useCreateAchievementsMutation, useDeleteFavoriteMutation} = apiFirebaseSlice;
 

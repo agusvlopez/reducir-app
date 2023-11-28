@@ -19,7 +19,6 @@ export function Actions () {
                 <Sidebar />
             </template>
         <div className="flex-1">
-        <NavbarWeb />
                 <div className="container p-6 mx-auto">
                     <h1 className="mb-2">Acciones</h1>
                     <p>Encontrá acá todas las acciones disponibles para agregar. Junto con tips que podrian ser útiles.</p>

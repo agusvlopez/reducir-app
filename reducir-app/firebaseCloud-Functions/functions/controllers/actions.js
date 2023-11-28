@@ -71,6 +71,20 @@ const deleteAction = async (req, res) => {
   }
 };
 
+//user
+const getUserById = async (req, res) => {
+    try {
+      const userId = req.params.userId;      
+      const user = await ActionsService.getUserById(userId);
+      return res.status(201).json({user});
+
+    } catch (error) {
+      console.error('Error al obtener los favoritos:', error);
+      res.status(500).json({ error: 'Error interno del servidor:' + error });
+    } 
+
+};
+
 //favorites
 const getFavorites = async (req, res) => {
   const userId = req.params.userId;
@@ -185,5 +199,6 @@ module.exports = {
   getAchievements,
   addToAchievements,
   deleteFavorite,
-  updateCarbon
+  updateCarbon,
+  getUserById
 };

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
 import ReducirLogo from './ReducirLogo';
 import { useAuth } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase.config";
 import { Link as RouterLink } from "react-router-dom";
+import { useGetUserQuery } from "../features/fetchFirebase";
 
 const menuRoutes = [
   { id: 1, path: "/registrarse", name: "Registrarse", userAuthorization: false, userLogged: false, adminLogged: false },
@@ -18,53 +17,33 @@ const NavbarWeb = (() => {
   const navigate = useNavigate();
   const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [userRole, setUserRole] = useState(null);
+  const uid = auth ? auth?.user?.uid : null;
 
+  const { data: userData, isLoading: userLoading, isError: userError } = useGetUserQuery(uid);
+
+  
+  const role = userData?.user?.rol;
+ 
   const displayEmail = auth?.user?.email;
   const storedUser = JSON.parse(localStorage.getItem('user'));
-  console.log(storedUser);
+  
   const filteredMenuRoutes = menuRoutes.filter(item => !item.userAuthorization || !!displayEmail);
 
   const userMenuRoutes = menuRoutes.filter((item) => {
     // Filtra las rutas de administración si el usuario tiene el rol "usuario"
-    return item.userLogged && (userRole || userRole !== "usuario");
+    return item.userLogged && (role || role !== "usuario");
   });
 
   const adminMenuRoutes = menuRoutes.filter((item) => {
     // Filtra las rutas de administración si el usuario tiene el rol "usuario"
-    return item.adminLogged && (userRole || userRole !== "admin");
+    return item.adminLogged && (role || role !== "admin");
   });
 
-  useEffect(() => {
-    // Función asincrónica para obtener el campo "rol" del usuario actual
-    if (storedUser && storedUser.rol) {
-      setUserRole(storedUser.rol);
-    } else {
-    const getUserRole = async () => {
-        const userDoc = doc(db, "users", auth.user.uid);
-
-        try {
-          const userSnapshot = await getDoc(userDoc);
-          if (userSnapshot.exists()) {
-            const newUserRole = userSnapshot.data().rol;
-            setUserRole(newUserRole);
-            if (newUserRole) {
-              localStorage.setItem('user', JSON.stringify({ rol: newUserRole }));
-              console.log("Rol del usuario obtenido de Firebase:", newUserRole);
-            }
-          }
-        } catch (error) {
-          console.error("Error obteniendo el rol del usuario:", error);
-        }
-    };
-
-      getUserRole();
-    }
-  }, [auth.user, storedUser]);
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
     auth.logout();
-    navigate("/");
+   
   }
 
   return (
@@ -94,7 +73,7 @@ const NavbarWeb = (() => {
           </RouterLink>
         </NavbarBrand>
         
-        { (displayEmail && userRole === "usuario") && 
+        { (storedUser && role === "usuario") && 
         userMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
           <RouterLink  color="foreground" to={item.path}>
@@ -102,7 +81,7 @@ const NavbarWeb = (() => {
           </RouterLink>
         </NavbarItem>     
         ))}
-        { (displayEmail && userRole === "admin") &&
+        { (storedUser && role === "admin") &&
         adminMenuRoutes.map((item) => (  
           <NavbarItem>
             <RouterLink color="foreground" to={item.path}>
@@ -110,7 +89,7 @@ const NavbarWeb = (() => {
             </RouterLink>
           </NavbarItem>
         ))}
-        {(displayEmail) &&
+        {(storedUser) &&
          <RouterLink className="text-white" to="/perfil">
           <Button 
             variant="flat"
@@ -122,7 +101,7 @@ const NavbarWeb = (() => {
           </Button>
         </RouterLink> 
         }
-        { (!displayEmail) && filteredMenuRoutes.map((item) => (
+        { (!storedUser) && filteredMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
           <RouterLink  color="foreground" to={item.path}>
            {item.name}
@@ -133,7 +112,7 @@ const NavbarWeb = (() => {
 
       <NavbarContent justify="end">  
         <NavbarItem>
-          {(displayEmail) &&
+          {(storedUser) &&
           <div>
             <Button 
             color="warning" 
@@ -148,7 +127,7 @@ const NavbarWeb = (() => {
         </NavbarItem>   
         <NavbarItem> 
         <RouterLink to="/iniciar-sesion">
-          {(!displayEmail) &&
+          {(!storedUser) &&
           <Button 
           color="warning" 
           variant="flat"
@@ -162,7 +141,7 @@ const NavbarWeb = (() => {
       </NavbarContent>
 
       <NavbarMenu>
-        {(displayEmail && userRole === "usuario") && 
+        {(storedUser && role === "usuario") && 
         userMenuRoutes.map((item) => (
           <NavbarMenuItem key={item.id}>
             <RouterLink  color="foreground" to={item.path}>
@@ -170,7 +149,7 @@ const NavbarWeb = (() => {
             </RouterLink>
           </NavbarMenuItem>
         ))}
-        {(displayEmail && userRole === "admin") && 
+        {(storedUser && role === "admin") && 
         adminMenuRoutes.map((item) => (       
           <NavbarMenuItem>
             <RouterLink  color="foreground" to={item.path}>
@@ -178,7 +157,7 @@ const NavbarWeb = (() => {
             </RouterLink>
           </NavbarMenuItem>
         ))}
-        {(displayEmail) &&
+        {(storedUser) &&
           <RouterLink className="text-white w-full" to="/perfil">
           <Button 
             variant="flat"
@@ -190,7 +169,7 @@ const NavbarWeb = (() => {
           </Button>
           </RouterLink>
         }
-        { (!displayEmail) && filteredMenuRoutes.map((item) => (
+        { (!storedUser) && filteredMenuRoutes.map((item) => (
         <NavbarMenuItem key={item.id}>
           <RouterLink  color="foreground" to={item.path}>
            {item.name}

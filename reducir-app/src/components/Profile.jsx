@@ -10,8 +10,8 @@ import { useGetCarbonQuery, useGetFavoritesQuery } from "../features/fetchFireba
 
 export function Profile () {
     const auth = useAuth();
-    const userId = auth.user.uid;
-    const displayEmail = auth.user.email;
+    const userId = auth?.user?.uid;
+    const displayEmail = auth?.user?.email;
     const {data: favoriteData, isLoading, isError, error} = useGetFavoritesQuery(userId);
     const {data: carbonData, isLoading: carbonIsLoading, isError: carbonIsError} = useGetCarbonQuery(userId);      
     
@@ -23,7 +23,6 @@ export function Profile () {
             </template>
 
             <div className="flex-1">
-            <NavbarWeb />
                 <div className="backgroundTrama mx-auto w-full">
                     <div className=" text-white p-4">
                         <h1 className="invisible">Mi perfil</h1>  

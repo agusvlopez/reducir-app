@@ -21,25 +21,6 @@ async function createAction(action) {
   }
 }
 
-//Get -> get()
-//Fetch - single data from firestore using specific ID 
-// app.get('/api/get/:id', (req, res) => {
-//   (async () => {
-//       try {
-//           //fetch the ID
-//           const reqDoc = db.collection('actions').doc(req.params.id);
-//           let actionDetail = await reqDoc.get();
-//           let response = actionDetail.data();
-
-//            return res.status(200).send({status: 'Success', data: response})
-//        }
-//        catch(error){
-//            console.log(error);
-//            return res.status(500).send({status: 'Failed', msg: error})
-//        }
-//   })();
-// });
-
 async function getActionById(id) {
   try {
     const reqDoc = db.collection('actions').doc(id);
@@ -106,10 +87,26 @@ const deleteAction = async (itemId) => {
   }
 };
 
+const getUserById = async (userId) => {
+  try {
+    const reqDoc = db.collection('users').doc(userId);
+    const userDetail = await reqDoc.get();
+    return userDetail.data();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+//  const userDoc = doc(db, "users", userId);
+//    if (userDoc) {
+//     //  const favorites = userDetail.data()?.favorites || [];
+//      return userDoc;
+//    }
+ 
+//    throw new Error('Usuario no encontrado');
+};
+
 const getFavoritesByUserId = async (userId) => {
   const userRef = db.collection('users').doc(userId);
- //const docSnapshot = doc(db, `users/${userId}`);
-  //  const docSnapshot = await getDoc(userRef);
   const userDetail = await userRef.get();
   
    if (userDetail) {
@@ -124,42 +121,24 @@ const addToFavorites = async (userId, newFavorite) => {
   const userRef = db.collection('users').doc(userId);
   
   try {
-    // Obtiene el documento del usuario
     const userDetail = await userRef.get();
 
-    // Inicializa 'favorites' como un array vacío si no existe
     const favorites = userDetail.data()?.favorites || [];
 
-    // // Filtra los elementos indefinidos o nulos antes de actualizar
-    // //const updatedFavorites = [...favorites, newFavorite].filter(item => item !== undefined && item !== null);
+    favorites.push(newFavorite);
 
-    // const favoriteExistsIndex = favorites.findIndex((favorite) => favorite.actionId === newFavorite.actionId);
-
-    // if (favoriteExistsIndex !== -1) {
-    //   // El favorito ya existe en la lista, elimínalo
-    //   favorites.splice(favoriteExistsIndex, 1);
-    // } else {
-      // Si no existe, agrégalo
-      favorites.push(newFavorite);
-    //}
-    
-    // Actualiza 'favorites' en el documento del usuario
     await userRef.update({
       favorites: favorites
     });
 
-    // Devuelve la lista actualizada de favoritos
     return getFavoritesByUserId(userId);
   } catch (error) {
-    // Maneja el error según tus necesidades
     throw new Error('Error al agregar a favoritos: ' + error.message);
   }
 };
 
 const getCarbonByUserId = async (userId) => {
   const userRef = db.collection('users').doc(userId);
- //const docSnapshot = doc(db, `users/${userId}`);
-  //  const docSnapshot = await getDoc(userRef);
   const userDetail = await userRef.get();
   
    if (userDetail) {
@@ -175,13 +154,9 @@ const updateCarbon = async (userId, newCarbon) => {
   const userDetail = await userRef.get();
 
   if (userDetail.exists) {
-    // Obtiene el valor actual de carbono del documento
     const currentCarbon = userDetail.data()?.carbon || 0;
-
-    // Actualiza el valor de carbono en el documento con el nuevo valor
     const doc = await userRef.set({ carbon: newCarbon }, { merge: true });
    
-
     return doc
   }
 
@@ -223,17 +198,12 @@ const getAchievementsByUserId = async (userId) => {
 const addToAchievements = async (userId, newData) => {
   const achievementsCollectionRef = db.collection(`users/${userId}/achievements`);
   try {
-    // Utilize the add() method to add a new document with an automatically generated ID
     const newAchievementRef = await achievementsCollectionRef.add(newData);
-
-    // Retrieve the newly added achievement using the reference
     const newAchievementSnapshot = await newAchievementRef.get();
     const newAchievement = newAchievementSnapshot.data();
 
-    // Return the newly added achievement
     return newAchievement;
   } catch (error) {
-    // Handle the error according to your needs
     throw new Error('Error al agregar a logros: ' + error.message);
   }
 };
@@ -274,5 +244,6 @@ module.exports = {
   getAchievementsByUserId,
   addToAchievements,
   deleteFavorite,
-  updateCarbon
+  updateCarbon,
+  getUserById
 };
