@@ -51,9 +51,6 @@ export function Login () {
     return (
         <>
         <div className="container p-8 mx-auto min-h-screen backgroundTrama">
-        <Link className="pl-2 text-white font-bold hover:textWhite" to="/">
-                Volver al inicio
-        </Link>
         <div className="max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
         <div className="p-2">
             <div className="flex justify-center mb-4">

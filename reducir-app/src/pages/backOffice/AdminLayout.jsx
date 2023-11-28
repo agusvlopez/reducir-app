@@ -6,8 +6,7 @@ import MenuAdmin from "../../components/MenuAdmin";
 const AdminLayout = ({ children, pageTitle }) => {
   return (
     <>
-      <div className="h-screen">
-        <NavbarWeb></NavbarWeb>
+      <div className="h-full">
         <div className="p-4 mb-8">
           <h1 className="border-b-2 border-gray-500 pb-2 mb-4">{pageTitle}</h1>
           <MenuAdmin></MenuAdmin>

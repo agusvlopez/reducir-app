@@ -20,7 +20,7 @@ export function Home () {
             <div className="text-center md:text-left md:p-4">
                 <h1 className="invisible">App Reducir</h1>
                 <div className="relative p-2">
-                    <div className="absolute top-[-25px] left-[-25px]">
+                    <div className="absolute top-[-25px] left-[-20px] md:left-[-25px]">
                         <img src={vectorMiniHojas} className="animate__animated animate__swing" />
                     </div>
                     <h2 className="text-5xl mb-6 p-1 relative z-10 text-left">

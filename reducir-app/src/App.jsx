@@ -5,7 +5,7 @@ import { Home } from "./components/Home";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { Welcome } from "./components/Welcome";
-import { Test } from "./components/Test";
+import { Test } from "./pages/Test";
 import { Profile } from './components/Profile';
 import { Actions } from './components/Actions';
 import { Achievements } from './components/Achievements';
