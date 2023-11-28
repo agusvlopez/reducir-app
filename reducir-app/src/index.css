@@ -8,7 +8,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #fdfdfd;
+  background-color: #F1EDEC;
   color: #242424;
   font-family: 'Poppins', sans-serif;
   font-family: 'Quicksand', sans-serif;
@@ -235,7 +235,7 @@ h2 {
 }
 
 .vector-hoja {
-  background-image: url('./covers/vector-hoja.png');
+  background-image: url('./covers/hoja-vector.png');
   content: '';
   width: 28px;
   height: 28px;
@@ -243,15 +243,23 @@ h2 {
   background-size: contain;
   display: inline-block;
 }
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #014936bd;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+
+.vector-hoja-naranja {
+  background-image: url('./covers/hoja-vector-naranja.png');
+  content: '';
+  width: 28px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+}
+
+.iconArrowRight {
+  background-image: url('./covers/icons/arrow-simple-right.png');
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+}

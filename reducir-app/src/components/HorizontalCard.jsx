@@ -4,7 +4,7 @@ import {HeartIcon} from "./HeartIcon";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import ChipArrow from "./ChipArrow";
-import { useCreateFavoritesMutation, useGetAchievementsQuery, useGetActionQuery, useGetFavoritesQuery } from "../features/fetchFirebase";
+import { useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsQuery, useGetActionQuery, useGetFavoritesQuery } from "../features/fetchFirebase";
 
 export default function HorizontalCard({
   titleCard,
@@ -19,13 +19,15 @@ export default function HorizontalCard({
     let userId = auth.user.uid;
 
     const [createFavorites] = useCreateFavoritesMutation();
+    const [deleteFavorite] = useDeleteFavoriteMutation();
 
     const { data: actionData, isLoading: actionLoading, isError: actionError } = useGetActionQuery(actionId);
     const {data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
     const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(userId);
 
     console.log(favoritesData);
-
+  const isActionLiked = favoritesData?.favorites.find((s) => s.actionId == actionId)
+  console.log(isActionLiked);
     const handleFavorite = async () => {
       const newFavorite = {
         titleCard: actionData?.title || '',
@@ -41,8 +43,15 @@ export default function HorizontalCard({
       };
 
       try {
-        const result = await createFavorites( newFavorite );
-      
+        if(isActionLiked){
+          await deleteFavorite({
+            userId,
+            actionId,
+          });
+        }else{
+          const result = await createFavorites( newFavorite );
+        }
+        
       } catch (error) {
         console.error("Error al agregar a favoritos:", error);
       }
@@ -56,11 +65,11 @@ export default function HorizontalCard({
       shadow="sm"
     >
       <CardBody>
-        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-4 items-center justify-center">
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 md:gap-4 justify-center">
           <div className="relative col-span-6 md:col-span-4">
             <Image
               alt="Album cover"
-              className="object-cover"
+              className="object-cover mt-2"
               height={100}
               shadow="md"
               src={imageCard}
@@ -75,7 +84,7 @@ export default function HorizontalCard({
                 <p className="text-small text-foreground/80">{descriptionCard}</p>
                 <p className="text-foreground/90 mt-4"><ChipArrow> -{carbonCard} kg CO2 </ChipArrow></p>
                 <div className="flex justify-end">
-                  <Link to={`/accion/${actionId}`} className="font-bold">Leer más</Link>
+                  <Link to={`/accion/${actionId}`} className="textDarkGreen font-bold flex items-center">Leer más<span className="iconArrowRight ml-1"></span></Link>
                 </div>
               </div>
               {!achievementsData?.find((a) => a.title === titleCard) ?
@@ -87,8 +96,8 @@ export default function HorizontalCard({
                 onPress={handleFavorite}
               >
                 <HeartIcon
-                  className={favoritesData?.favorites.find((s) => s.actionId === actionId) ? "[&>path]:stroke-transparent" : "animate__bounceIn"}
-                  fill={favoritesData?.favorites.find((s) => s.actionId === actionId) ? "currentColor" : "none"}
+                  className={isActionLiked ? "[&>path]:stroke-transparent" : "animate__bounceIn"}
+                  fill={isActionLiked ? "currentColor" : "none"}
                 />
               </Button>
               :

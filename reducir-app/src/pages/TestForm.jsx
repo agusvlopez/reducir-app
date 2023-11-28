@@ -25,19 +25,19 @@ const options = [
 ];
 
 const dietOptions = [
-  { id: 1, label: "Vegana", imageUrl: bike, value: "2,89" },
-  { id: 2, label: 'Vegetariana', imageUrl: 'url_de_imagen_auto.jpg', value: '3,81' },
-  { id: 3, label: 'Piscívora', imageUrl: 'url_de_imagen_taxi.jpg', value: '3,91' },
-  { id: 4, label: 'Baja en carne', imageUrl: 'url_de_imagen_taxi.jpg', value: '4,67' },
-  { id: 5, label: 'Moderada en carne', imageUrl: 'url_de_imagen_taxi.jpg', value: '5,63' },
-  { id: 6, label: 'Alta en carne', imageUrl: 'url_de_imagen_taxi.jpg', value: '7,19' }
+  { id: 1, label: "Vegana", value: "2,89" },
+  { id: 2, label: 'Vegetariana', value: '3,81' },
+  { id: 3, label: 'Piscívora', value: '3,91' },
+  { id: 4, label: 'Baja en carne', value: '4,67' },
+  { id: 5, label: 'Moderada en carne', value: '5,63' },
+  { id: 6, label: 'Alta en carne', value: '7,19' }
 ];
 
 const TransportOption = ({ id, label, imageUrl, value, selected, onClick }) => (
   <div
     key={id}
     onClick={() => onClick(id, value)}
-    className={`cursor-pointer border rounded-xl p-4 ${selected ? 'borderGreen' : 'border-gray-300'}`}
+    className={`cursor-pointer border rounded-xl p-4 font-semibold ${selected ? 'borderGreen' : 'border-gray-300 bg-white'}`}
   >
     <div className="flex items-center flex-col">
       <img src={imageUrl} alt={label} className="mb-2 h-18 w-18 object-contain" />
@@ -50,64 +50,45 @@ const DietOption = ({ id, label, value, selected, onClick }) => (
   <div
     key={id}
     onClick={() => onClick(id, value)}
-    className={`cursor-pointer border rounded-xl p-4 ${selected ? 'border-blue-500' : 'border-gray-300'}`}
+    className={`cursor-pointer border rounded-xl p-4 flex justify-center items-center ${selected ? 'borderGreen text-white backgroundDarkGreen font-semibold' : 'border-gray-300 bg-white'}`}
   >
-    <p className="text-center">{label}</p>
+    <p className={`text-center ${selected ? ' text-white' : ''}`}>{label}</p>
   </div>
 );
 
 const TestForm = () => {
-  //energia
-  const [kwhSelected, setKwhSelected] = useState(''); // Estado para almacenar la opción seleccionada
-  //transporte
-  const [transportSelected, setTransportSelected] = useState(''); 
-  const [selectedTransportId, setSelectedTransportId] = useState(null); 
-  console.log(kwhSelected);
-  //diet
-  const [dietSelected, setDietSelected] = useState('');
-  const [dietId, selectedDietId] = useState(null); // Estado para almacenar la opción seleccionada
-  console.log(dietSelected);
-
+  
   const navigate = useNavigate();
   const auth = useAuth();
-  console.log(auth.user.uid);
   const userId = auth.user.uid;
+  
+  //energia
+  const [kwhSelected, setKwhSelected] = useState('');
+  const [transportSelected, setTransportSelected] = useState(''); 
+  const [selectedTransportId, setSelectedTransportId] = useState(null); 
+  //diet
+  const [dietSelected, setDietSelected] = useState('');
+  const [dietId, selectedDietId] = useState(null); 
 
   const [carbon, setCarbon] = useState('');
 
   const sumaCarbon = parseInt(kwhSelected) + parseInt(dietSelected) + parseInt(transportSelected);
   console.log(sumaCarbon);
-    // const dataKwh = {
-    //     consumption: kwhSelected,
-    //     location: 'LatinAmerica',
-    // };
-    // console.log(dataKwh);
 
   const handleChangeKwh = (e) => {
     setKwhSelected(e.target.value);
     console.log(kwhSelected);
-    // Actualiza el estado cuando cambia la opción seleccionada
   };
 
   const handleTransportClick = (selectedId, selectedValue) => {
     setSelectedTransportId(selectedId);
-    setTransportSelected(selectedValue);
+    setTransportSelected(selectedValue === '' ? null : selectedValue);
   };
 
   const handleDietClick = (selectedId, selectedValue) => {
     selectedDietId(selectedId);
-    setDietSelected(selectedValue);
+    setDietSelected(selectedValue === '' ? null : selectedValue);
   };
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setData({ ...data, [name]: value });
-//   };
-
-  // const handleChangeDiet = (e) => {
-  //   setDietSelected(e.target.value);
-  //   console.log(dietSelected);
-  //   // Actualiza el estado cuando cambia la opción seleccionada
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -117,28 +98,26 @@ const TestForm = () => {
     console.log(userRef);
  
     try {
-      // Actualiza el campo "carbon" del documento con el nuevo valor
       await updateDoc(userRef, { carbon: sumaCarbon });
       
-      // Puedes agregar lógica adicional aquí si es necesario
-
       navigate("/perfil");
     } catch (error) {
       console.error('Error al actualizar el documento:', error);
     }
 };
 
-  console.log("energia:", kwhSelected);
-  console.log("transporte: ", transportSelected);
-  console.log("dieta:", dietSelected);
-  console.log("carbon: ",carbon);
   return (
     <>
     <div className="rounded-t-[30px] backgroundWhite p-2">
       <div className="container mx-auto max-w-2xl p-4">
         <form action="" onSubmit={handleSubmit}>
-        <div>
-        <label htmlFor="kwh" className="mb-2 block text-base font-medium text-gray-700">Vamos a calcular aproximadamente el consumo de kwh por el tamaño de tu vivienda.</label>
+          <p className="mb-2"><span className="text-lg">(*)</span> Indica un campo obligatorio.</p>
+        <div className="mb-6">
+        <label htmlFor="kwh" className="mb-2 block text-lg font-medium text-gray-700">Vamos a calcular aproximadamente el consumo de kwh por el tamaño de tu vivienda.
+        {!kwhSelected && (
+          <span className="text-red-500 text-lg pl-1">*</span>
+        )}
+        </label>
           <select 
           id="kwh" 
           name="kwh" 
@@ -155,9 +134,12 @@ const TestForm = () => {
           </select>
         </div>
 
-        <div>
-        <label htmlFor="transport" className="mb-2 block text-base font-medium text-gray-700 ">
+        <div className="mb-6">
+        <label htmlFor="transport" className="mb-2 block font-medium text-gray-700 text-lg ">
           ¿Qué transporte usas con más frecuencia en tu día a día?
+          {!transportSelected && (
+            <span className="text-red-500 text-lg pl-1">*</span>
+          )}
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {options.map((option) => (
@@ -166,7 +148,7 @@ const TestForm = () => {
               id={option.id}
               label={option.label}
               imageUrl={option.imageUrl}
-              value={option.value} // Agrega el valor como prop
+              value={option.value}
               selected={selectedTransportId === option.id}
               onClick={handleTransportClick}
             />
@@ -174,30 +156,12 @@ const TestForm = () => {
           </div>
         </div>
 
-        {/* <div>
-          <label htmlFor="transport" className="mb-2 block text-base font-medium text-gray-700 ">¿Que transporte usas con más frecuencia en tu día a día?</label>
-          <select 
-          id="transport" 
-          name="transport" 
-          value={transportSelected} 
-          onChange={handleChangeTransport}
-          className="mt-1 block w-full p-2 border rounded-md mb-4"
-          required
-          >
-            
-            <option value="6,3873"><img src=""></img>Auto</option>
-            <option value="5,3097">Taxi</option>
-            <option value="4,4958">Colectivo</option>
-            <option value="2,2977">Tren</option>
-            <option value="2,4462">Subte</option>
-            <option value="3,8151">Moto</option>
-            <option value="0">Bici</option>
-            <option value="0">A pie</option>
-          </select>
-        </div> */}
-      <div>
+      <div className="mb-4">
         <label htmlFor="diet" className="mb-2 block text-base font-medium text-gray-700 ">
           ¿Cuál es tu tipo de dieta?
+          {!dietSelected && (
+          <span className="text-red-500 text-lg pl-1">*</span>
+      )}
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {dietOptions.map((option) => (
@@ -205,44 +169,23 @@ const TestForm = () => {
               key={option.id}
               id={option.id}
               label={option.label}
-              value={option.value} // Agrega el valor como prop
+              value={option.value}
               selected={dietId === option.id}
               onClick={handleDietClick}
             />
           ))}
         </div>
       </div>
-{/* 
-        <div>
-          <label htmlFor="diet" className="mb-2 block text-base font-medium text-gray-700 ">
-              ¿Cuál es tu tipo de dieta?
-            </label>
-            <select
-              id="diet"
-              name="diet"
-              value={dietSelected}
-              onChange={handleChangeDiet}
-              className="mt-1 block w-full p-2 border rounded-md mb-4"
-              required
-            >
-              <option value="">Selecciona una opción...</option>
-              <option value="2,89">Vegana</option>
-              <option value="3,81">Vegetariana</option>
-              <option value="3,91">Piscívora</option>
-              <option value="4,67">Baja en carne</option>
-              <option value="5,63">Moderada en carne</option>
-              <option value="7,19">Alta en carne</option>
-              {/* Agrega más opciones según sea necesario */}
-            {/* </select>
-          </div> */} 
-
           <Button 
           type='submit'
-          className='text-base mt-4'
+          className={`text-base mt-4 backgroundDarkGreen text-white ${!kwhSelected || !transportSelected || !dietSelected ? 'opacity-70' : ''}`}
+          disabled={!kwhSelected || !transportSelected || !dietSelected}
           >
           Enviar</Button>
-        
         </form>
+        <p 
+          className={`text-sm mt-4 ${!kwhSelected || !transportSelected || !dietSelected ? 'block' : 'none'}`}
+        > Faltan seleccionar campos.</p>
       </div>
     </div>
     </>

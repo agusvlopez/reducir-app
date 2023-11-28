@@ -14,7 +14,7 @@ const menuRoutes = [
   { id: 4, path: "/admin/acciones", name: "Administración", userAuthorization: true, userLogged: false, adminLogged: true }
 ];
 
-const NavbarWeb = React.memo(() => {
+const NavbarWeb = (() => {
   const navigate = useNavigate();
   const auth = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,7 +58,6 @@ const NavbarWeb = React.memo(() => {
         }
     };
 
-    // Llamada a la función al cargar el componente o cuando cambie el usuario
       getUserRole();
     }
   }, [auth.user, storedUser]);

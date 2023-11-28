@@ -1,7 +1,7 @@
 //PARA GLOBALIZAR LAS FUNCIONES DE FIREBASE A TODA NUESTRA APLICACIÓN
 //en este caso referido a la autenticacion, para que toda la app tenga acceso al usuario logueado
 import React, {useState, useEffect} from "react";
-import {auth} from "../firebase/firebase.config";
+import { auth } from "../firebase/firebase.config";
 import { createContext, useContext } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { createUserProfile } from "../services/user";

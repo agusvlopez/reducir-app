@@ -9,9 +9,6 @@ import logo from '../covers/logo-horizontal.png';
 export function Login () {
     const navigate = useNavigate();
     const auth = useAuth();
-    // const {displayName} = auth.user;
-    // const displayEmail = auth.user.email;
-    // console.log(displayName);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -37,11 +34,9 @@ export function Login () {
         }
 
         try {
-            // Intenta realizar el inicio de sesión
             await auth.login(email, password);
             navigate("/perfil");
         } catch (error) {
-            // Maneja errores de inicio de sesión aquí
             setValidationMessage("Error al iniciar sesión. Verifica tus credenciales.");
         }
        
@@ -52,29 +47,6 @@ export function Login () {
         auth.loginWithGoogle();
         navigate("/perfil");
     }
-    // const [inputEmail, setInputEmail] = useState('');
-    // const [inputPass, setInputPass] = useState('');
-
-    // const navigate = useNavigate();
-
-    // const authUser = 
-    // {
-    //     email: 'ana@io.com',
-    //     pass: '123',
-    // };
-    
-    // const login = (event) => {
-    //     event.preventDefault();
-
-    //     if(inputEmail === authUser.email && inputPass === authUser.pass){
-    //         console.log("hola");
-    //        navigate("/perfil");
-    //     }
-
-    //     console.log(inputEmail, "pass ", inputPass);
-    //     // console.log(event);
-    // };
-
 
     return (
         <>

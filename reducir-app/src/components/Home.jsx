@@ -25,11 +25,14 @@ export function Home () {
                         <img src={vectorMiniHojas} className="animate__animated animate__swing" />
                     </div>
                     <h2 className="text-5xl mb-6 p-1 relative z-10 text-left">
-                        Estás a un <span className="font-semibold textDarkGreen">click</span> de <span className="textDarkGreen font-semibold">cambiar tus hábitos</span> y el <span className="font-semibold textDarkGreen">mundo</span>
+                        <span className="block">Estás a un <span className="font-semibold textDarkGreen">click</span></span> 
+                        <span className="block">de <span className="textDarkGreen font-semibold">cambiar </span>
+                        tus <span className="textDarkGreen font-semibold">hábitos </span></span>
+                        <span className="block">y el <span className="font-semibold textDarkGreen">mundo</span></span>
                     </h2>
                 </div>
                 <div className="pl-3 text-left">
-                    <p className="mb-4"><strong>Reducir</strong> es una <strong>aplicación web</strong> y <strong><span lang="en" >mobile</span></strong> que te acompaña en tu día a día ayudándote a <span className="font-bold textDarkGreen">incorporar hábitos amigables con el medio ambiente</span>.</p>
+                    <p className="mb-4 "><strong className="italic">reducir</strong> es una <strong>aplicación web</strong> y <strong><span lang="en" >mobile</span></strong> que te acompaña en tu día a día ayudándote a <span className="font-bold textDarkGreen">incorporar hábitos amigables con el medio ambiente</span>.</p>
                     <p className="mb-6">Animate a dar el primer paso para construir un mundo mejor. <span className="font-semibold textDarkGreen">¡Registrate ahora!</span></p>
                     <Link to="/registrarse">
                         <Button className="backgroundDarkGreen text-white rounded-full py-4 px-4 transition duration-300">Registrarse</Button>
@@ -56,7 +59,7 @@ export function Home () {
                             <span className="vector-hoja"><span className="invisible">Vector de una hoja</span></span>
                         </div>
                         <h3 className="text-xl text-white mb-6 p-1 relative z-10 text-right">
-                            <strong className="text-white">Medí tu huella de carbono</strong> e incorporá acciones de tu vida cotidiana para <strong  className="text-white">reducir</strong> tu huella <span className="font-semibold">día a día</span>.
+                            <strong className="text-white">Medí tu huella de carbono</strong> e incorporá nuevos hábitos para <strong  className="text-white">reducir</strong> tu huella <span className="font-semibold">día a día</span>.
                         </h3>
                     </div> 
                     <div className="pl-3 text-left">
@@ -72,10 +75,10 @@ export function Home () {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div className="text-center md:text-left">
                     <div className="relative p-2">
-                        <div className="absolute top-[-25px] right-0">
-                            <span className="vector-hoja"><span className="invisible">Vector de una hoja</span></span>
+                        <div className="absolute top-[-25px] left-0">
+                            <span className="vector-hoja-naranja"><span className="invisible">Vector de una hoja</span></span>
                         </div>
-                        <h3 className="text-xl mb-6 p-1 relative z-10 text-right">
+                        <h3 className="text-xl mb-6 p-1 relative z-10 text-left">
                             <strong>Ganá premios</strong> y <strong>obtené descuentos</strong> exclusivos en marcas amigables con el medioambiente por usar la App. 
                         </h3>
                     </div> 

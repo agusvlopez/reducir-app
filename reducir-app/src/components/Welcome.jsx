@@ -23,7 +23,7 @@ export function Welcome () {
           
             <p className="mb-2 pb-2 border-b-2 border-gray-300"><strong>Reducir</strong> fue diseñada para ayudarte a <strong>cambiar tus hábitos</strong> para reducir tu impacto ambiental y así también, <strong>reducir tu huella de carbono</strong>.</p>
 
-            <p>Entonces, para <strong>medir tu huella de carbono</strong>, te invitamos a realizar un <span className="font-bold">test con 3 simples preguntas</span> acerca del transporte, energía y comida por única vez.</p> 
+            <p>Entonces, para <strong>medir tu huella de carbono</strong>, te invitamos a realizar un <span className="font-bold textDarkGreen">test con 3 simples preguntas</span> acerca del transporte, energía y comida por única vez.</p> 
 
             <div className="flex justify-center mt-4">
                 <Link to="/test">

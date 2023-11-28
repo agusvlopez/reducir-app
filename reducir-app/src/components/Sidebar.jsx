@@ -39,9 +39,9 @@ sidebarRoutes.push({
 
 const Sidebar = () => {
 
-    const [isOpen, setIsOpen] = useState(true); // Estado para controlar si la barra está abierta
+    const [isOpen, setIsOpen] = useState(true); 
     const toggleBar = () => {
-      setIsOpen(!isOpen); // Cambia el estado para abrir o cerrar la barra
+      setIsOpen(!isOpen);
     };
 
   return (

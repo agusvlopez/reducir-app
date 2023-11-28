@@ -34,12 +34,12 @@ export function Achievements () {
         }
         <div className="lg:flex lg:flex-wrap gap-4">
           {achievementsData?.map((achievement) => (
-          <div key={achievement.id} className="mb-8 mt-4">
-              <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4 lg:max-w-[480px]">     
-              <img src={achievement.image} alt={achievement.alt} className="w-100 lg:max-h-48 rounded-lg" />    
+          <div key={achievement.id} className="mb-2 mt-4">
+              <div className="backgroundWhite p-4 rounded-xl shadow-sm lg:flex gap-4 lg:w-[420px]">     
+              <img src={achievement.image} alt={achievement.alt} className="w-100 lg:max-h-48 rounded-lg mb-2" />    
                   <div className="flex flex-col justify-between">
-                      <h2 className="text-xl font-semibold">{achievement.title}</h2>
-                      <p><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{achievement.category}</Chip></p>
+                      <h2 className="text-lg font-semibold mb-2">{achievement.title}</h2>
+                      <p><Chip className="shadow-md backgroundDarkGreen text-white mb-2" size="sm">{achievement.category}</Chip></p>
                       <p><span className="font-semibold">Puntos ganados:</span> {achievement.points}</p>
                       <p><span className="font-semibold">Carbono reducido:</span> {achievement.carbon} kg.</p>
                       <div className="flex justify-end">  

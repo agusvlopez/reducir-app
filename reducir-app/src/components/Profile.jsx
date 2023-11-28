@@ -18,13 +18,13 @@ export function Profile () {
     return (
         <>
         <div className="lg:flex">
-            <template className="hidden lg:block">
+            <template className="hidden lg:block ">
                 <Sidebar />
             </template>
 
             <div className="flex-1">
             <NavbarWeb />
-                <div className="backgroundTrama shadow-md mx-auto w-full">
+                <div className="backgroundTrama mx-auto w-full">
                     <div className=" text-white p-4">
                         <h1 className="invisible">Mi perfil</h1>  
                         <h2 className="text-2xl font-bold text-center mb-4 text-white">¡Hola {displayEmail}!</h2>
@@ -34,7 +34,7 @@ export function Profile () {
                         <p className="text-center mt-4 text-white text-[18px]">Mi huella de carbono de este mes:</p>
                         <p className="font-bold text-center mb-8 textOrange text-[20px] animate__animated animate__pulse">{!carbonIsLoading ? `${carbonData} kg de CO2` : "Cargando..."}</p>
                     </div>
-                    <div className="pb-8 h-full backgroundWhite mx-auto px-8 p-4 pt-8 rounded-t-[30px]">
+                    <div className="pb-8 backgroundWhite mx-auto px-8 p-4 pt-8 rounded-t-[30px] ">
                         <h2 className="text-2xl font-semibold p-2">Mis acciones en proceso</h2>
                        
                         <div> {isLoading ? 
@@ -55,7 +55,7 @@ export function Profile () {
                                 <img src={fav.imageCard} alt={fav.titleCard} className="w-48 rounded-lg" />
                                 <div className="p-2 m-1 text-white">
                                     <h3 className="text-xl mb-2">{fav.titleCard}</h3>
-                                    <p className="text-base">CO2: - {fav.carbonCard}</p>
+                                    <p className="text-base text-white">CO2: - {fav.carbonCard}</p>
                                     <div className="flex justify-end mt-4">
                                         <Link to={`/accion/${fav.actionId}`} className="font-bold text-white hover:textWhite">Ver detalles</Link>
                                     </div>
@@ -78,7 +78,7 @@ export function Profile () {
                 </div>
             </div> 
         </div> 
-        <div className="block lg:hidden mt-8">
+        <div className="block lg:hidden mt-8 lg:mt-0">
             <Menu></Menu>
         </div>
         </>
