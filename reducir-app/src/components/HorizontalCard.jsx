@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {Card, CardBody, Image, Button, Spinner, Chip} from "@nextui-org/react";
 import {HeartIcon} from "./HeartIcon";
 import { Link } from "react-router-dom";
@@ -25,9 +25,10 @@ export default function HorizontalCard({
     const {data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
     const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(userId);
 
-    console.log(favoritesData);
-  const isActionLiked = favoritesData?.favorites.find((s) => s.actionId == actionId)
-  console.log(isActionLiked);
+    const isActionLiked = favoritesData?.favorites.find((s) => s.actionId == actionId)
+
+    const [likedAction, setLikedAction] = useState(isActionLiked);
+
     const handleFavorite = async () => {
       const newFavorite = {
         titleCard: actionData?.title || '',
@@ -42,8 +43,11 @@ export default function HorizontalCard({
         pointsCard: actionData?.points || '',
       };
 
+      setLikedAction(newFavorite);
+
       try {
         if(isActionLiked){
+          setLikedAction(false);
           await deleteFavorite({
             userId,
             actionId,
@@ -96,8 +100,8 @@ export default function HorizontalCard({
                 onPress={handleFavorite}
               >
                 <HeartIcon
-                  className={isActionLiked ? "[&>path]:stroke-transparent" : "animate__bounceIn"}
-                  fill={isActionLiked ? "currentColor" : "none"}
+                  className={likedAction ? "[&>path]:stroke-transparent" : "animate__bounceIn"}
+                  fill={likedAction ? "currentColor" : "none"}
                 />
               </Button>
               :

@@ -181,7 +181,7 @@ const getAchievementsByUserId = async (userId) => {
              category: doc.data().category,
              carbon: doc.data().carbon,
              points: doc.data().points,
-             id: doc.data().id,
+             id: doc.data().actionId,
       };
 
       response.push(selectedItem);

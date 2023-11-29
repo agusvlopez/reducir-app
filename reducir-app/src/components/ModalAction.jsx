@@ -82,13 +82,12 @@ export default function ModalAction({ item, updateData }) {
         <form onSubmit={handleUpdateAction}>
         <ModalContent>
           {(onClose) => (
-            <>
-            
-              <ModalHeader className="flex flex-col gap-1">{formData.title}</ModalHeader>
+            <>           
+              <ModalHeader className="flex flex-col gap-1">Editar acción: "{formData.title}"</ModalHeader>
               <ModalBody>
               <div className="flex">
                 <div>
-                <label htmlFor="title">Título:</label>
+                <label htmlFor="title" className="font-semibold">Título:</label>
                   <input
                     type="text"
                     id="title"
@@ -98,7 +97,7 @@ export default function ModalAction({ item, updateData }) {
                   />
                 </div>
                 <div>
-                <label htmlFor="category">Categoría:</label>
+                <label htmlFor="category" className="font-semibold">Categoría:</label>
                   <input
                     type="text"
                     id="category"
@@ -108,7 +107,7 @@ export default function ModalAction({ item, updateData }) {
                   />
                 </div>
               </div>
-              <label htmlFor="description">Descripción:</label>
+              <label htmlFor="description" className="font-semibold">Descripción:</label>
                 <textarea
                   type="text"
                   id="description"
@@ -117,7 +116,7 @@ export default function ModalAction({ item, updateData }) {
                   onChange={handleChange}
                 />
 
-              <label htmlFor="tip">Tip:</label>
+              <label htmlFor="tip" className="font-semibold">Tip:</label>
                 <textarea
                   type="text"
                   id="tip"
@@ -126,7 +125,7 @@ export default function ModalAction({ item, updateData }) {
                   onChange={handleChange}
                 />
 
-              <label htmlFor="image">Imagen URL:</label>
+              <label htmlFor="image" className="font-semibold">Imagen URL:</label>
                 <input
                   type="text"
                   id="image"
@@ -135,7 +134,7 @@ export default function ModalAction({ item, updateData }) {
                   onChange={handleChange}
                 />
 
-              <label htmlFor="alt">Alt de la imagen:</label>
+              <label htmlFor="alt" className="font-semibold">Alt de la imagen:</label>
                 <input
                   type="text"
                   id="alt"
@@ -146,7 +145,7 @@ export default function ModalAction({ item, updateData }) {
 
               <div className="flex">
               <div>
-              <label htmlFor="carbon">Carbono:</label>
+              <label htmlFor="carbon" className="font-semibold">Carbono:</label>
                 <input
                   type="number"
                   id="carbon"
@@ -156,7 +155,7 @@ export default function ModalAction({ item, updateData }) {
                 />
               </div>
               <div>
-              <label htmlFor="points">Puntos:</label>
+              <label htmlFor="points" className="font-semibold">Puntos:</label>
                 <input
                   type="number"
                   id="points"
@@ -171,8 +170,10 @@ export default function ModalAction({ item, updateData }) {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" type="submit">
-                  Guardar
+                <Button 
+                className="backgroundDarkGreen text-white"
+                color="default" type="submit">
+                  Editar
                 </Button>
               </ModalFooter> 
              

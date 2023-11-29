@@ -115,7 +115,7 @@ const TestForm = () => {
         <form action="" onSubmit={handleSubmit}>
           <p className="mb-2"><span className="text-lg">(*)</span> Indica un campo obligatorio.</p>
         <div className="mb-6">
-        <label htmlFor="kwh" className="mb-2 block text-lg font-medium text-gray-700">Vamos a calcular aproximadamente el consumo de kwh por el tamaño de tu vivienda.
+        <label htmlFor="kwh" className="mb-2 block text-lg font-medium text-gray-700">Vamos a calcular aproximadamente el consumo de kwh según el tamaño de tu vivienda.
         {!kwhSelected && (
           <span className="text-red-500 text-lg pl-1">*</span>
         )}

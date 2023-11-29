@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menu} from "./Menu";
 import {HeartIcon} from "./HeartIcon";
 import { Button, Chip, Spinner } from "@nextui-org/react";
@@ -26,9 +26,13 @@ export function Action () {
   const { data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
 
   const isActionLiked = favoritesData?.favorites.find((s) => s.actionId == actionId);
-  console.log(actionId, userId);
-  console.log(favoritesData);
-    const handleFavorite = async () => {
+
+  const isAchievementAdded = achievementsData?.find((a) => a.id == actionId);
+  console.log(achievementsData);
+  const [likedAction, setLikedAction] = useState(isActionLiked);
+  const [addedAchievement, setAddedAchievement] = useState(isAchievementAdded);
+    
+  const handleFavorite = async () => {
       const newFavorite = {
         titleCard: actionData?.title || '',
         descriptionCard: actionData?.description || '',
@@ -41,19 +45,20 @@ export function Action () {
         carbonCard: actionData?.carbon || '',
         pointsCard: actionData?.points || '',
       };
-  
+
+      setLikedAction(newFavorite);
+
       try {
         if(isActionLiked){
-          // Use the appropriate parameters in the deleteFavorite mutation
-          const deleted =await deleteFavorite({
+          setLikedAction(false);
+          const deleted = await deleteFavorite({
             userId,
             actionId,
           });
           console.log(deleted);
-          // await deleteFavorite( newFavorite );
+
         }else{
-          const result = await createFavorites( newFavorite );
-          console.log(result);
+          const result = await createFavorites(newFavorite);
         }
       
       } catch (error) {
@@ -75,6 +80,8 @@ export function Action () {
         userId,
         actionId
       };
+
+      setAddedAchievement(newAchievement);
 
       try {
         const result = await createAchievements(newAchievement);  
@@ -131,7 +138,7 @@ export function Action () {
                         <div className="mb-2 border-2 border-transparent rounded-xl border-s-orange-600 p-2 backgroundSoftOrange font-semibold text-orange-800 italic"><span className="iconTip"><span className="invisible">Tip:</span></span> {actionData?.tip}</div>
 
                         <div className="flex justify-end pt-2">   
-                        {!achievementsData?.find((a) => a.title === actionData.title) ?
+                        {!addedAchievement ?
                         <>
                           <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
                           
@@ -144,8 +151,8 @@ export function Action () {
                           >
 
                           <HeartIcon
-                            className={isActionLiked ? "[&>path]:stroke-transparent" : "animate__bounceIn  animate__delay-2s"}
-                            fill={isActionLiked ? "currentColor" : "none"}
+                            className={likedAction ? "[&>path]:stroke-transparent" : "animate__bounceIn  animate__delay-2s"}
+                            fill={likedAction ? "currentColor" : "none"}
                           />
 
                           </Button>
