@@ -1,9 +1,10 @@
 import { Button, Input, Textarea } from "@nextui-org/react";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ActionsForm = (props) => {
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate();
   const validate = (value) => {
     // Lógica de validación para el campo title
     return value ? "" : "Este campo es obligatorio.";
@@ -30,7 +31,9 @@ const ActionsForm = (props) => {
     };
 
     const handleSubmit = async (e) => {
+      e.preventDefault();
       props.addAction(values);
+      navigate("/admin/acciones");
 
     };
 

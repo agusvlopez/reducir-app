@@ -2,10 +2,6 @@ const { doc, getDoc, getDocs } = require('firebase/firestore');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-//   {
-//   credential: admin.credential.applicationDefault()
-// }
-
 const db = admin.firestore();
 
 async function createAction(action) {
@@ -96,13 +92,6 @@ const getUserById = async (userId) => {
     console.error(error);
     throw error;
   }
-//  const userDoc = doc(db, "users", userId);
-//    if (userDoc) {
-//     //  const favorites = userDetail.data()?.favorites || [];
-//      return userDoc;
-//    }
- 
-//    throw new Error('Usuario no encontrado');
 };
 
 const getFavoritesByUserId = async (userId) => {
