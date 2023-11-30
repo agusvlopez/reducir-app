@@ -191,7 +191,7 @@ const TestForm = () => {
       }
         </form>
         <p 
-          className={`text-sm mt-4 ${!kwhSelected || !transportSelected || !dietSelected ? 'block' : 'none'}`}
+          className={`text-sm mt-4 ${!kwhSelected || !transportSelected || !dietSelected ? 'block' : 'hidden'}`}
         > Faltan seleccionar campos.</p>
       </div>
     </div>

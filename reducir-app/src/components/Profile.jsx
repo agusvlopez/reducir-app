@@ -54,7 +54,7 @@ export function Profile () {
                                     <img src={fav.imageCard} alt={fav.titleCard} className="w-48 rounded-lg" />
                                     <div className="p-2 m-1 text-white">
                                         <h3 className="text-xl mb-2">{fav.titleCard}</h3>
-                                        <p className="text-base text-white">CO2: - {fav.carbonCard}</p>
+                                        <p className="text-base text-white">CO2: -{fav.carbonCard} kg</p>
                                         <div className="flex justify-end mt-4">
                                             <Link to={`/accion/${fav.actionId}`} className="font-bold text-white hover:textWhite">Ver detalles</Link>
                                         </div>

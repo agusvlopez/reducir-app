@@ -43,7 +43,9 @@ const ItemListContainer = () => {
                     action.description
                 }
                 imageCard={action.image}
-                categoryCard={action.category}
+                categoryCard={
+                    category === "energia" ? "energía" : action.category
+                  } 
                 actionId={action.id}
                 carbonCard={action.carbon}
             />               

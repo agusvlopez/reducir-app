@@ -26,12 +26,13 @@ export function Action () {
   const { data: achievementsData, isLoading: achievementsLoading, isError, achivementsError} = useGetAchievementsQuery(userId);
 
   const isActionLiked = favoritesData?.favorites.find((s) => s.actionId == actionId);
-
   const isAchievementAdded = achievementsData?.find((a) => a.id == actionId);
   console.log(achievementsData);
+  
   const [likedAction, setLikedAction] = useState(isActionLiked);
   const [addedAchievement, setAddedAchievement] = useState(isAchievementAdded);
     
+ 
   const handleFavorite = async () => {
       const newFavorite = {
         titleCard: actionData?.title || '',
@@ -58,6 +59,7 @@ export function Action () {
           console.log(deleted);
 
         }else{
+          setLikedAction(newFavorite);
           const result = await createFavorites(newFavorite);
         }
       
@@ -89,11 +91,12 @@ export function Action () {
           userId: result.data.userId,
           actionId: result.data.actionId,
         }
-        const isActionInFavorites = favoritesData?.favorites.some((f) => f.actionId === actionId);
+        const isActionInFavorites = favoritesData?.favorites.some((f) => f.actionId == actionId);
 
         if (isActionInFavorites) {
           const updatedFavorites = favoritesData?.favorites.filter((f) => f.actionId !== actionId);
           const deleteAchievementResult = await deleteFavorite(favorite);
+          //setLikedAction(false);
         }
 
       } catch (error) {

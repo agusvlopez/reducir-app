@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const ActionsForm = (props) => {
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
   const validate = (value) => {
     // Lógica de validación para el campo title
@@ -33,7 +34,11 @@ const ActionsForm = (props) => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       props.addAction(values);
-      navigate("/admin/acciones");
+      setSuccessMessage("¡El formulario se completó con éxito!");
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate("/admin/acciones");
+      }, 2000);
 
     };
 
@@ -144,7 +149,15 @@ const ActionsForm = (props) => {
         </div>
         <p 
           className={`text-sm mt-4  ${!values.title || !values.description || !values.tip || !values.image || !values.alt || !values.category || !values.carbon || !values.points ? 'block' : 'none'}`}
-        > Faltan completar campos.</p>
+        > Faltan completar campos.
+        </p>
+        <p
+          className={`text-sm mt-4 text-green-500 ${
+            successMessage ? "block" : "hidden"
+          }`}
+        >
+          {successMessage}
+        </p>
       </form>
     </>
     )

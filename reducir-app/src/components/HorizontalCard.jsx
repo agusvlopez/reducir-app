@@ -53,6 +53,7 @@ export default function HorizontalCard({
             actionId,
           });
         }else{
+          setLikedAction(newFavorite);
           const result = await createFavorites( newFavorite );
         }
         
@@ -84,11 +85,11 @@ export default function HorizontalCard({
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0"> 
                 <p className="text-large font-medium mt-2">{titleCard}</p>
-                <p className="mt-1 mb-2 font-semibold text-foreground/90"><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{categoryCard}</Chip></p>
+                <p className="mt-1 mb-2 font-semibold text-foreground/90"><Chip className="shadow-md backgroundDarkGreen text-white" size="sm">{categoryCard === "energia" ? "energía" : categoryCard}</Chip></p>
                 <p className="text-small text-foreground/80">{descriptionCard}</p>
                 <p className="text-foreground/90 mt-4"><ChipArrow> -{carbonCard} kg CO2 </ChipArrow></p>
                 <div className="flex justify-end">
-                  <Link to={`/accion/${actionId}`} className="textDarkGreen font-bold flex items-center">Leer más<span className="iconArrowRight ml-1"></span></Link>
+                  <Link to={`/accion/${actionId}`} className="textDarkGreen font-bold flex items-center">Leer más</Link>
                 </div>
               </div>
               {!achievementsData?.find((a) => a.title === titleCard) ?
