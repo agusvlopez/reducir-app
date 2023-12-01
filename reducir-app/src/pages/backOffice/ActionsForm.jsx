@@ -1,8 +1,11 @@
 import { Button, Input, Textarea } from "@nextui-org/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { storage, db } from "../../firebase/firebase.config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const ActionsForm = (props) => {
+  const [urlImg, setUrlImg] = useState("");
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
@@ -33,7 +36,11 @@ const ActionsForm = (props) => {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-      props.addAction(values);
+
+      props.addAction({
+        ...values
+      });
+
       setSuccessMessage("¡El formulario se completó con éxito!");
       setTimeout(() => {
         setSuccessMessage("");
@@ -41,6 +48,22 @@ const ActionsForm = (props) => {
       }, 2000);
 
     };
+
+    const fileHandler = async (e) => {
+      const file = e.target.files[0];
+      //cargamos la imagen al storage:
+      const refFile = ref(storage, `images/${file.name}`);
+      await uploadBytes(refFile, file);
+      //obtenemos la url de la imagen de storage:
+      const imageUrl = await getDownloadURL(refFile);
+      setUrlImg(imageUrl);
+
+      // Actualizamos el valor del campo de imagen en el estado del formulario
+      setValues((prevValues) => ({
+        ...prevValues,
+        image: imageUrl,
+      }));
+    }
 
     return (
       <>
@@ -82,12 +105,13 @@ const ActionsForm = (props) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="w-full">
             <Input
-              type="text"
+              id="file"
+              type="file"
               variant="faded"
-              label="Imagen URL"
+              label="Imagen"
               name="image"
-              value={values.image}
-              onChange={handleChange}
+              //value={values.image}
+              onChange={fileHandler}
               required
             />
           </div>        
@@ -141,14 +165,14 @@ const ActionsForm = (props) => {
         <div className="flex justify-center">
           <Button 
           type="submit" 
-          className={`backgroundDarkGreen text-white w-2/5 ${!values.title || !values.description || !values.tip || !values.image || !values.alt || !values.category || !values.carbon || !values.points ? 'opacity-70' : ''}`}
-          disabled={!values.title || !values.description || !values.tip || !values.image || !values.alt || !values.category || !values.carbon || !values.points} 
+          className={`backgroundDarkGreen text-white w-2/5 ${!values.title || !values.description || !values.tip || !values.alt || !values.category || !values.carbon || !values.points ? 'opacity-70' : ''}`}
+          disabled={!values.title || !values.description || !values.tip  || !values.alt || !values.category || !values.carbon || !values.points} 
           >
             Enviar
           </Button>
         </div>
         <p 
-          className={`text-sm mt-4  ${!values.title || !values.description || !values.tip || !values.image || !values.alt || !values.category || !values.carbon || !values.points ? 'block' : 'none'}`}
+          className={`text-sm mt-4  ${!values.title || !values.description || !values.tip || !values.alt || !values.category || !values.carbon || !values.points ? 'block' : 'none'}`}
         > Faltan completar campos.
         </p>
         <p

@@ -9,6 +9,7 @@ import ModalActionDetail from "../../components/ModalActionDetail.jsx";
 import AdminLayout from "./AdminLayout.jsx";
 
 const ActionsAdmin = () => {
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
