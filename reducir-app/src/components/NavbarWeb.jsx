@@ -37,7 +37,10 @@ const NavbarWeb = (() => {
     // Filtra las rutas de administración si el usuario tiene el rol "usuario"
     return item.adminLogged && (role || role !== "admin");
   });
-
+  
+  const handleApp = () => {
+    navigate("/perfil");
+  }
   const handleLogin = () => {
     navigate("/iniciar-sesion");
   }
@@ -91,8 +94,8 @@ const NavbarWeb = (() => {
           </NavbarItem>
         ))}
         {(storedUser) &&
-         <RouterLink className="text-white" to="/perfil">
           <Button 
+            onPress={handleApp}
             variant="flat"
             radius="full"
             size="sm"
@@ -100,7 +103,6 @@ const NavbarWeb = (() => {
             > 
               App      
           </Button>
-        </RouterLink> 
         }
         { (!storedUser) && filteredMenuRoutes.map((item) => (
         <NavbarItem key={item.id}>
