@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavbarWeb from "../../components/NavbarWeb";
 import Footer from "../../components/Footer";
-import ModalAction from "../../components/ModalAction.jsx";
+import ModalActionEdit from "../../components/ModalActionEdit.jsx";
 import { Button, Card, CardBody, CardFooter, Image, Modal, Spinner, useDisclosure } from "@nextui-org/react";
 import ModalDelete from "../../components/ModalDelete.jsx";
 import MenuAdmin from "../../components/MenuAdmin.jsx";
@@ -83,7 +83,7 @@ const ActionsAdmin = () => {
                 <CardFooter className="text-small justify-between gap-2">
                   <b>{item.title}</b>
                   <div className="flex flex-col align-center gap-2">
-                    <ModalAction item={item} updateData={updateData} />
+                    <ModalActionEdit item={item} updateData={updateData} />
                     <ModalDelete item={item} deleteData={deleteData} />
                     <ModalActionDetail item={item} isOpen={selectedItem === item} onClose={closeModal} />
                   </div>

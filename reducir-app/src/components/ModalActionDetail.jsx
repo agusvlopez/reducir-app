@@ -12,12 +12,10 @@ export default function ModalActionDetail({item, isOpen, onClose}) {
         console.log(result);
         if(!result.empty){
           setData(result);
-          setLoading(false);
         }
 
       } catch (error) {
         console.error('Error fetching data:', error);
-        setLoading(false);
       }
     };
 

@@ -5,12 +5,14 @@ import homeApp from '../covers/home-app.jpg';
 import homeLoginApp from '../covers/home-2-app.jpg';
 import home3 from '../covers/home-3.jpg';
 import Footer from "./Footer";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import vectorMiniHojas from '../covers/vector-mini-2.png';
 
 import 'animate.css';
 
 export function Home () {
+    const navigate = useNavigate();
+
     return (
     <>    
     <div className="container p-4 mx-auto">
@@ -33,9 +35,10 @@ export function Home () {
                 <div className="pl-3 text-left">
                     <p className="mb-4 "><strong className="italic">reducir</strong> es una <strong>aplicación web</strong> y <strong><span lang="en" >mobile</span></strong> que te acompaña en tu día a día ayudándote a <span className="font-bold textDarkGreen">incorporar hábitos amigables con el medio ambiente</span>.</p>
                     <p className="mb-6">Animate a dar el primer paso para construir un mundo mejor. <span className="font-semibold textDarkGreen">¡Registrate ahora!</span></p>
-                    <Link to="/registrarse">
-                        <Button className="backgroundDarkGreen text-white rounded-full py-4 px-4 transition duration-300">Registrarse</Button>
-                    </Link>
+                        <Button 
+                        onPress={() => { navigate("/registrarse") }} 
+                        className="backgroundDarkGreen text-white rounded-full py-4 px-4 transition duration-300">Registrarse
+                        </Button>
                 </div>
             </div>
             <div className="text-center">
@@ -45,7 +48,7 @@ export function Home () {
         </section>
         </div>
     </div>
-    <div className="backgroundOrange container p-4 mx-auto">
+    <div className="backgroundOrange p-4 mx-auto">
         <div>
             <section className="container mx-auto p-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">

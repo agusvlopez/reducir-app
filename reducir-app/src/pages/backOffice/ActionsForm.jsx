@@ -69,11 +69,13 @@ const ActionsForm = (props) => {
       <>
         <form onSubmit={handleSubmit} className="my-form container">
         <div className="w-full mb-4">
+            <label htmlFor="title" className="mb-2 text-sm"></label>
             <Input
               type="text"
               variant="faded"
               label="Título"
               name="title"
+              id="title"
               value={values.title}
               onChange={handleChange}
               onBlur={() => setErrors({ ...errors, title: validate(values.title) })}
@@ -81,22 +83,26 @@ const ActionsForm = (props) => {
             />
         </div>
         <div className="w-full mb-4">
+            <label htmlFor="description" className="mb-2 text-sm"></label>
             <Textarea
               type="text"
               variant="faded"
               label="Descripción"
               name="description"
+              id="description"
               value={values.description}
               onChange={handleChange}
               required
             />
         </div>
         <div className="w-full mb-4">
+            <label htmlFor="tip" className="mb-2 text-sm"></label>
             <Textarea
               type="text"
               variant="faded"
               label="Tip"
               name="tip"
+              id="tip"
               value={values.tip}
               onChange={handleChange}
               required
@@ -104,23 +110,25 @@ const ActionsForm = (props) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="w-full">
+            <label htmlFor="file" className="mb-2 text-sm"></label>
             <Input
               id="file"
               type="file"
               variant="faded"
               label="Imagen"
               name="image"
-              //value={values.image}
               onChange={fileHandler}
               required
             />
           </div>        
-          <div className="w-full ">
+          <div className="w-full">
+            <label htmlFor="alt" className="mb-2 text-sm"></label>
             <Input
               type="text"
               variant="faded"
               label="Alt de la imagen"
               name="alt"
+              id="alt"
               value={values.alt}
               onChange={handleChange}
               required
@@ -128,8 +136,10 @@ const ActionsForm = (props) => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div className="w-full ">
+          <div className="w-full">
+            <label htmlFor="category" className="mb-2 text-sm"></label>
             <Input
+              id="category"
               type="text"
               variant="faded"
               label="Categoría"
@@ -140,7 +150,9 @@ const ActionsForm = (props) => {
             />
           </div>
           <div className="w-full">
+            <label htmlFor="carbon" className="mb-2 text-sm"></label>
             <Input
+              id="carbon"
               type="number"
               variant="faded"
               label="Carbono"
@@ -152,7 +164,9 @@ const ActionsForm = (props) => {
           </div>
         </div>
         <div className="w-full mb-4">
+            <label htmlFor="points" className="mb-2 text-sm"></label>
             <Input
+              id="points"
               type="number"
               variant="faded"
               label="Puntos"

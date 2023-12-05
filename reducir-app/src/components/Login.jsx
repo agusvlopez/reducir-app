@@ -50,8 +50,8 @@ export function Login () {
 
     return (
         <>
-        <div className="container p-8 mx-auto min-h-screen backgroundTrama">
-        <div className="max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
+        <div className="p-8 mx-auto min-h-screen backgroundTrama">
+        <div className="container max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
         <div className="p-2">
             <div className="flex justify-center mb-4">
                 <img src={logo} />
@@ -68,7 +68,7 @@ export function Login () {
         <form
         onSubmit={(e)=>handleLogin(e)}>
             <div className="mb-3">
-                <label className="mb-2 text-sm">Email</label>
+                <label htmlFor="email" className="mb-2 text-sm">Email</label>
                 <input     
                     onChange={handleEmailChange}
                     type="email" 
@@ -78,7 +78,7 @@ export function Login () {
                 />
             </div>
             <div className="mb-6">
-                <label className="mb-2 text-sm">Contraseña</label>
+                <label htmlFor="password" className="mb-2 text-sm">Contraseña</label>
                 <input
                     onChange={handlePasswordChange}
                     type="password" 
@@ -95,7 +95,8 @@ export function Login () {
             <p className="text-center mt-8">¿Aún no tenés una cuenta?</p>  
             <div className="flex justify-center mt-3">
                 <Link to="/registrarse">
-                    <Button className="backgroundDarkGreen text-white hover:text-white">
+                    <Button 
+                    className="backgroundDarkGreen text-white hover:text-white">
                     Registrarse
                     </Button>  
                 </Link>

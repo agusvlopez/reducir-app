@@ -20,7 +20,6 @@ const NavbarWeb = (() => {
   const uid = auth ? auth?.user?.uid : null;
 
   const { data: userData, isLoading: userLoading, isError: userError } = useGetUserQuery(uid);
-
   
   const role = userData?.user?.rol;
  
@@ -39,7 +38,9 @@ const NavbarWeb = (() => {
     return item.adminLogged && (role || role !== "admin");
   });
 
-
+  const handleLogin = () => {
+    navigate("/iniciar-sesion");
+  }
   const handleLogout = () => {
     localStorage.removeItem('user');
     auth.logout();
@@ -126,17 +127,16 @@ const NavbarWeb = (() => {
           }
         </NavbarItem>   
         <NavbarItem> 
-        <RouterLink to="/iniciar-sesion">
           {(!storedUser) &&
           <Button 
-          color="warning" 
+          onPress={handleLogin}
+          type="button"
           variant="flat"
           className="text-sm backgroundOrange text-white hover:text-white"
           >
             Login 
           </Button>
           }
-          </RouterLink>
         </NavbarItem>  
       </NavbarContent>
 

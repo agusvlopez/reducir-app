@@ -58,8 +58,8 @@ export function Register () {
   
     return (
         <>
-        <div className="container p-8 mx-auto min-h-screen backgroundTrama">
-        <div className="max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
+        <div className="p-8 mx-auto min-h-screen backgroundTrama">
+        <div className="container max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
         <div className="p-2">
             <div className="flex justify-center mb-4">
                 <img src={logo} />
@@ -79,7 +79,7 @@ export function Register () {
         onSubmit={(e)=> handleRegister(e)}
         >
             <div className="mb-3">
-                <label className="mb-2 text-sm">Nombre</label>
+                <label htmlFor="name" className="mb-2 text-sm">Nombre</label>
                 <input    
                     name="name"
                     type="text" 
@@ -89,11 +89,10 @@ export function Register () {
                 />
             </div>
             <div className="mb-3">
-                <label className="mb-2 text-sm">Email</label>
+                <label htmlFor="email" className="mb-2 text-sm">Email</label>
                 <input 
                     onChange={handleEmailChange}
                     name="email"       
-                    // ref={emailRef}
                     type="email" 
                     id="email" 
                     placeholder="Ingresá tu email"
@@ -101,11 +100,10 @@ export function Register () {
                 />
             </div>
             <div className="mb-6">
-                <label className="mb-2 text-sm">Contraseña</label>
+                <label htmlFor="password" className="mb-2 text-sm">Contraseña</label>
                 <input
                     onChange={handlePasswordChange}
                     name="password"   
-                    // ref={passRef}
                     type="password" 
                     id="password"                   
                     placeholder="Ingresá tu contraseña"
@@ -113,7 +111,7 @@ export function Register () {
                 />
             </div>
             <div className="mb-6">
-                <label className="mb-2 text-sm">Confirmar contraseña</label>
+                <label htmlFor="passwordConfirm" className="mb-2 text-sm">Confirmar contraseña</label>
                 <input
                     name="confirm_password"   
                     onChange={handlePasswordConfirm}
