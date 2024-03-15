@@ -37,10 +37,10 @@ const ActionsAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5001/reducir-app/us-central1/app/api/getAll');
+        const response = await fetch('http://localhost:2023/actions');
         const result = await response.json();
         console.log(result);
-        if(!result.empty){
+        if (!result.empty) {
           setData(result);
           setLoading(false);
         }
@@ -53,47 +53,47 @@ const ActionsAdmin = () => {
 
     fetchData();
   }, []);
- 
-    return (
-        <>   
-         <AdminLayout pageTitle="Administración">
-          <h2 className="pb-2 mb-4">Todas las acciones</h2>
+
+  return (
+    <>
+      <AdminLayout pageTitle="Administración">
+        <h2 className="pb-2 mb-4">Todas las acciones</h2>
         {loading &&
           <div className="flex justify-center container p-4 mx-auto">
             <Spinner color="success" />
           </div>
         }
-          <div className="gap-2 grid grid-cols-1 sm:grid-cols-4 container mx-auto">
-            {data.map((item) => (
-              <Card shadow="sm" 
-              key={item.id} 
+        <div className="gap-2 grid grid-cols-1 sm:grid-cols-4 container mx-auto">
+          {data.map((item) => (
+            <Card shadow="sm"
+              key={item.id}
               isPressable
               onPress={() => openModal(item)}
-              >
-                <CardBody className="overflow-visible p-0">
-                  <Image
-                    shadow="sm"
-                    radius="lg"
-                    width="100%"
-                    alt={item.title}
-                    className="w-full object-cover h-[140px]"
-                    src={item.image}
-                  />
-                </CardBody>
-                <CardFooter className="text-small justify-between gap-2">
-                  <b>{item.title}</b>
-                  <div className="flex flex-col align-center gap-2">
-                    <ModalActionEdit item={item} updateData={updateData} />
-                    <ModalDelete item={item} deleteData={deleteData} />
-                    <ModalActionDetail item={item} isOpen={selectedItem === item} onClose={closeModal} />
-                  </div>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </AdminLayout>
-        </>
-    )
+            >
+              <CardBody className="overflow-visible p-0">
+                <Image
+                  shadow="sm"
+                  radius="lg"
+                  width="100%"
+                  alt={item.title}
+                  className="w-full object-cover h-[140px]"
+                  src={item.image}
+                />
+              </CardBody>
+              <CardFooter className="text-small justify-between gap-2">
+                <b>{item.title}</b>
+                <div className="flex flex-col align-center gap-2">
+                  <ModalActionEdit item={item} updateData={updateData} />
+                  <ModalDelete item={item} deleteData={deleteData} />
+                  <ModalActionDetail item={item} isOpen={selectedItem === item} onClose={closeModal} />
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </AdminLayout>
+    </>
+  )
 }
 
 export default ActionsAdmin;

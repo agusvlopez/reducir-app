@@ -4,17 +4,17 @@ console.log(db);
 export const apiFirebaseSlice = createApi({
     reducerPath: "FirebaseApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: `http://127.0.0.1:5001/reducir-app/us-central1/app/`
+        baseUrl: `http://localhost:2023/`
     }),
     endpoints: (builder) => ({
         getUser: builder.query({
             query: (userId) => `/api/user/${userId}`
         }),
         getAction: builder.query({
-            query: (id) => `/api/get/${id}`
+            query: (id) => `actions/${id}`
         }),
         getActions: builder.query({
-            query: () => `/api/getAll`
+            query: () => `actions`
         }),
         getFavorites: builder.query({
             query: (userId) => `api/users/get/${userId}/favorites`,
@@ -22,9 +22,9 @@ export const apiFirebaseSlice = createApi({
         }),
         createFavorites: builder.mutation({
             query: (newFavorite) => ({
-              url: `/api/users/create/${newFavorite.userId}/favorites`,
-              method: "POST",
-              body: newFavorite
+                url: `/api/users/create/${newFavorite.userId}/favorites`,
+                method: "POST",
+                body: newFavorite
             }),
             invalidatesTags: ["Favorites"]
         }),
@@ -44,8 +44,8 @@ export const apiFirebaseSlice = createApi({
                 url: `/api/users/create/${newCarbon.userId}/carbon`,
                 method: "POST",
                 body: newCarbon
-              }),
-              invalidatesTags: ["Carbon"]
+            }),
+            invalidatesTags: ["Carbon"]
         }),
         getAchievements: builder.query({
             query: (userId) => `/api/users/get/${userId}/achievements`,
@@ -62,5 +62,5 @@ export const apiFirebaseSlice = createApi({
     })
 });
 
-export const {useGetUserQuery,useGetFavoritesQuery, useGetCarbonQuery, useCreateCarbonMutation, useGetActionsQuery, useGetActionQuery, useCreateFavoritesMutation, useGetAchievementsQuery, useCreateAchievementsMutation, useDeleteFavoriteMutation} = apiFirebaseSlice;
+export const { useGetUserQuery, useGetFavoritesQuery, useGetCarbonQuery, useCreateCarbonMutation, useGetActionsQuery, useGetActionQuery, useCreateFavoritesMutation, useGetAchievementsQuery, useCreateAchievementsMutation, useDeleteFavoriteMutation } = apiFirebaseSlice;
 

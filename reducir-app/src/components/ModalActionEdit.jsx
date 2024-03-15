@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 import { storage } from "../firebase/firebase.config";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function ModalActionEdit({ item, updateData }) {
-  const {isOpen, onOpen, onClose} = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState('opaque')
   const [data, setData] = useState([]);
-  
+
   const backdrops = ["Editar"];
   console.log(item);
 
@@ -25,11 +25,11 @@ export default function ModalActionEdit({ item, updateData }) {
     category: item.category,
     carbon: item.carbon,
     points: item.points,
-    id: item.id,
+    _id: item._id,
   });
 
 
-// console.log(formData);
+  // console.log(formData);
 
   const handleChange = (e) => {
     setFormData({
@@ -38,41 +38,41 @@ export default function ModalActionEdit({ item, updateData }) {
     });
   };
 
-    // Función para obtener el nombre del archivo desde la URL
-    const getFileNameFromUrl = (url) => {
-      try {
-        // Decodifica la URL y obtén la última parte después de '/'
-        const decodedUrl = decodeURIComponent(url);
-        const urlParts = decodedUrl.split('/');
-        const fileName = urlParts[urlParts.length - 1];
-    
-        // Verifica si la última parte es un token válido
-        if (fileName.includes('?alt=media&token=')) {
-          console.log(fileName);
-          return fileName;
-        } else {
-          console.error('La URL no tiene el formato esperado:', url);
-          return null;
-        }
-      } catch (error) {
-        console.error('Error al obtener el nombre del archivo desde la URL:', error);
+  // Función para obtener el nombre del archivo desde la URL
+  const getFileNameFromUrl = (url) => {
+    try {
+      // Decodifica la URL y obtén la última parte después de '/'
+      const decodedUrl = decodeURIComponent(url);
+      const urlParts = decodedUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+
+      // Verifica si la última parte es un token válido
+      if (fileName.includes('?alt=media&token=')) {
+        console.log(fileName);
+        return fileName;
+      } else {
+        console.error('La URL no tiene el formato esperado:', url);
         return null;
       }
-    };
+    } catch (error) {
+      console.error('Error al obtener el nombre del archivo desde la URL:', error);
+      return null;
+    }
+  };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     console.log(file);
-  
+
     // Elimina la imagen existente si existe
     if (formData.image) {
       try {
         const existingImageRef = ref(storage, `images/${getFileNameFromUrl(formData.image)}`);
         console.log(existingImageRef);
-        if(existingImageRef){
+        if (existingImageRef) {
           await getDownloadURL(existingImageRef); // Verifica si la URL es válida
           await deleteObject(existingImageRef);
-        console.log('Imagen existente eliminada con éxito');
+          console.log('Imagen existente eliminada con éxito');
         }
 
       } catch (error) {
@@ -84,7 +84,7 @@ export default function ModalActionEdit({ item, updateData }) {
         }
       }
     }
-  
+
     // Sube la nueva imagen
     const refFile = ref(storage, `images/${file.name}`);
     try {
@@ -122,133 +122,133 @@ export default function ModalActionEdit({ item, updateData }) {
       } else {
         console.error('Error al actualizar');
       }
-      
+
     } catch (error) {
       console.error('Error al realizar la actualización:', error);
     }
   };
-  
+
   return (
     <>
       <div className="flex flex-wrap gap-3">
         {backdrops.map((b) => (
-          <Button  
+          <Button
             key={b}
-            variant="flat" 
-            color="warning" 
+            variant="flat"
+            color="warning"
             onPress={() => handleOpen(b)}
             className="capitalize"
           >
-           {b}
+            {b}
           </Button>
-        ))}  
+        ))}
       </div>
-     
+
       <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
         <form onSubmit={handleUpdateAction}>
-        <ModalContent>
-          {(onClose) => (
-            <>           
-              <ModalHeader className="flex flex-col gap-1">Editar acción: "{formData.title}"</ModalHeader>
-              <ModalBody>
-              <div className="flex">
-                <div>
-                <label htmlFor="title" className="font-semibold">Título:</label>
-                  <input
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">Editar acción: "{formData.title}"</ModalHeader>
+                <ModalBody>
+                  <div className="flex">
+                    <div>
+                      <label htmlFor="title" className="font-semibold">Título:</label>
+                      <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="category" className="font-semibold">Categoría:</label>
+                      <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                  <label htmlFor="description" className="font-semibold">Descripción:</label>
+                  <textarea
                     type="text"
-                    id="title"
-                    name="title"
-                    value={formData.title}
+                    id="description"
+                    name="description"
+                    value={formData.description}
                     onChange={handleChange}
                   />
-                </div>
-                <div>
-                <label htmlFor="category" className="font-semibold">Categoría:</label>
-                  <input
+
+                  <label htmlFor="tip" className="font-semibold">Tip:</label>
+                  <textarea
                     type="text"
-                    id="category"
-                    name="category"
-                    value={formData.category}
+                    id="tip"
+                    name="tip"
+                    value={formData.tip}
                     onChange={handleChange}
                   />
-                </div>
-              </div>
-              <label htmlFor="description" className="font-semibold">Descripción:</label>
-                <textarea
-                  type="text"
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                />
 
-              <label htmlFor="tip" className="font-semibold">Tip:</label>
-                <textarea
-                  type="text"
-                  id="tip"
-                  name="tip"
-                  value={formData.tip}
-                  onChange={handleChange}
-                />
+                  <label htmlFor="image" className="font-semibold">Imagen</label>
+                  <input
+                    id="file"
+                    type="file"
+                    name="image"
+                    //value={formData.image}
+                    onChange={handleImageChange}
+                  />
 
-              <label htmlFor="image" className="font-semibold">Imagen</label>
-                <input
-                  id="file"
-                  type="file" 
-                  name="image"
-                  //value={formData.image}
-                  onChange={handleImageChange}
-                />
+                  <label htmlFor="alt" className="font-semibold">Alt de la imagen:</label>
+                  <input
+                    type="text"
+                    id="alt"
+                    name="alt"
+                    value={formData.alt}
+                    onChange={handleChange}
+                  />
 
-              <label htmlFor="alt" className="font-semibold">Alt de la imagen:</label>
-                <input
-                  type="text"
-                  id="alt"
-                  name="alt"
-                  value={formData.alt}
-                  onChange={handleChange}
-                />
+                  <div className="flex">
+                    <div>
+                      <label htmlFor="carbon" className="font-semibold">Carbono:</label>
+                      <input
+                        type="number"
+                        id="carbon"
+                        name="carbon"
+                        value={formData.carbon}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="points" className="font-semibold">Puntos:</label>
+                      <input
+                        type="number"
+                        id="points"
+                        name="points"
+                        value={formData.points}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Cerrar
+                  </Button>
+                  <Button
+                    className="backgroundDarkGreen text-white"
+                    color="default" type="submit">
+                    Editar
+                  </Button>
+                </ModalFooter>
 
-              <div className="flex">
-              <div>
-              <label htmlFor="carbon" className="font-semibold">Carbono:</label>
-                <input
-                  type="number"
-                  id="carbon"
-                  name="carbon"
-                  value={formData.carbon}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-              <label htmlFor="points" className="font-semibold">Puntos:</label>
-                <input
-                  type="number"
-                  id="points"
-                  name="points"
-                  value={formData.points}
-                  onChange={handleChange}
-                />
-              </div>
-              </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Cerrar
-                </Button>
-                <Button 
-                className="backgroundDarkGreen text-white"
-                color="default" type="submit">
-                  Editar
-                </Button>
-              </ModalFooter> 
-             
-            </>
-          )}
-        </ModalContent> 
+              </>
+            )}
+          </ModalContent>
         </form>
       </Modal>
-      
+
     </>
   );
 }
