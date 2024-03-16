@@ -21,7 +21,7 @@ const ActionsAdmin = () => {
   };
 
   const deleteData = (itemId) => {
-    setData((prevData) => prevData.filter((item) => item.id !== itemId));
+    setData((prevData) => prevData.filter((item) => item._id !== itemId));
   }
 
   const openModal = (item) => {
@@ -66,7 +66,7 @@ const ActionsAdmin = () => {
         <div className="gap-2 grid grid-cols-1 sm:grid-cols-4 container mx-auto">
           {data.map((item) => (
             <Card shadow="sm"
-              key={item.id}
+              key={item._id}
               isPressable
               onPress={() => openModal(item)}
             >

@@ -33,15 +33,7 @@ function getActionByID(req, res) {
 
 async function createAction(req, res) {
     try {
-        const { body, image } = req;
-
-        // // Verificar si se cargó un archivo de imagen
-        // if (!image) {
-        //     return res.status(400).json({ error: 'No image provided' });
-        // }
-
-        // // Llamar al servicio para subir la imagen a Firebase Storage
-        // const { downloadURL } = await uploadFile(image);
+        const { body } = req;
 
         // Llamar al servicio para crear el producto con la URL de descarga de la imagen
         const action = await ActionsService.createAction(body);
@@ -53,15 +45,34 @@ async function createAction(req, res) {
     }
 }
 
+async function deleteAction(req, res) {
+    try {
+        const { actionId } = req.params;
+
+        // Lógica para eliminar el producto con el actionId
+        const result = await ActionsService.deleteAction(actionId);
+
+        if (result.deletedCount == 0) {
+            return res.status(404).json({ error: 'Action not found' });
+        }
+
+        res.status(200).json({ message: 'Action deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting action:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 
 export {
     getActions,
     createAction,
-    getActionByID
+    getActionByID,
+    deleteAction
 }
 
 export default {
     getActions,
     createAction,
-    getActionByID
+    getActionByID,
+    deleteAction
 }

@@ -10,5 +10,6 @@ const fileUpload = multer().single('image');
 route.get('/actions', ActionsController.getActions);
 route.get('/actions/:actionId', ActionsController.getActionByID);
 route.post('/actions', fileUpload, ActionsController.createAction);
+route.delete('/actions/:actionId', ActionsController.deleteAction);
 
 export default route;

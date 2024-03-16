@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
+import { useParams } from "react-router-dom";
 
 export default function ModalActionDetail({ item, isOpen, onClose }) {
-
+  const { idAccion: actionId } = useParams();
   const [data, setData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:2023/actions/${item._id}`);
+        const response = await fetch(`http://localhost:2023/actions/${actionId}`);
         console.log(response);
         const result = await response.json();
         console.log(result);

@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 import { MongoClient, ObjectId } from 'mongodb';
+import { storage } from '../firebase/firebase.js';
+import { deleteObject, ref } from 'firebase/storage';
 // Cargar variables de entorno desde .env
 dotenv.config();
 
@@ -85,14 +87,55 @@ async function createAction(action) {
     }
 }
 
+async function deleteActionFromDatabase(actionId) {
+    return await ActionCollection.deleteOne({ _id: ObjectId.createFromHexString(actionId) });
+}
+
+async function deleteImageFile(imagePath) {
+    try {
+        const fileRef = ref(storage, imagePath);
+        console.log(imagePath);
+        await deleteObject(fileRef);
+
+        console.log('Image file deleted successfully.');
+    } catch (err) {
+        console.error('Error deleting image file:', err);
+        throw err;
+    }
+}
+
+async function deleteAction(actionId) {
+    try {
+        const action = await getActionByID(actionId);
+
+        const result = await deleteActionFromDatabase(actionId);
+
+        if (result.deletedCount === 0) {
+            return { success: false, error: 'Product not found' };
+        }
+
+        const imagePath = action.image;
+        if (imagePath) {
+            deleteImageFile(imagePath);
+        }
+
+        return { success: true, message: 'Product deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        return { success: false, error: 'Internal Server Error' };
+    }
+}
+
 export {
     getActions,
     createAction,
-    getActionByID
+    getActionByID,
+    deleteAction
 }
 
 export default {
     getActions,
     createAction,
-    getActionByID
+    getActionByID,
+    deleteAction
 }
