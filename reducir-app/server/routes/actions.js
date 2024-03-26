@@ -11,5 +11,6 @@ route.get('/actions', ActionsController.getActions);
 route.get('/actions/:actionId', ActionsController.getActionByID);
 route.post('/actions', fileUpload, ActionsController.createAction);
 route.delete('/actions/:actionId', ActionsController.deleteAction);
+route.put('/actions/:actionId', fileUpload, ActionsController.updateAction);
 
 export default route;

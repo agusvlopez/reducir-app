@@ -126,16 +126,68 @@ async function deleteAction(actionId) {
     }
 }
 
+async function updateAction(actionId, actionData) {
+    try {
+        //await client.connect();
+
+        // Obtener el producto existente
+        const oldAction = await getActionByID(actionId);
+
+        // Crear el objeto de producto actualizado
+        const updatedAction = {
+            _id: oldAction._id,
+            title: actionData.title || oldAction.title,
+            description: actionData.description || oldAction.description,
+            tip: actionData.tip || oldAction.tip,
+            image: oldAction.image,
+            alt: actionData.alt || oldAction.alt,
+            category: actionData.category || oldAction.category,
+            carbon: parseInt(actionData.carbon) || oldAction.carbon,
+            points: parseInt(actionData.points) || oldAction.points,
+        };
+
+        // Si hay un nuevo archivo, actualizar la propiedad 'image' en 'updatedAction'
+        if (actionData.image) {
+            updatedAction.image = actionData.image;
+            // Eliminar la imagen anterior si existe
+            if (oldAction.image) {
+                await deleteImageFile(oldAction.image);
+                console.log('oldAction.image', oldAction.image);
+            }
+        }
+
+        // Actualizar el producto en la base de datos
+        const result = await ActionCollection.updateOne(
+            { _id: new ObjectId(actionId) },
+            { $set: updatedAction }
+        );
+
+        console.log('Producto antiguo:', oldAction);
+        console.log('Producto actualizado:', updatedAction);
+        console.log('Resultado de la actualización:', result);
+
+        if (result.matchedCount === 1) {
+            console.log('Producto editado exitosamente.');
+            return ActionCollection.findOne({ _id: new ObjectId(actionId) });
+        }
+    } catch (error) {
+        console.error('Error actualizando producto:', error);
+        throw { code: 500, msg: 'Internal Server Error' };
+    }
+}
+
 export {
     getActions,
     createAction,
     getActionByID,
-    deleteAction
+    deleteAction,
+    updateAction
 }
 
 export default {
     getActions,
     createAction,
     getActionByID,
-    deleteAction
+    deleteAction,
+    updateAction
 }

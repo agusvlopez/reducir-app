@@ -27,3 +27,35 @@ export async function uploadFile(file) {
         throw error;
     }
 }
+
+/**
+ * Retorna la URL del archivo.
+ * 
+ * @param {File} path 
+ * @returns {Promise<string>}
+ */
+export async function getFileURL(path) {
+    return getDownloadURL(ref(storage, path));
+}
+
+/**
+ * Edita la foto con el archivo proporcionado.
+ * 
+ * @param {File} image - Archivo de imagen a cargar.
+ * @param {string} id - ID de la acción a la que pertenece la imagen.
+ * @returns {Promise<string>} - URL de la imagen editada.
+ */
+export async function editPhoto(image, id) {
+    const path = `images/${id}/${Date.now()}`;
+    try {
+        // Carga el archivo de imagen
+        await uploadFile(image);
+        // Obtiene la URL de descarga del archivo cargado
+        const photoURL = await getFileURL(path);
+        console.log('photoURL', photoURL);
+        return photoURL;
+    } catch (error) {
+        console.error('Error al subir la imagen:', error);
+        throw error;
+    }
+}

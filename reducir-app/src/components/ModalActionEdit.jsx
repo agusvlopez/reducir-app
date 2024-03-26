@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 import { storage } from "../firebase/firebase.config";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -6,8 +6,8 @@ import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage
 export default function ModalActionEdit({ item, updateData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState('opaque')
-  const [data, setData] = useState([]);
-
+  const [file, setFile] = useState(null);
+  const [keepImage, setKeepImage] = useState(true);
   const backdrops = ["Editar"];
   console.log(item);
 
@@ -17,108 +17,82 @@ export default function ModalActionEdit({ item, updateData }) {
   }
 
   const [formData, setFormData] = useState({
-    title: item.title,
-    description: item.description,
-    tip: item.tip,
-    image: item.image,
-    alt: item.alt,
-    category: item.category,
-    carbon: item.carbon,
-    points: item.points,
-    _id: item._id,
+    title: "",
+    description: "",
+    tip: "",
+    alt: "",
+    category: "",
+    carbon: "",
+    points: "",
+
   });
 
-
-  // console.log(formData);
-
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
-  // Función para obtener el nombre del archivo desde la URL
-  const getFileNameFromUrl = (url) => {
-    try {
-      // Decodifica la URL y obtén la última parte después de '/'
-      const decodedUrl = decodeURIComponent(url);
-      const urlParts = decodedUrl.split('/');
-      const fileName = urlParts[urlParts.length - 1];
-
-      // Verifica si la última parte es un token válido
-      if (fileName.includes('?alt=media&token=')) {
-        console.log(fileName);
-        return fileName;
-      } else {
-        console.error('La URL no tiene el formato esperado:', url);
-        return null;
-      }
-    } catch (error) {
-      console.error('Error al obtener el nombre del archivo desde la URL:', error);
-      return null;
-    }
-  };
-
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    console.log(file);
+    const fileInput = e.target;
+    const newFile = fileInput.files[0];
 
-    // Elimina la imagen existente si existe
-    if (formData.image) {
-      try {
-        const existingImageRef = ref(storage, `images/${getFileNameFromUrl(formData.image)}`);
-        console.log(existingImageRef);
-        if (existingImageRef) {
-          await getDownloadURL(existingImageRef); // Verifica si la URL es válida
-          await deleteObject(existingImageRef);
-          console.log('Imagen existente eliminada con éxito');
-        }
+    console.log("New File:", newFile);
 
-      } catch (error) {
-        if (error.code === 'storage/object-not-found') {
-          console.log('La imagen no existe en Storage. Continuando...');
-        } else {
-          console.error('Error al eliminar la imagen existente:', error);
-          return;
-        }
-      }
+    if (newFile) {
+      setFile(newFile);
+      setKeepImage(false);
     }
 
-    // Sube la nueva imagen
-    const refFile = ref(storage, `images/${file.name}`);
-    try {
-      await uploadBytes(refFile, file);
-      const imageUrl = await getDownloadURL(refFile);
-
-      setFormData((prevValues) => ({
-        ...prevValues,
-        image: imageUrl,
-      }));
-    } catch (error) {
-      console.error('Error al subir la nueva imagen:', error);
-    }
+    //cargamos la imagen al storage:
+    // const refFile = ref(storage, `images/${Date.now()}/${Date.now()}`);
+    // await uploadBytes(refFile, newFile);
+    // //obtenemos la url de la imagen de storage:
+    // const imageUrl = await getDownloadURL(refFile);
+    // console.log(imageUrl);
+    // // Actualizamos el valor del campo de imagen en el estado del formulario
+    // setFormData((prevValues) => ({
+    //   ...prevValues,
+    //   image: imageUrl,
+    // }));
   };
 
 
   const handleUpdateAction = async (e) => {
     e.preventDefault();
+    const formDataForUpdate = new FormData();
+    formDataForUpdate.append('title', formData.title);
+    formDataForUpdate.append('description', formData.description);
+    formDataForUpdate.append('tip', formData.tip);
+    formDataForUpdate.append('alt', formData.alt);
+    formDataForUpdate.append('category', formData.category);
+    formDataForUpdate.append('carbon', formData.carbon);
+    formDataForUpdate.append('points', formData.points);
+
+    if (file) {
+      formDataForUpdate.append('image', file);
+    }
+
+    console.log("FILE:", formData.image);
+    console.log("NEW FILE:", file);
     try {
       // Aquí deberías realizar la lógica para enviar la solicitud PUT
-      const response = await fetch(`http://127.0.0.1:5001/reducir-app/us-central1/app/api/update/${formData.id}`, {
+      const response = await fetch(`http://localhost:2023/actions/${item._id}`, {
         method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
+        // headers: {
+
+        //   'Content-Type': 'application/json'
+        // },
+        body: formDataForUpdate,
       });
-      console.log(formData, "despues del fetch");
+      console.log(formDataForUpdate, "despues del fetch");
       onClose(); // Cierra el modal después de la actualización
       // Manejo de la respuesta, por ejemplo:
       if (response.ok) {
-        updateData(formData);
-        console.log('Actualización exitosa:', formData);
+        updateData(formDataForUpdate);
+        console.log('Actualización exitosa:', formDataForUpdate);
       } else {
         console.error('Error al actualizar');
       }
@@ -127,6 +101,15 @@ export default function ModalActionEdit({ item, updateData }) {
       console.error('Error al realizar la actualización:', error);
     }
   };
+
+  useEffect(() => {
+    if (item) {
+      setFormData(item);
+      if (item.image) {
+        setKeepImage(true);
+      }
+    }
+  }, [item]);
 
   return (
     <>
@@ -163,25 +146,16 @@ export default function ModalActionEdit({ item, updateData }) {
                       />
                     </div>
                     <div>
-                      <label htmlFor="category" className="font-semibold">Categoría:</label>
-                      <input
+                      <label htmlFor="description" className="font-semibold">Descripción:</label>
+                      <textarea
                         type="text"
-                        id="category"
-                        name="category"
-                        value={formData.category}
+                        id="description"
+                        name="description"
+                        value={formData.description}
                         onChange={handleChange}
                       />
                     </div>
                   </div>
-                  <label htmlFor="description" className="font-semibold">Descripción:</label>
-                  <textarea
-                    type="text"
-                    id="description"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                  />
-
                   <label htmlFor="tip" className="font-semibold">Tip:</label>
                   <textarea
                     type="text"
@@ -193,10 +167,10 @@ export default function ModalActionEdit({ item, updateData }) {
 
                   <label htmlFor="image" className="font-semibold">Imagen</label>
                   <input
-                    id="file"
+                    id="image"
                     type="file"
                     name="image"
-                    //value={formData.image}
+                    required={!keepImage}
                     onChange={handleImageChange}
                   />
 
@@ -206,6 +180,15 @@ export default function ModalActionEdit({ item, updateData }) {
                     id="alt"
                     name="alt"
                     value={formData.alt}
+                    onChange={handleChange}
+                  />
+
+                  <label htmlFor="category" className="font-semibold">Categoría:</label>
+                  <input
+                    type="text"
+                    id="category"
+                    name="category"
+                    value={formData.category}
                     onChange={handleChange}
                   />
 

@@ -1,5 +1,5 @@
 import * as ActionsService from "../services/actions.js";
-import { uploadFile } from '../functions/uploadFile.js';
+import { editPhoto, uploadFile } from '../functions/uploadFile.js';
 
 function getActions(req, res) {
 
@@ -62,17 +62,44 @@ async function deleteAction(req, res) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+async function updateAction(req, res) {
+    try {
+        const { actionId } = req.params;
+        const { body, file } = req;
+
+        // Verificar si hay un nuevo archivo adjunto
+        if (!file) {
+            // Si no hay un nuevo archivo, solo actualizar la información del producto sin cargar un nuevo archivo
+            const updatedAction = await ActionsService.updateAction(actionId, body);
+            console.log("No se ha adjuntado ninguna imagen");
+            return res.status(200).json(updatedAction);
+        }
+
+        // Si hay un nuevo archivo, cargar el archivo y luego actualizar la información del producto
+        const { downloadURL } = await uploadFile(file);
+        const updatedActionData = { ...body, image: downloadURL };
+        const updatedAction = await ActionsService.updateAction(actionId, updatedActionData);
+
+        console.log('Acción actualizada con éxito:', updatedAction);
+        return res.status(200).json(updatedAction);
+    } catch (error) {
+        console.error('Error al actualizar la acción:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
 
 export {
     getActions,
     createAction,
     getActionByID,
-    deleteAction
+    deleteAction,
+    updateAction
 }
 
 export default {
     getActions,
     createAction,
     getActionByID,
-    deleteAction
+    deleteAction,
+    updateAction
 }

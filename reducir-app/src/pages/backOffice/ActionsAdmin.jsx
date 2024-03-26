@@ -17,7 +17,7 @@ const ActionsAdmin = () => {
 
   const updateData = (updatedItem) => {
     // Actualizar el estado con el nuevo item
-    setData((prevData) => prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item)));
+    setData((prevData) => prevData.map((item) => (item._id === updatedItem._id ? updatedItem : item)));
   };
 
   const deleteData = (itemId) => {
