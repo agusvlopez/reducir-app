@@ -30,56 +30,56 @@ async function getActionById(id) {
 
 const getAllActions = async () => {
   try {
-      const query = db.collection('actions');
-      let response = [];
+    const query = db.collection('actions');
+    let response = [];
 
-      const data = await query.get();
-      let docs = data.docs;
+    const data = await query.get();
+    let docs = data.docs;
 
-      docs.map((doc) => {
-          const selectedItem = {
-              title: doc.data().title,
-              description: doc.data().description,
-              tip: doc.data().tip,
-              image: doc.data().image,
-              alt: doc.data().alt,
-              category: doc.data().category,
-              carbon: doc.data().carbon,
-              points: doc.data().points,
-              id: doc.data().id
-          };
+    docs.map((doc) => {
+      const selectedItem = {
+        title: doc.data().title,
+        description: doc.data().description,
+        tip: doc.data().tip,
+        image: doc.data().image,
+        alt: doc.data().alt,
+        category: doc.data().category,
+        carbon: doc.data().carbon,
+        points: doc.data().points,
+        id: doc.data().id
+      };
 
-          response.push(selectedItem);
-      });
+      response.push(selectedItem);
+    });
 
-      return response;
+    return response;
   } catch (error) {
-      console.log(error);
-      throw new Error(error);
+    console.log(error);
+    throw new Error(error);
   }
 };
 
 const updateAction = async (itemId, newData) => {
   try {
-      const reqDoc = db.collection('actions').doc(itemId);
-      await reqDoc.update(newData);
+    const reqDoc = db.collection('actions').doc(itemId);
+    await reqDoc.update(newData);
 
-      return { status: 'Success', msg: 'Data saved' };
+    return { status: 'Success', msg: 'Data saved' };
   } catch (error) {
-      console.log(error);
-      throw new Error(error);
+    console.log(error);
+    throw new Error(error);
   }
 };
 
 const deleteAction = async (itemId) => {
   try {
-      const reqDoc = db.collection('actions').doc(itemId);
-      await reqDoc.delete();
+    const reqDoc = db.collection('actions').doc(itemId);
+    await reqDoc.delete();
 
-      return { status: 'Success', msg: 'Data removed from Firestore' };
+    return { status: 'Success', msg: 'Data removed from Firestore' };
   } catch (error) {
-      console.log(error);
-      throw new Error(error);
+    console.log(error);
+    throw new Error(error);
   }
 };
 
@@ -97,18 +97,18 @@ const getUserById = async (userId) => {
 const getFavoritesByUserId = async (userId) => {
   const userRef = db.collection('users').doc(userId);
   const userDetail = await userRef.get();
-  
-   if (userDetail) {
-     const favorites = userDetail.data()?.favorites || [];
-     return favorites;
-   }
- 
-   throw new Error('Usuario no encontrado');
+
+  if (userDetail) {
+    const favorites = userDetail.data()?.favorites || [];
+    return favorites;
+  }
+
+  throw new Error('Usuario no encontrado');
 };
 
 const addToFavorites = async (userId, newFavorite) => {
   const userRef = db.collection('users').doc(userId);
-  
+
   try {
     const userDetail = await userRef.get();
 
@@ -129,13 +129,13 @@ const addToFavorites = async (userId, newFavorite) => {
 const getCarbonByUserId = async (userId) => {
   const userRef = db.collection('users').doc(userId);
   const userDetail = await userRef.get();
-  
-   if (userDetail) {
-     let carbon = userDetail.data()?.carbon || 0;
-     return carbon;
-   }
- 
-   throw new Error('Usuario no encontrado');
+
+  if (userDetail) {
+    let carbon = userDetail.data()?.carbon || 0;
+    return carbon;
+  }
+
+  throw new Error('Usuario no encontrado');
 };
 
 const updateCarbon = async (userId, newCarbon) => {
@@ -145,8 +145,8 @@ const updateCarbon = async (userId, newCarbon) => {
   if (userDetail.exists) {
     const currentCarbon = userDetail.data()?.carbon || 0;
     const doc = await userRef.set({ carbon: newCarbon }, { merge: true });
-   
-    return doc
+
+    return doc;
   }
 
   throw new Error('Usuario no encontrado');
@@ -161,16 +161,16 @@ const getAchievementsByUserId = async (userId) => {
     let docs = data.docs;
 
     docs.map((doc) => {
-         const selectedItem = {
-             title: doc.data().title,
-             description: doc.data().description,
-             tip: doc.data().tip,
-             image: doc.data().image,
-             alt: doc.data().alt,
-             category: doc.data().category,
-             carbon: doc.data().carbon,
-             points: doc.data().points,
-             id: doc.data().actionId,
+      const selectedItem = {
+        title: doc.data().title,
+        description: doc.data().description,
+        tip: doc.data().tip,
+        image: doc.data().image,
+        alt: doc.data().alt,
+        category: doc.data().category,
+        carbon: doc.data().carbon,
+        points: doc.data().points,
+        id: doc.data().actionId,
       };
 
       response.push(selectedItem);
@@ -178,8 +178,8 @@ const getAchievementsByUserId = async (userId) => {
 
     return response;
   } catch (error) {
-      console.log(error);
-      throw new Error(error);
+    console.log(error);
+    throw new Error(error);
   }
 };
 
@@ -214,7 +214,7 @@ const deleteFavorite = async (userId, favoriteId) => {
     await userRef.update({
       favorites: favorites
     });
-    
+
     return getFavoritesByUserId(userId);
   } catch (error) {
     throw new Error('Error al eliminar favorito: ' + error.message);

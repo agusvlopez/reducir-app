@@ -1,60 +1,69 @@
 import React, { useState } from "react";
 import { Card, CardBody, Image, Button, Spinner, Chip } from "@nextui-org/react";
 import { HeartIcon } from "./HeartIcon";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import ChipArrow from "./ChipArrow";
-import { useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsQuery, useGetActionQuery, useGetFavoritesQuery } from "../features/fetchFirebase";
+import { useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsQuery, useGetActionQuery, useGetFavoritesQuery, useGetUserQuery } from "../features/fetchFirebase";
 
 export default function HorizontalCard({
   titleCard,
   descriptionCard,
   imageCard,
   categoryCard,
-  idAction,
-  carbonCard
+  actionId,
+  carbonCard,
+  onFavoriteToggle,
 }
 ) {
-  const auth = useAuth();
-  let userId = auth.user.uid;
-
+  //const auth = useAuth();
+  //let userId = auth.user.uid;
+  const { accountId } = useParams();
   const [createFavorites] = useCreateFavoritesMutation();
   const [deleteFavorite] = useDeleteFavoriteMutation();
 
-  const { data: actionData, isLoading: actionLoading, isError: actionError } = useGetActionQuery(idAction);
-  const { data: achievementsData, isLoading: achievementsLoading, isError, achivementsError } = useGetAchievementsQuery(userId);
-  const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(userId);
+  const { data: accountData, isLoading: accountIsLoading, isError: accountIsError } = useGetUserQuery(accountId);
+  const { data: actionData, isLoading: actionLoading, isError: actionError } = useGetActionQuery(actionId);
+  const { data: achievementsData, isLoading: achievementsLoading, isError, achivementsError } = useGetAchievementsQuery(accountId);
+  const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(accountId);
 
-  const isActionLiked = favoritesData?.favorites.find((s) => s.idAction == idAction)
+  const isActionLiked = accountData?.account.favorites.find((s) => s._id == actionId);
+  const isAchievementAdded = accountData?.account.achievements.find((a) => a._id === actionId);
 
   const [likedAction, setLikedAction] = useState(isActionLiked);
+  const [addedAchievement, setAddedAchievement] = useState(isAchievementAdded);
 
   const handleFavorite = async () => {
     const newFavorite = {
-      titleCard: actionData?.title || '',
-      descriptionCard: actionData?.description || '',
+      _id: actionData?._id,
+      title: actionData?.title || '',
+      description: actionData?.description || '',
       tipCard: actionData?.tip || '',
-      imageCard: actionData?.image || '',
-      altCard: actionData?.alt || '',
-      categoryCard: actionData?.category || '',
-      idAction,
-      userId,
-      carbonCard: actionData?.carbon || '',
-      pointsCard: actionData?.points || '',
+      image: actionData?.image || '',
+      alt: actionData?.alt || '',
+      category: actionData?.category || '',
+      actionId,
+      accountId,
+      carbon: actionData?.carbon || '',
+      points: actionData?.points || '',
     };
 
     setLikedAction(newFavorite);
 
     try {
       if (isActionLiked) {
-        setLikedAction(false);
-        await deleteFavorite({
-          userId,
-          idAction,
+        const deleted = await deleteFavorite({
+          accountId,
+          actionId,
         });
+
+        setLikedAction(false);
+        onFavoriteToggle(false);
       } else {
+        const result = await createFavorites({ accountId, newFavorite });
+
         setLikedAction(newFavorite);
-        const result = await createFavorites(newFavorite);
+        onFavoriteToggle(true);
       }
 
     } catch (error) {
@@ -89,10 +98,10 @@ export default function HorizontalCard({
                   <p className="text-small text-foreground/80">{descriptionCard}</p>
                   <p className="text-foreground/90 mt-4"><ChipArrow> -{carbonCard} kg CO2 </ChipArrow></p>
                   <div className="flex justify-end">
-                    <Link to={`/accion/${idAction}`} className="textDarkGreen font-bold flex items-center">Leer más</Link>
+                    <Link to={`/accion/${actionId}`} className="textDarkGreen font-bold flex items-center">Leer más</Link>
                   </div>
                 </div>
-                {!achievementsData?.find((a) => a.title === titleCard) ?
+                {!addedAchievement ?
                   <Button
                     isIconOnly
                     className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2"

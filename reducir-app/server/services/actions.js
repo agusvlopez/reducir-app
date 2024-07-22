@@ -8,9 +8,9 @@ dotenv.config();
 // Obtener la URL de la base de datos desde las variables de entorno
 const mongoURI = process.env.MONGODB_URI;
 
-//const client = new MongoClient('mongodb://127.0.0.1:27017');
-const client = new MongoClient(mongoURI);
-const db = client.db("reducir-app");
+const client = new MongoClient('mongodb://127.0.0.1:27017');
+//const client = new MongoClient(mongoURI);
+const db = client.db("reducir_app");
 const ActionCollection = db.collection('actions');
 
 function filterQueryToMongo(filter) {
@@ -48,7 +48,7 @@ function filterQueryToMongo(filter) {
 }
 
 async function getActions(filter = {}) {
-    await client.connect();
+    //await client.connect();
 
     const validatedFilter = filterQueryToMongo(filter);
 
@@ -56,7 +56,7 @@ async function getActions(filter = {}) {
 }
 
 async function getActionByID(actionId) {
-    await client.connect();
+    // await client.connect();
     return ActionCollection.findOne({ _id: ObjectId.createFromHexString(actionId) });
 }
 
@@ -158,7 +158,7 @@ async function updateAction(actionId, actionData) {
 
         // Actualizar el producto en la base de datos
         const result = await ActionCollection.updateOne(
-            { _id: new ObjectId(actionId) },
+            { _id: ObjectId.createFromHexString(actionId) },
             { $set: updatedAction }
         );
 
@@ -168,7 +168,7 @@ async function updateAction(actionId, actionData) {
 
         if (result.matchedCount === 1) {
             console.log('Producto editado exitosamente.');
-            return ActionCollection.findOne({ _id: new ObjectId(actionId) });
+            return ActionCollection.findOne({ _id: ObjectId.createFromHexString(actionId) });
         }
     } catch (error) {
         console.error('Error actualizando producto:', error);

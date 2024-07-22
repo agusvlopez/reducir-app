@@ -1,6 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { db } from "../firebase/firebase.config";
-console.log(db);
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
 export const apiFirebaseSlice = createApi({
     reducerPath: "FirebaseApi",
     baseQuery: fetchBaseQuery({
@@ -8,59 +7,119 @@ export const apiFirebaseSlice = createApi({
     }),
     endpoints: (builder) => ({
         getUser: builder.query({
-            query: (userId) => `/api/user/${userId}`
+            query: (accountId) => `/account/${accountId}`,
+            providesTags: ["Favorites", "Achievements", "Carbon"],
         }),
         getAction: builder.query({
-            query: (id) => `actions/${id}`
+            query: (actionId) => `/actions/${actionId}`
         }),
         getActions: builder.query({
-            query: () => `actions`
+            query: () => `/actions`
         }),
         getFavorites: builder.query({
-            query: (userId) => `api/users/get/${userId}/favorites`,
+            query: (userId) => `/account/${userId}/favorites`,
+            headers: { 'auth-token': localStorage.getItem('token') },
             providesTags: ["Favorites"],
         }),
-        createFavorites: builder.mutation({
-            query: (newFavorite) => ({
-                url: `/api/users/create/${newFavorite.userId}/favorites`,
+        createSession: builder.mutation({
+            query: (data) => ({
+                url: `/session`,
                 method: "POST",
+                headers: { 'auth-token': localStorage.getItem('token') },
+                body: data
+            })
+        }),
+        createAccount: builder.mutation({
+            query: (data) => ({
+                url: `/account`,
+                method: "POST",
+                headers: { 'auth-token': localStorage.getItem('token') },
+                body: data
+            })
+        }),
+        createFavorites: builder.mutation({
+            query: ({ accountId, newFavorite }) => ({
+                url: `/account/${accountId}/favorites`,
+                method: "PUT",
+                headers: { 'auth-token': localStorage.getItem('token') },
                 body: newFavorite
             }),
             invalidatesTags: ["Favorites"]
         }),
         deleteFavorite: builder.mutation({
-            query: (favorite) => ({
-                url: `/api/users/delete/${favorite.userId}/favorites/${favorite.actionId}`,
+            query: (action) => ({
+                url: `/account/${action.accountId}/favorites/${action.actionId}`,
                 method: "DELETE",
+                headers: { 'auth-token': localStorage.getItem('token') }
             }),
             invalidatesTags: ["Favorites"]
         }),
         getCarbon: builder.query({
-            query: (userId) => `/api/users/get/${userId}/carbon`,
+            query: (accountId) => `/account/${accountId}/carbon`,
+            headers: { 'auth-token': localStorage.getItem('token') },
             providesTags: ["Carbon"],
         }),
         createCarbon: builder.mutation({
             query: (newCarbon) => ({
-                url: `/api/users/create/${newCarbon.userId}/carbon`,
-                method: "POST",
-                body: newCarbon
+                url: `/account/${newCarbon.accountId}/carbon`,
+                method: "PUT",
+                headers: { 'auth-token': localStorage.getItem('token') },
+                body: newCarbon.carbon
+            }),
+            invalidatesTags: ["Carbon"]
+        }),
+        updateCarbon: builder.mutation({
+            query: (newCarbon) => ({
+                url: `/account/${newCarbon.accountId}/carbon`,
+                method: "PUT",
+                headers: { 'auth-token': localStorage.getItem('token') },
+                body: { carbon: newCarbon.carbon }
             }),
             invalidatesTags: ["Carbon"]
         }),
         getAchievements: builder.query({
-            query: (userId) => `/api/users/get/${userId}/achievements`,
+            query: (accountId) => `/account/${accountId}/achievements`,
+            headers: { 'auth-token': localStorage.getItem('token') },
+            providesTags: ["Achievements"],
+        }),
+        getAchievement: builder.query({
+            query: (achievement) => `/account/${achievement.accountId}/achievements/${achievement.achievementId}`,
+            headers: { 'auth-token': localStorage.getItem('token') },
             providesTags: ["Achievements"],
         }),
         createAchievements: builder.mutation({
             query: (newAchievement) => ({
-                url: `/api/users/create/${newAchievement.userId}/achievements`,
-                method: "POST",
+                url: `/account/${newAchievement.accountId}/achievements`,
+                method: "PUT",
+                headers: { 'auth-token': localStorage.getItem('token') },
                 body: newAchievement
             }),
             invalidatesTags: ["Achievements"]
-        })
+        }),
+        logoutSession: builder.mutation({
+            query: () => ({
+                url: `/session`,
+                method: "DELETE",
+                headers: { 'auth-token': localStorage.getItem('token') },
+            }),
+        }),
     })
 });
 
-export const { useGetUserQuery, useGetFavoritesQuery, useGetCarbonQuery, useCreateCarbonMutation, useGetActionsQuery, useGetActionQuery, useCreateFavoritesMutation, useGetAchievementsQuery, useCreateAchievementsMutation, useDeleteFavoriteMutation } = apiFirebaseSlice;
-
+export const {
+    useGetUserQuery,
+    useGetFavoritesQuery,
+    useGetCarbonQuery,
+    useCreateCarbonMutation,
+    useUpdateCarbonMutation,
+    useGetActionsQuery,
+    useGetActionQuery,
+    useCreateFavoritesMutation,
+    useGetAchievementsQuery,
+    useGetAchievementQuery,
+    useCreateAchievementsMutation,
+    useDeleteFavoriteMutation,
+    useCreateSessionMutation,
+    useCreateAccountMutation,
+    useLogoutSessionMutation,
+} = apiFirebaseSlice;

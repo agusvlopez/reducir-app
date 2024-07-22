@@ -9,7 +9,8 @@ export default function ModalActionEdit({ item, updateData }) {
   const [file, setFile] = useState(null);
   const [keepImage, setKeepImage] = useState(true);
   const backdrops = ["Editar"];
-  console.log(item);
+  const [formDataUpdated, setFormDataUpdated] = useState([]);
+  const size = '2xl';
 
   const handleOpen = (backdrop) => {
     setBackdrop(backdrop)
@@ -81,21 +82,18 @@ export default function ModalActionEdit({ item, updateData }) {
       // Aquí deberías realizar la lógica para enviar la solicitud PUT
       const response = await fetch(`http://localhost:2023/actions/${item._id}`, {
         method: 'PUT',
-        // headers: {
-
-        //   'Content-Type': 'application/json'
-        // },
         body: formDataForUpdate,
       });
       console.log(formDataForUpdate, "despues del fetch");
-      onClose(); // Cierra el modal después de la actualización
       // Manejo de la respuesta, por ejemplo:
       if (response.ok) {
-        updateData(formDataForUpdate);
-        console.log('Actualización exitosa:', formDataForUpdate);
+        const updatedItem = await response.json(); // Asegúrate de obtener el ítem actualizado desde la respuesta
+        updateData(updatedItem); // Pasar el ítem actualizado a updateData
+        console.log('Actualización exitosa:', updatedItem);
       } else {
         console.error('Error al actualizar');
       }
+      onClose(); // Cierra el modal después de la actualización
 
     } catch (error) {
       console.error('Error al realizar la actualización:', error);
@@ -109,7 +107,7 @@ export default function ModalActionEdit({ item, updateData }) {
         setKeepImage(true);
       }
     }
-  }, [item]);
+  }, [item, formDataUpdated]);
 
   return (
     <>
@@ -127,88 +125,107 @@ export default function ModalActionEdit({ item, updateData }) {
         ))}
       </div>
 
-      <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        backdrop={backdrop}
+        isOpen={isOpen}
+        onClose={onClose}
+        size={size}
+      >
         <form onSubmit={handleUpdateAction}>
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">Editar acción: "{formData.title}"</ModalHeader>
                 <ModalBody>
-                  <div className="flex">
-                    <div>
+                  <div className="md:flex md:gap-4">
+                    <div className="">
                       <label htmlFor="title" className="font-semibold">Título:</label>
                       <input
                         type="text"
                         id="title"
                         name="title"
+                        className="w-full border p-2 rounded-md"
                         value={formData.title}
                         onChange={handleChange}
                       />
                     </div>
-                    <div>
-                      <label htmlFor="description" className="font-semibold">Descripción:</label>
-                      <textarea
+                    <div className="flex-1">
+                      <label htmlFor="category" className="font-semibold">Categoría:</label>
+                      <input
                         type="text"
-                        id="description"
-                        name="description"
-                        value={formData.description}
+                        id="category"
+                        name="category"
+                        className="w-full border p-2 rounded-md"
+                        value={formData.category}
                         onChange={handleChange}
                       />
                     </div>
                   </div>
-                  <label htmlFor="tip" className="font-semibold">Tip:</label>
-                  <textarea
-                    type="text"
-                    id="tip"
-                    name="tip"
-                    value={formData.tip}
-                    onChange={handleChange}
-                  />
+                  <div>
+                    <label htmlFor="description" className="font-semibold">Descripción:</label>
+                    <textarea
+                      className="w-full h-[100px] border p-2 rounded-md"
+                      type="text"
+                      id="description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="tip" className="font-semibold">Tip:</label>
+                    <textarea
+                      type="text"
+                      id="tip"
+                      name="tip"
+                      className="w-full border p-2 rounded-md"
+                      value={formData.tip}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="md:flex md:gap-4">
+                    <div className="flex-1">
+                      <label htmlFor="image" className="font-semibold">Imagen</label>
+                      <input
+                        id="image"
+                        type="file"
+                        name="image"
+                        required={!keepImage}
+                        onChange={handleImageChange}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <label htmlFor="alt" className="font-semibold">Alt de la imagen:</label>
+                      <input
+                        type="text"
+                        id="alt"
+                        name="alt"
+                        className="w-full border p-2 rounded-md"
+                        value={formData.alt}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
 
-                  <label htmlFor="image" className="font-semibold">Imagen</label>
-                  <input
-                    id="image"
-                    type="file"
-                    name="image"
-                    required={!keepImage}
-                    onChange={handleImageChange}
-                  />
-
-                  <label htmlFor="alt" className="font-semibold">Alt de la imagen:</label>
-                  <input
-                    type="text"
-                    id="alt"
-                    name="alt"
-                    value={formData.alt}
-                    onChange={handleChange}
-                  />
-
-                  <label htmlFor="category" className="font-semibold">Categoría:</label>
-                  <input
-                    type="text"
-                    id="category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                  />
-
-                  <div className="flex">
-                    <div>
+                  <div className="md:flex md:gap-4">
+                    <div className="flex-1">
                       <label htmlFor="carbon" className="font-semibold">Carbono:</label>
                       <input
                         type="number"
                         id="carbon"
                         name="carbon"
+                        className="w-full border p-2 rounded-md"
                         value={formData.carbon}
                         onChange={handleChange}
                       />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <label htmlFor="points" className="font-semibold">Puntos:</label>
                       <input
                         type="number"
                         id="points"
                         name="points"
+                        className="w-full border p-2 rounded-md"
                         value={formData.points}
                         onChange={handleChange}
                       />

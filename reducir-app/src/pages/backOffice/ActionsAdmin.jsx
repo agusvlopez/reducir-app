@@ -16,9 +16,11 @@ const ActionsAdmin = () => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const updateData = (updatedItem) => {
-    // Actualizar el estado con el nuevo item
-    setData((prevData) => prevData.map((item) => (item._id === updatedItem._id ? updatedItem : item)));
+    setData((prevData) =>
+      prevData.map((item) => (item._id === updatedItem._id ? updatedItem : item))
+    );
   };
+
 
   const deleteData = (itemId) => {
     setData((prevData) => prevData.filter((item) => item._id !== itemId));

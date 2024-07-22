@@ -110,9 +110,9 @@ const ActionsForm = (props) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="w-full">
-            <label htmlFor="file" className="mb-2 text-sm"></label>
+            <label htmlFor="image" className="mb-2 text-sm"></label>
             <Input
-              id="file"
+              id="image"
               type="file"
               variant="faded"
               label="Imagen"

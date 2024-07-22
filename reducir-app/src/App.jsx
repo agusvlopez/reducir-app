@@ -8,7 +8,7 @@ import { Welcome } from "./components/Welcome";
 import { Test } from "./pages/Test";
 import { Profile } from './components/Profile';
 import { Actions } from './components/Actions';
-import { Achievements } from './components/Achievements';
+import { Achievements } from './pages/Achievements';
 import { Benefits } from './components/Benefits';
 import { Action } from './components/Action';
 import { AuthProvider } from './context/authContext';
@@ -19,6 +19,7 @@ import AuthRoute from './components/AuthRoute';
 import AuthAdminRoute from './components/AuthAdminRoute';
 import NavbarWeb from './components/NavbarWeb';
 import PageNotFound from './pages/PageNotFound';
+import { AchievementsForm } from './pages/AchievementsForm';
 
 function App() {
   return (
@@ -26,21 +27,22 @@ function App() {
       <Router>
         <NavbarWeb />
         <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/iniciar-sesion" element={<Login />}/>
-        <Route path="/registrarse" element={<Register />}/>
-        <Route path="/bienvenida" element={<AuthRoute><Welcome /></AuthRoute>}/>
-        <Route path="/test" element={<AuthRoute><Test /></AuthRoute>}/>
-        <Route path="/perfil" element={<AuthRoute><Profile /></AuthRoute>}/>
-        <Route path="/acciones" element={<AuthRoute><Actions /></AuthRoute>}/>
-        <Route path="/logros" element={<AuthRoute><Achievements /></AuthRoute>}/>
-        <Route path="/beneficios" element={<AuthRoute><Benefits /></AuthRoute>}/>
-        <Route path="/acciones/:categoria" element={<AuthRoute><Actions /></AuthRoute>}/>
-        <Route path="/accion/:idAccion" element={<AuthRoute><Action /></AuthRoute>}/>
-        {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
-        <Route path="/admin/acciones" element={<AuthAdminRoute><ActionsAdmin /></AuthAdminRoute>}/> 
-        <Route path="/admin/acciones/new" element={<AuthAdminRoute><NewActionAdmin /></AuthAdminRoute>}/>
-        <Route path="/*" element={<PageNotFound />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/iniciar-sesion" element={<Login />} />
+          <Route path="/registrarse" element={<Register />} />
+          <Route path="/bienvenida" element={<Welcome />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/perfil/:accountId" element={<Profile />} />
+          <Route path="/acciones/:accountId" element={<Actions />} />
+          <Route path="/logros/:accountId" element={<Achievements />} />
+          <Route path="/logros/:accountId/nuevo/:achievementId" element={<AchievementsForm />} />
+          <Route path="/beneficios" element={<Benefits />} />
+          <Route path="/acciones/:accountId/:categoria" element={<Actions />} />
+          <Route path="/accion/:actionId" element={<Action />} />
+          {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
+          <Route path="/admin/acciones" element={<ActionsAdmin />} />
+          <Route path="/admin/acciones/new" element={<NewActionAdmin />} />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Router>
     </AuthProvider>

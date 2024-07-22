@@ -62,6 +62,7 @@ async function deleteAction(req, res) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
 async function updateAction(req, res) {
     try {
         const { actionId } = req.params;
