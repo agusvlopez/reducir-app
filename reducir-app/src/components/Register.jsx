@@ -5,26 +5,28 @@ import { Button } from "@nextui-org/react";
 import NavbarWeb from "./NavbarWeb";
 import { useAuth } from "../context/AuthContext";
 import logo from '../covers/logo-horizontal.png';
+import { useCreateAccountMutation } from "../features/fetchFirebase";
 
 export function Register() {
     const auth = useAuth();
     const navigate = useNavigate();
-
-    const [emailRegister, setEmailRegister] = useState("");
-    const [passwordRegister, setPasswordRegister] = useState("");
+    const [createAccount] = useCreateAccountMutation();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [favorites, setFavorites] = useState([]);
+    const [achievements, setAchievements] = useState([]);
     const [rol, setRol] = useState("");
-    const [carbon, setCarbon] = useState("");
+    const [carbon, setCarbon] = useState(0);
     const [validationMessage, setValidationMessage] = useState("");
     //console.log(emailRegister, passwordRegister, "Estados del formulario en registro");
 
     const handleEmailChange = (e) => {
-        setEmailRegister(e.target.value)
+        setEmail(e.target.value)
     }
 
     const handlePasswordChange = (e) => {
-        setPasswordRegister(e.target.value)
+        setPassword(e.target.value)
     }
     const handlePasswordConfirm = (e) => {
         setPasswordConfirm(e.target.value)
@@ -32,23 +34,34 @@ export function Register() {
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        if (!emailRegister || !passwordRegister || !passwordConfirm) {
+        if (!email || !password || !passwordConfirm) {
             setValidationMessage("Todos los campos son obligatorios.");
             return;
         }
 
-        if (passwordRegister !== passwordConfirm) {
+        if (password !== passwordConfirm) {
             setValidationMessage("Las contraseñas no coinciden.");
             return;
         }
-        if (passwordRegister.length < 6 || passwordConfirm < 6) {
+        if (password.length < 6 || passwordConfirm < 6) {
             setValidationMessage("La contraseña debe tener como mínimo 6 caracteres.");
             return;
         }
 
+        const account = { email, password, carbon, favorites, achievements };
+        console.log("account", account);
         try {
             // Tu lógica de registro aquí...
-            await auth.register(emailRegister, passwordRegister, favorites, "usuario", carbon);
+            //await auth.register(emailRegister, passwordRegister, favorites, "usuario", carbon);
+            const result = await createAccount(account);
+            console.log("result", result);
+            localStorage.setItem('token', result.data.account.token);
+            localStorage.setItem('email', result.data.account.email);
+            localStorage.setItem('favorites', result.data.account.favorites);
+            localStorage.setItem('achievements', result.data.account.achievements);
+            localStorage.setItem('role', result.data.account.role);
+            localStorage.setItem('_id', result.data.account._id);
+
             navigate("/bienvenida");
         } catch (error) {
             setValidationMessage("Error al registrar. Inténtalo de nuevo.");
