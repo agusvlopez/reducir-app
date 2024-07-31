@@ -231,7 +231,7 @@ const getAchievementById = async (req, res) => {
         const { accountId } = req.params;
         const { achievementId } = req.params;
         const achievement = await AccountService.getAchievementById(accountId, achievementId);
-        return res.status(201).json({ achievement });
+        return res.status(201).json(achievement);
     } catch (error) {
         console.error('Error al obtener el logro:', error);
         res.status(500).json({ error: 'Error interno del servidor:' + error });

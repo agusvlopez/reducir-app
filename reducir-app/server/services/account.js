@@ -71,9 +71,14 @@ async function createAccount(account) {
 
     newAccount.password = await bcrypt.hash(account.password, salt);
 
-    await AccountsCollection.insertOne(newAccount);
+    const result = await AccountsCollection.insertOne(newAccount);
+
+    const insertedId = result.insertedId;
     console.log("account", account);
+    console.log("result", result);
     return {
+        _id: insertedId,
+        email: account.email, carbon: account.carbon, favorites: account.favorites, achievements: account.achievements, role: 'cliente',
         token: await createToken({ ...account, password: undefined, role: account.role })
     };
 }
@@ -573,6 +578,7 @@ const updateCarbon = async (id, newCarbon, req) => {
         throw error;
     }
 }
+
 
 export {
     createAccount,

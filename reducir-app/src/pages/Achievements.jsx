@@ -45,7 +45,7 @@ export function Achievements() {
                       <p><span className="font-semibold">Puntos ganados:</span> {achievement.points}</p>
                       <p><span className="font-semibold">Carbono reducido:</span> {achievement.carbon} kg.</p>
                       <div className="flex justify-end">
-                        <Link to={`/logros/${accountId}/nuevo/${achievement._id}`}>
+                        <Link to={`/logros/${accountId}/new/${achievement._id}`}>
                           <span className="iconShare mr-2 mt-4"></span>
                         </Link>
                       </div>

@@ -20,32 +20,40 @@ import AuthAdminRoute from './components/AuthAdminRoute';
 import NavbarWeb from './components/NavbarWeb';
 import PageNotFound from './pages/PageNotFound';
 import { AchievementsForm } from './pages/AchievementsForm';
+import BlogpostsForm from './components/BlogpostsForm';
+import NewBlogpost from './components/NewBlogpost';
+import BlogPost from './pages/blog/Blogpost';
+import { Blog } from './pages/blog/Blog';
+import NewAchievement from './components/NewAchievement';
+import AchievementPost from './pages/Achievementpost';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <NavbarWeb />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/iniciar-sesion" element={<Login />} />
-          <Route path="/registrarse" element={<Register />} />
-          <Route path="/bienvenida" element={<Welcome />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/perfil/:accountId" element={<Profile />} />
-          <Route path="/acciones/:accountId" element={<Actions />} />
-          <Route path="/logros/:accountId" element={<Achievements />} />
-          <Route path="/logros/:accountId/nuevo/:achievementId" element={<AchievementsForm />} />
-          <Route path="/beneficios" element={<Benefits />} />
-          <Route path="/acciones/:accountId/:categoria" element={<Actions />} />
-          <Route path="/accion/:actionId" element={<Action />} />
-          {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
-          <Route path="/admin/acciones" element={<ActionsAdmin />} />
-          <Route path="/admin/acciones/new" element={<NewActionAdmin />} />
-          <Route path="/*" element={<PageNotFound />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <Router>
+      <NavbarWeb />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/iniciar-sesion" element={<Login />} />
+        <Route path="/registrarse" element={<Register />} />
+        <Route path="/bienvenida" element={<Welcome />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/perfil/:accountId" element={<Profile />} />
+        <Route path="/acciones/:accountId" element={<Actions />} />
+        <Route path="/logros/:accountId" element={<Achievements />} />
+        <Route path="/blogpost" element={<NewBlogpost />} />
+        <Route path="/logros/:accountId/new/:achievementId" element={<NewAchievement />} />
+        <Route path="/achievementpost/:achievementId" element={<AchievementPost />} />
+        <Route path="/beneficios" element={<Benefits />} />
+        <Route path="/acciones/:accountId/:categoria" element={<Actions />} />
+        <Route path="/accion/:actionId" element={<Action />} />
+        <Route path="/blogpost/:blogpostId" element={<BlogPost />} />
+        <Route path="/blog" element={<Blog />} />
+        {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
+        <Route path="/admin/acciones" element={<ActionsAdmin />} />
+        <Route path="/admin/acciones/new" element={<NewActionAdmin />} />
+        <Route path="/*" element={<PageNotFound />} />
+      </Routes>
+    </Router>
   );
 }
 

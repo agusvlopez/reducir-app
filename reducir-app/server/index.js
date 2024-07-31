@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import ActionsRoute from './routes/actions.js';
 import AccountsRoute from './routes/account.js';
+import BlogpostsRoute from './routes/blogposts.js';
+import AchievementsRoute from './routes/achievements.js';
 import mongoose from 'mongoose';
 import { connectDB } from './config/dbConnection.js';
 import { config } from './config/config.js';
@@ -23,6 +25,8 @@ connectDB();
 
 app.use(ActionsRoute);
 app.use(AccountsRoute);
+app.use(BlogpostsRoute);
+app.use(AchievementsRoute);
 
 const port = config.port || 2023;
 

@@ -109,6 +109,7 @@ const TestForm = () => {
       const result = await updateCarbon(newCarbon).unwrap();
       console.log("Result:", result);
       setCarbon(sumaCarbon);
+      //localStorage.setItem('carbon', sumaCarbon);
       navigate(`/perfil/${accountId}`);
     } catch (error) {
       console.error("Error updating carbon:", error);

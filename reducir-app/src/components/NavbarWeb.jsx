@@ -4,7 +4,7 @@ import ReducirLogo from './ReducirLogo';
 import { useAuth } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import { useGetUserQuery } from "../features/fetchFirebase";
+import { useGetUserQuery, useLogoutSessionMutation } from "../features/fetchFirebase";
 
 
 const NavbarWeb = (() => {
@@ -33,16 +33,19 @@ const NavbarWeb = (() => {
   console.log("userMenuRoutes", userMenuRoutes);
   const adminMenuRoutes = menuRoutes.filter((item) => {
     // Filtra las rutas de administración si el usuario tiene el rol "admin"
-    return item.adminLogged && (role || role !== "admin");
+    return item.adminLogged && (role || role == "admin");
   });
   console.log("adminMenuRoutes", adminMenuRoutes);
+  const [logoutSession] = useLogoutSessionMutation();
+
   const handleApp = () => {
     navigate(`/perfil/${accountId}`);
   }
   const handleLogin = () => {
     navigate("/iniciar-sesion");
   }
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logoutSession().unwrap();
     localStorage.removeItem('_id');
     localStorage.removeItem('achievements');
     localStorage.removeItem('carbon');
@@ -51,7 +54,7 @@ const NavbarWeb = (() => {
     localStorage.removeItem('role');
     localStorage.removeItem('token');
     //auth.logout();
-
+    navigate("/iniciar-sesion");
   }
 
   return (

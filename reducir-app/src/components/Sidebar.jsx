@@ -38,6 +38,12 @@ const Sidebar = () => {
         name: 'Beneficios',
         icon: benefits,
     });
+    sidebarRoutes.push({
+        id: 8,
+        path: '/blog',
+        name: 'Blog',
+        icon: benefits,
+    });
     const [isOpen, setIsOpen] = useState(true);
     const toggleBar = () => {
         setIsOpen(!isOpen);

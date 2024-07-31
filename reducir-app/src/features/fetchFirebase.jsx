@@ -83,8 +83,10 @@ export const apiFirebaseSlice = createApi({
             providesTags: ["Achievements"],
         }),
         getAchievement: builder.query({
-            query: (achievement) => `/account/${achievement.accountId}/achievements/${achievement.achievementId}`,
-            headers: { 'auth-token': localStorage.getItem('token') },
+            query: ({ accountId, achievementId }) => ({
+                url: `/account/${accountId}/achievements/${achievementId}`,
+                headers: { 'auth-token': localStorage.getItem('token') },
+            }),
             providesTags: ["Achievements"],
         }),
         createAchievements: builder.mutation({
@@ -102,6 +104,36 @@ export const apiFirebaseSlice = createApi({
                 method: "DELETE",
                 headers: { 'auth-token': localStorage.getItem('token') },
             }),
+        }),
+        createBlogpost: builder.mutation({
+            query: (newBlogpost) => ({
+                url: `/blogposts`,
+                method: "POST",
+                body: newBlogpost
+            }),
+            invalidatesTags: ["Blogposts"]
+        }),
+        getBlogposts: builder.query({
+            query: (accountId) => `/blogposts/${accountId}`,
+            headers: { 'auth-token': localStorage.getItem('token') },
+            providesTags: ["Blogposts"],
+        }),
+        getBlogpost: builder.query({
+            query: (blogpostId) => `/blogpost/${blogpostId}`,
+            headers: { 'auth-token': localStorage.getItem('token') },
+            providesTags: ["Blogposts"]
+        }),
+        getAllBlogposts: builder.query({
+            query: () => `/blogposts`,
+            providesTags: ["Blogposts"]
+        }),
+        getAchievementsPosts: builder.query({
+            query: () => `/achievements`,
+            headers: { 'auth-token': localStorage.getItem('token') }
+        }),
+        getAchievementPost: builder.query({
+            query: (achievementId) => `/achievementspost/${achievementId}`,
+            headers: { 'auth-token': localStorage.getItem('token') }
         }),
     })
 });
@@ -122,4 +154,10 @@ export const {
     useCreateSessionMutation,
     useCreateAccountMutation,
     useLogoutSessionMutation,
+    useCreateBlogpostMutation,
+    useGetBlogpostsQuery,
+    useGetAllBlogpostsQuery,
+    useGetBlogpostQuery,
+    useGetAchievementsPostsQuery,
+    useGetAchievementPostQuery
 } = apiFirebaseSlice;

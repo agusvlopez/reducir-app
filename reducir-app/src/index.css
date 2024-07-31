@@ -39,6 +39,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #005840;
 }
@@ -46,23 +47,28 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto transparent;
-} 
+}
 
 .backgroundWhite {
   background-color: #F1EDEC;
 }
+
 .backgroundNav {
   background-color: #fafafa;
 }
+
 .backgroundOrange {
   background-color: #ed6C1D;
 }
+
 .backgroundSoftOrange {
   background-color: #e7824465;
 }
+
 .backgroundOrangeChip {
   background-color: #ed6d1dc4;
 }
+
 .backgroundDarkGreen {
   background-color: #005840;
 }
@@ -75,25 +81,31 @@ button:focus-visible {
 .navLogo {
   max-width: 130px;
 }
+
 .textDarkGreen {
   color: #005840;
 }
-.textOrange{
+
+.textOrange {
   color: #ed6d1dea;
 }
+
 .textWhite {
   color: #F1EDEC;
 }
+
 .buttonDarkGreen {
   background-color: #005840;
   color: white;
   border-color: #005840;
 }
+
 .buttonDarkGreen:hover {
   background-color: #014936;
   color: white;
   border-color: #005840;
 }
+
 .buttonDarkGreen:focus {
   background-color: #F1EDEC;
   color: #005840;
@@ -139,6 +151,7 @@ button:focus-visible {
   background-size: contain;
   background-repeat: no-repeat;
 }
+
 .moreIcon {
   background-image: url('./covers/icons/more-vertical.png');
   width: 26px;
@@ -147,21 +160,27 @@ button:focus-visible {
   background-size: contain;
   background-repeat: no-repeat;
 }
+
 .sidebarButton {
   outline: none;
   background-color: transparent;
   border-color: transparent;
 }
+
 .sidebarButton:hover {
   border-color: transparent;
 }
-.sidebarButton:focus, .sidebarButton:focus-visible {
- outline: none;
+
+.sidebarButton:focus,
+.sidebarButton:focus-visible {
+  outline: none;
 }
+
 .my-form {
   max-width: 600px;
   margin: 0 auto;
 }
+
 .selected-card {
   z-index: 1;
   transform: scale(1.1);
@@ -196,7 +215,8 @@ button:focus-visible {
   background-repeat: no-repeat;
   background-size: contain;
   display: inline-block;
-  animation: swing; /* referring directly to the animation's @keyframe declaration */
+  animation: swing;
+  /* referring directly to the animation's @keyframe declaration */
   animation-duration: 2s;
 }
 
@@ -218,7 +238,8 @@ button:focus-visible {
   background-repeat: no-repeat;
   background-size: contain;
   display: inline-block;
-  animation: swing; /* referring directly to the animation's @keyframe declaration */
+  animation: swing;
+  /* referring directly to the animation's @keyframe declaration */
   animation-duration: 2s;
 }
 
