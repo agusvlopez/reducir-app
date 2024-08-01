@@ -123,6 +123,11 @@ export const apiFirebaseSlice = createApi({
             headers: { 'auth-token': localStorage.getItem('token') },
             providesTags: ["Blogposts"]
         }),
+        getBlogpostsByAccount: builder.query({
+            query: (accountId) => `/blogposts/${accountId}`,
+            headers: { 'auth-token': localStorage.getItem('token') },
+            providesTags: ["Blogposts"]
+        }),
         getAllBlogposts: builder.query({
             query: () => `/blogposts`,
             providesTags: ["Blogposts"]
@@ -158,6 +163,7 @@ export const {
     useGetBlogpostsQuery,
     useGetAllBlogpostsQuery,
     useGetBlogpostQuery,
+    useGetBlogpostsByAccountQuery,
     useGetAchievementsPostsQuery,
     useGetAchievementPostQuery
 } = apiFirebaseSlice;

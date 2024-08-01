@@ -73,6 +73,7 @@ const createAchievement = async (achievement) => {
             title: achievement.title,
             achievement: achievement.achievement,
             description: achievement.description,
+            category: achievement.category,
             image: achievement.image,
             email: achievement.email,
             accountId: achievement.accountId

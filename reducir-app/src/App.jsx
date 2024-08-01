@@ -48,6 +48,7 @@ function App() {
         <Route path="/accion/:actionId" element={<Action />} />
         <Route path="/blogpost/:blogpostId" element={<BlogPost />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:categoria" element={<Blog />} />
         {/* <Route path="/admin" element={<AuthAdminRoute><Admin /></AuthAdminRoute>}/> */}
         <Route path="/admin/acciones" element={<ActionsAdmin />} />
         <Route path="/admin/acciones/new" element={<NewActionAdmin />} />

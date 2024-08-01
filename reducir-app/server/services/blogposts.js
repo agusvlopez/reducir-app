@@ -94,6 +94,7 @@ const createBlogpost = async (blogpost) => {
             title: blogpost.title,
             achievement: blogpost.achievement,
             description: blogpost.description,
+            category: blogpost.category,
             image: blogpost.image,
             email: blogpost.email,
             accountId: blogpost.accountId

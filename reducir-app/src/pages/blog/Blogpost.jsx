@@ -24,13 +24,15 @@ const BlogPost = () => {
                 <template className="hidden lg:block">
                     <Sidebar />
                 </template>
-                <div className="max-w-lg mx-auto my-4 bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="max-w-2xl mx-auto my-4 bg-white rounded-lg shadow-md overflow-hidden flex h-fit">
                     <div>
-                        <p>Logro: {blogpostData?.achievement}</p>
-                        <p>Categoría: </p>
+                        <img className="w-full object-cover" src={blogpostData?.image} alt={blogpostData?.title} />
                     </div>
-                    <img className="w-full h-48 object-cover" src={blogpostData?.image} alt={blogpostData?.title} />
                     <div className="p-4">
+                        <div>
+                            <p>Logro: {blogpostData?.achievement}</p>
+                            <p>Categoría: {blogpostData?.category}</p>
+                        </div>
                         <h2 className="text-2xl font-bold text-gray-800">{blogpostData?.title}</h2>
                         <p className="mt-2 text-gray-600">{blogpostData?.description}</p>
                         <p className="mt-2 text-gray-600">{blogpostData?.achievement}</p>

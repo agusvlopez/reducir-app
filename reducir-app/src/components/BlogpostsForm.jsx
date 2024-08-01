@@ -32,6 +32,7 @@ const BlogpostsForm = (props) => {
         title: "",
         achievement: "",
         description: "",
+        category: "",
         image: "",
         email: accountEmail,
         accountId: accountId
@@ -50,12 +51,12 @@ const BlogpostsForm = (props) => {
         // Update the achievement field before submitting
         const updatedValues = { ...values };
         console.log("updatedValues", updatedValues);
-        props.addBlogpost(updatedValues);
+        await props.addBlogpost(updatedValues);
         setSuccessMessage("¡El formulario se completó con éxito!");
         setTimeout(() => {
             setSuccessMessage("");
             navigate(`/blog`);
-        }, 2000);
+        }, 3000);
     };
 
     const fileHandler = async (e) => {
@@ -109,6 +110,19 @@ const BlogpostsForm = (props) => {
                     name="description"
                     id="description"
                     value={values.description}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+            <div className="w-full mb-4">
+                <label htmlFor="category" className="mb-2 text-sm"></label>
+                <Textarea
+                    type="text"
+                    variant="faded"
+                    label="Categoría"
+                    name="category"
+                    id="category"
+                    value={values.category}
                     onChange={handleChange}
                     required
                 />
