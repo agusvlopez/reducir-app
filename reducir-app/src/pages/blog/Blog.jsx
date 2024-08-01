@@ -3,11 +3,12 @@ import { Menu } from '../../components/Menu';
 import Sidebar from '../../components/Sidebar';
 import { useGetAllBlogpostsQuery } from '../../features/fetchFirebase';
 import userImg from '../../covers/user.png';
-import { Button, User } from "@nextui-org/react";
-import { Link } from 'react-router-dom';
+import { Button, Chip, User } from "@nextui-org/react";
+import { Link, useParams } from 'react-router-dom';
 
 export function Blog() {
     const accountId = localStorage.getItem('_id');
+    const { categoria: category } = useParams();
     const { data: blogposts, isLoading: blogpostsIsLoading, isError: blogpostsIsError } = useGetAllBlogpostsQuery();
     const [searchTerm, setSearchTerm] = useState("");
     const [confirmedSearchTerm, setConfirmedSearchTerm] = useState("");
@@ -16,12 +17,15 @@ export function Blog() {
         setConfirmedSearchTerm(searchTerm);
     };
 
-    const filteredBlogposts = confirmedSearchTerm
-        ? blogposts?.filter(b =>
-            b.title.toLowerCase().includes(confirmedSearchTerm.toLowerCase()) ||
-            b.description.toLowerCase().includes(confirmedSearchTerm.toLowerCase())
-        )
-        : blogposts;
+    // Filtramos primero por categoría y luego por el término de búsqueda confirmado
+    const filteredBlogposts = blogposts
+        ?.filter(b => !category || b.category === category)
+        ?.filter(b =>
+            confirmedSearchTerm
+                ? b.title.toLowerCase().includes(confirmedSearchTerm.toLowerCase()) ||
+                b.description.toLowerCase().includes(confirmedSearchTerm.toLowerCase())
+                : true
+        );
 
     return (
         <>
@@ -38,7 +42,7 @@ export function Blog() {
                             </svg></span>
                             Agregar un post</Link>
                     </div>
-                    {/* <div className="flex gap-2 pt-4 pb-4 container mx-auto justify-center">
+                    <div className="flex gap-2 pt-4 pb-4 container mx-auto">
                         <Link to={`/blog`}>
                             <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Todas</Chip>
                         </Link>
@@ -51,7 +55,7 @@ export function Blog() {
                         <Link to={`/blog/agua`}>
                             <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Agua</Chip>
                         </Link>
-                    </div> */}
+                    </div>
                     <div className="my-4 flex items-center">
                         <input
                             type="text"
@@ -72,7 +76,8 @@ export function Blog() {
                             <Link to={`/blogpost/${b?._id}`} key={b?._id}>
                                 <div className="p-4 max-w-2xl mx-auto my-4 bg-white rounded-lg shadow-md overflow-hidden">
                                     <div>
-                                        <p>{b?.achievement}</p>
+                                        <p>Logro: {b?.achievement}</p>
+                                        <p>Categoría: {b?.category}</p>
                                     </div>
                                     <div className="flex items-center">
                                         <div>
