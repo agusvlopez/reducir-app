@@ -26,6 +26,7 @@ import BlogPost from './pages/blog/Blogpost';
 import { Blog } from './pages/blog/Blog';
 import NewAchievement from './components/NewAchievement';
 import AchievementPost from './pages/Achievementpost';
+import { AllAchievementsPosts } from './pages/AllAchievementsPosts';
 
 function App() {
   return (
@@ -41,8 +42,10 @@ function App() {
         <Route path="/acciones/:accountId" element={<Actions />} />
         <Route path="/logros/:accountId" element={<Achievements />} />
         <Route path="/blogpost" element={<NewBlogpost />} />
-        <Route path="/logros/:accountId/new/:achievementId" element={<NewAchievement />} />
+        <Route path="/logros/:accountId/new/:actionId" element={<NewAchievement />} />
         <Route path="/achievementpost/:achievementId" element={<AchievementPost />} />
+        <Route path="/logros/inicio" element={<AllAchievementsPosts />} />
+        <Route path="/logros/inicio/:categoria" element={<AllAchievementsPosts />} />
         <Route path="/beneficios" element={<Benefits />} />
         <Route path="/acciones/:accountId/:categoria" element={<Actions />} />
         <Route path="/accion/:actionId" element={<Action />} />

@@ -65,6 +65,7 @@ const BlogpostsForm = (props) => {
         await uploadBytes(refFile, file);
         const imageUrl = await getDownloadURL(refFile);
         setUrlImg(imageUrl);
+        console.log("imageUrl", imageUrl);
         setValues((prevValues) => ({
             ...prevValues,
             image: imageUrl,

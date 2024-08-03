@@ -3,26 +3,27 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { storage } from "../firebase/firebase.config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useGetAchievementQuery } from "../features/fetchFirebase";
+import { useCreateCarbonMutation, useGetAchievementQuery, useGetActionQuery, useGetCarbonQuery } from "../features/fetchFirebase";
 
 const AchievementForm = (props) => {
     const { accountId } = useParams();
-    const { achievementId } = useParams();
-    const achievement = {
-        accountId: accountId,
-        achievementId: achievementId
-    }
+    const { actionId } = useParams();
+    // const achievement = {
+    //     accountId: accountId,
+    //     achievementId: achievementId
+    // }
 
     const accountEmail = localStorage.getItem('email');
     const [urlImg, setUrlImg] = useState("");
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate();
-    const { data: achievementData, isLoading: achievementDataIsLoading, isError: achievementDataIsError } = useGetAchievementQuery({ accountId, achievementId });
-    console.log("achievementId", achievementId);
-    console.log("accountId", accountId);
-    console.log("achievementData", achievementData);
-    const achievementTitle = achievementData?.title;
+    // const { data: achievementData, isLoading: achievementDataIsLoading, isError: achievementDataIsError } = useGetAchievementQuery({ accountId, achievementId });
+    const { data: actionData, isLoading: actionDataIsLoading, isError: actionDataIsError } = useGetActionQuery(actionId);
+    console.log("actionData", actionData);
+    const { data: carbonData, isLoading: carbonLoading, isError: carbonError } = useGetCarbonQuery(accountId);
+    const [createCarbon] = useCreateCarbonMutation();
+    const achievementTitle = actionData?.title;
     const validate = (value) => {
         return value ? "" : "Este campo es obligatorio.";
     };
@@ -43,25 +44,12 @@ const AchievementForm = (props) => {
         setValues((prevValues) => ({ ...prevValues, [name]: value }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        // Update the achievement field before submitting
-        const updatedValues = { ...values, achievement: achievementData?.title || "" };
-
-        props.addAchievement(updatedValues);
-        setSuccessMessage("¡El formulario se completó con éxito!");
-        setTimeout(() => {
-            setSuccessMessage("");
-            navigate(`/perfil/${accountId}`);
-        }, 2000);
-    };
-
     const fileHandler = async (e) => {
         const file = e.target.files[0];
         const refFile = ref(storage, `images/${Date.now()}/${Date.now()}`);
         await uploadBytes(refFile, file);
         const imageUrl = await getDownloadURL(refFile);
+        console.log("imageUrl", imageUrl);
         setUrlImg(imageUrl);
         setValues((prevValues) => ({
             ...prevValues,
@@ -69,8 +57,37 @@ const AchievementForm = (props) => {
         }));
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Update the achievement field before submitting
+        const updatedValues = { ...values, achievement: actionData?.title || "" };
+
+        console.log("Submitting values:", updatedValues);
+
+        await props.addAchievement(updatedValues);
+        setSuccessMessage("¡El formulario se completó con éxito!");
+        const newCarbonValue = carbonData?.carbon - actionData?.carbon;
+
+        const newCarbon = {
+            accountId,
+            carbon: {
+                carbon: newCarbonValue
+            }
+        };
+
+        if (newCarbonValue) {
+            const result = await createCarbon(newCarbon);
+            console.log("Result of createCarbon:", result);
+        }
+        setTimeout(() => {
+            setSuccessMessage("Success");
+            navigate(`/perfil/${accountId}`);
+        }, 2000);
+    };
+
     return (
-        achievementData?.title ? (
+        actionData?.title ? (
             <form onSubmit={handleSubmit} className="my-form container">
                 <div className="w-full mb-4">
                     <label htmlFor="title" className="mb-2 text-sm"></label>

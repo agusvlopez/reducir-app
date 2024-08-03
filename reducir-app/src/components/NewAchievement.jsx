@@ -1,26 +1,15 @@
 import React from "react";
 import AchievementForm from "./AchievementForm";
+import { useCreateAchievementPostMutation } from "../features/fetchFirebase";
 
 const NewAchievement = () => {
     const accountId = localStorage.getItem('_id');
+    const [createAchievementPost] = useCreateAchievementPostMutation();
 
     const addAchievement = async (achievementData) => {
         console.log("achievementData", achievementData);
         try {
-            const response = await fetch(`http://localhost:2023/achievements`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(achievementData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create a blogpost');
-            }
-
-            const data = await response.json();
-            console.log('Achievement post created:', data);
+            const result = await createAchievementPost(achievementData);
             // Aquí puedes hacer cualquier otra operación que necesites con la respuesta
         } catch (error) {
             console.error('Error creating achievement post:', error);

@@ -4,7 +4,7 @@ import { HeartIcon } from "./HeartIcon";
 import { Button, Chip, Popover, PopoverContent, Spinner } from "@nextui-org/react";
 import Sidebar from "./Sidebar";
 import NavbarWeb from "./NavbarWeb";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import ChipArrow from "./ChipArrow";
 import { useCreateAchievementsMutation, useCreateCarbonMutation, useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsQuery, useGetActionQuery, useGetCarbonQuery, useGetFavoritesQuery, useGetUserQuery } from "../features/fetchFirebase";
@@ -94,66 +94,66 @@ export function Action() {
     }, 3000);
   };
 
-  const addAsAchievement = async () => {
+  // const addAsAchievement = async () => {
 
-    const newAchievement = {
-      _id: actionData?._id,
-      title: actionData?.title || '',
-      description: actionData?.description || '',
-      tip: actionData?.tip || '',
-      image: actionData?.image || '',
-      alt: actionData?.alt || '',
-      category: actionData?.category || '',
-      actionId,
-      accountId,
-      carbon: actionData?.carbon || '',
-      points: actionData?.points || '',
-    };
+  //   const newAchievement = {
+  //     _id: actionData?._id,
+  //     title: actionData?.title || '',
+  //     description: actionData?.description || '',
+  //     tip: actionData?.tip || '',
+  //     image: actionData?.image || '',
+  //     alt: actionData?.alt || '',
+  //     category: actionData?.category || '',
+  //     actionId,
+  //     accountId,
+  //     carbon: actionData?.carbon || '',
+  //     points: actionData?.points || '',
+  //   };
 
-    setAddedAchievement(newAchievement);
+  //   setAddedAchievement(newAchievement);
 
-    try {
-      const result = await createAchievements(newAchievement);
+  //   try {
+  //     const result = await createAchievements(newAchievement);
 
-      setPopUpAchievementAdded(true);
-      setTimeout(() => {
-        setPopUpAchievementAdded(false);
-      }, 3000);
+  //     setPopUpAchievementAdded(true);
+  //     setTimeout(() => {
+  //       setPopUpAchievementAdded(false);
+  //     }, 3000);
 
-      const favorite = {
-        accountId: result.data.accountId,
-        actionId: result.data.actionId,
-      }
-      const isActionInFavorites = favoritesData?.favorites.some((f) => f._id === actionId);
+  //     const favorite = {
+  //       accountId: result.data.accountId,
+  //       actionId: result.data.actionId,
+  //     }
+  //     const isActionInFavorites = favoritesData?.favorites.some((f) => f._id === actionId);
 
-      if (isActionLiked) {
-        const actionDeleted = {
-          accountId,
-          actionId
-        }
-        const deleted = await deleteFavorite(actionDeleted);
-        setLikedAction(false);
-      }
+  //     if (isActionLiked) {
+  //       const actionDeleted = {
+  //         accountId,
+  //         actionId
+  //       }
+  //       const deleted = await deleteFavorite(actionDeleted);
+  //       setLikedAction(false);
+  //     }
 
-      const newCarbonValue = carbonData?.carbon - actionData?.carbon;
+  //     const newCarbonValue = carbonData?.carbon - actionData?.carbon;
 
-      const newCarbon = {
-        accountId,
-        carbon: {
-          carbon: newCarbonValue
-        }
-      };
+  //     const newCarbon = {
+  //       accountId,
+  //       carbon: {
+  //         carbon: newCarbonValue
+  //       }
+  //     };
 
-      if (newCarbonValue) {
-        const result = await createCarbon(newCarbon);
+  //     if (newCarbonValue) {
+  //       const result = await createCarbon(newCarbon);
 
-      }
+  //     }
 
-    } catch (error) {
-      console.error("Error adding achievement:", error);
-    }
+  //   } catch (error) {
+  //     console.error("Error adding achievement:", error);
+  //   }
 
-  };
+  // };
 
   return (
     <>
@@ -187,7 +187,10 @@ export function Action() {
                     <div className="flex justify-end pt-2">
                       {!addedAchievement ?
                         <>
-                          <Button onClick={addAsAchievement} className="backgroundDarkGreen text-white">Agregar como logro +</Button>
+
+                          <Link to={`/logros/${accountId}/new/${actionData?._id}`} className="">
+                            <Button className="backgroundDarkGreen text-white"> Agregar como logro +</Button>
+                          </Link>
 
                           <Button
                             isIconOnly

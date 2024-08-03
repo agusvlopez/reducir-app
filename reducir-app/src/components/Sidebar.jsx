@@ -32,12 +32,21 @@ const Sidebar = () => {
         icon: achievements,
     });
 
+
     sidebarRoutes.push({
         id: 8,
         path: '/beneficios',
         name: 'Beneficios',
         icon: benefits,
     });
+
+    sidebarRoutes.push({
+        id: 7,
+        path: `/logros/inicio`,
+        name: 'Comunidad',
+        icon: achievements,
+    });
+
     sidebarRoutes.push({
         id: 8,
         path: '/blog',

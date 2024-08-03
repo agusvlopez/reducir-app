@@ -154,12 +154,12 @@ export function Profile() {
                         }
                         {blogpostsSection &&
                             <div className="pb-8 backgroundWhite mx-auto px-8 p-4 pt-8 rounded-t-[30px] ">
-                                <h2 className="text-2xl font-semibold p-2">Mis logros</h2>
+                                <h2 className="text-2xl font-semibold p-2">Mis blogposts</h2>
                                 <div className="flex justify-center mt-6 pb-8">
 
                                     <Button className="backgroundDarkGreen text-white flex justify-between items-center font-semibold text-base">
                                         <Link to={`/logros/${accountId}`} className="hover:text-white">
-                                            Agregar un logro <span className="ml-6">+</span>
+                                            Agregar un blogpost <span className="ml-6">+</span>
                                         </Link>
                                     </Button>
 

@@ -132,9 +132,18 @@ export const apiFirebaseSlice = createApi({
             query: () => `/blogposts`,
             providesTags: ["Blogposts"]
         }),
+        createAchievementPost: builder.mutation({
+            query: (newAchievement) => ({
+                url: `/achievements`,
+                method: "POST",
+                body: newAchievement
+            }),
+            invalidatesTags: ["AchievementsPosts"]
+        }),
         getAchievementsPosts: builder.query({
             query: () => `/achievements`,
-            headers: { 'auth-token': localStorage.getItem('token') }
+            headers: { 'auth-token': localStorage.getItem('token') },
+            providesTags: ["AchievementsPosts"]
         }),
         getAchievementPost: builder.query({
             query: (achievementId) => `/achievementspost/${achievementId}`,
@@ -164,6 +173,7 @@ export const {
     useGetAllBlogpostsQuery,
     useGetBlogpostQuery,
     useGetBlogpostsByAccountQuery,
+    useCreateAchievementPostMutation,
     useGetAchievementsPostsQuery,
     useGetAchievementPostQuery
 } = apiFirebaseSlice;

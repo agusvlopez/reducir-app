@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Menu } from '../../components/Menu';
-import Sidebar from '../../components/Sidebar';
-import { useGetAllBlogpostsQuery } from '../../features/fetchFirebase';
-import userImg from '../../covers/user.png';
+import { Menu } from '../components/Menu';
+import Sidebar from '../components/Sidebar';
+import { useGetAchievementsPostsQuery } from '../features/fetchFirebase';
+import userImg from '../covers/user.png';
 import { Button, Chip, User } from "@nextui-org/react";
 import { Link, useParams } from 'react-router-dom';
 
-export function Blog() {
+export function AllAchievementsPosts() {
     const accountId = localStorage.getItem('_id');
     const { categoria: category } = useParams();
-    const { data: blogposts, isLoading: blogpostsIsLoading, isError: blogpostsIsError } = useGetAllBlogpostsQuery();
+    const { data: achievements, isLoading: achievementsIsLoading, isError: achievementsIsError } = useGetAchievementsPostsQuery();
     const [searchTerm, setSearchTerm] = useState("");
     const [confirmedSearchTerm, setConfirmedSearchTerm] = useState("");
 
@@ -18,15 +18,16 @@ export function Blog() {
     };
 
     // Filtramos primero por categoría y luego por el término de búsqueda confirmado
-    const filteredBlogposts = blogposts
-        ?.filter(b => !category || b.category === category)
-        ?.filter(b =>
+    const filteredAchievements = achievements
+        ?.filter(a => !category || a.category === category)
+        ?.filter(a =>
             confirmedSearchTerm
-                ? b.title.toLowerCase().includes(confirmedSearchTerm.toLowerCase()) ||
-                b.description.toLowerCase().includes(confirmedSearchTerm.toLowerCase())
+                ? a.title.toLowerCase().includes(confirmedSearchTerm.toLowerCase()) ||
+                a.description.toLowerCase().includes(confirmedSearchTerm.toLowerCase())
                 : true
         );
 
+    console.log("filteredAchievements?.length === 0", filteredAchievements?.length === 0);
     return (
         <>
             <div className="lg:flex">
@@ -34,7 +35,7 @@ export function Blog() {
                     <Sidebar />
                 </template>
                 <div className="p-4 mx-4">
-                    <h1 className="mb-2">Blog</h1>
+                    <h1 className="mb-2">Comunidad</h1>
                     <div className="font-bold py-2">
                         <Link to={`/blogpost`} className="flex gap-1 textDarkGreen">
                             <span className=""><svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,16 +44,16 @@ export function Blog() {
                             Agregar un post</Link>
                     </div>
                     <div className="flex gap-2 pt-4 pb-4 container mx-auto">
-                        <Link to={`/blog`}>
+                        <Link to={`/logros/inicio`}>
                             <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Todas</Chip>
                         </Link>
-                        <Link to={`/blog/energia`}>
+                        <Link to={`/logros/inicio/energia`}>
                             <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Energía</Chip>
                         </Link>
-                        <Link to={`/blog/reciclaje`}>
+                        <Link to={`/logros/inicio/reciclaje`}>
                             <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Reciclaje</Chip>
                         </Link>
-                        <Link to={`/blog/agua`}>
+                        <Link to={`/logros/inicio/agua`}>
                             <Chip size="md" className="cursor-pointer hover:drop-shadow-2xl">Agua</Chip>
                         </Link>
                     </div>
@@ -72,7 +73,7 @@ export function Blog() {
                         </Button>
                     </div>
                     <div className="">
-                        {filteredBlogposts?.map((b) => (
+                        {filteredAchievements?.map((b) => (
                             <Link to={`/blogpost/${b?._id}`} key={b?._id}>
                                 <div className="p-4 max-w-2xl mx-auto my-4 bg-white rounded-lg shadow-md overflow-hidden">
                                     <div>
@@ -98,7 +99,7 @@ export function Blog() {
                             </Link>
                         ))}
                     </div>
-                    {filteredBlogposts?.length === 0 &&
+                    {filteredAchievements?.length === 0 &&
                         <>
                             <div>No hay publicaciones disponibles con esa categoría.</div>
                         </>}
