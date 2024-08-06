@@ -1,4 +1,4 @@
-import { Button, Input, Textarea } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { storage } from "../firebase/firebase.config";
@@ -8,22 +8,23 @@ import { useCreateCarbonMutation, useGetAchievementQuery, useGetActionQuery, use
 const AchievementForm = (props) => {
     const { accountId } = useParams();
     const { actionId } = useParams();
-    // const achievement = {
-    //     accountId: accountId,
-    //     achievementId: achievementId
-    // }
 
+    const categories = [
+        { id: 1, name: 'agua' },
+        { id: 2, name: 'reciclaje' },
+        { id: 3, name: 'energía' },
+        { id: 4, name: 'todas' }
+    ];
     const accountEmail = localStorage.getItem('email');
     const [urlImg, setUrlImg] = useState("");
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate();
-    // const { data: achievementData, isLoading: achievementDataIsLoading, isError: achievementDataIsError } = useGetAchievementQuery({ accountId, achievementId });
     const { data: actionData, isLoading: actionDataIsLoading, isError: actionDataIsError } = useGetActionQuery(actionId);
-    console.log("actionData", actionData);
     const { data: carbonData, isLoading: carbonLoading, isError: carbonError } = useGetCarbonQuery(accountId);
     const [createCarbon] = useCreateCarbonMutation();
     const achievementTitle = actionData?.title;
+
     const validate = (value) => {
         return value ? "" : "Este campo es obligatorio.";
     };
@@ -32,11 +33,11 @@ const AchievementForm = (props) => {
         title: "",
         achievement: "",
         description: "",
+        category: "",
         image: "",
         email: accountEmail,
         accountId: accountId
     };
-    console.log("initialStateValues", initialStateValues);
     const [values, setValues] = useState(initialStateValues);
 
     const handleChange = (e) => {
@@ -44,26 +45,26 @@ const AchievementForm = (props) => {
         setValues((prevValues) => ({ ...prevValues, [name]: value }));
     };
 
+    const handleSelectChange = (selectedCategory) => {
+        setValues((prevValues) => ({ ...prevValues, category: selectedCategory }));
+    };
+
     const fileHandler = async (e) => {
         const file = e.target.files[0];
         const refFile = ref(storage, `images/${Date.now()}/${Date.now()}`);
         await uploadBytes(refFile, file);
         const imageUrl = await getDownloadURL(refFile);
-        console.log("imageUrl", imageUrl);
         setUrlImg(imageUrl);
         setValues((prevValues) => ({
             ...prevValues,
             image: imageUrl,
         }));
-    }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Update the achievement field before submitting
         const updatedValues = { ...values, achievement: actionData?.title || "" };
-
-        console.log("Submitting values:", updatedValues);
 
         await props.addAchievement(updatedValues);
         setSuccessMessage("¡El formulario se completó con éxito!");
@@ -104,6 +105,34 @@ const AchievementForm = (props) => {
                     />
                     {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
                 </div>
+                <div className="flex gap-4 mb-4">
+                    <div className="flex w-1/2">
+                        <Select
+                            label="Categoría"
+                            placeholder="Seleccionar una categoría"
+                            className="w-full"
+                            value={values.category}
+                            onChange={(e) => handleSelectChange(e.target.value)}
+                        >
+                            {categories.map((category) => (
+                                <SelectItem key={category.name} value={category.name}>
+                                    {category.name}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="w-1/2 flex flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
+                        <Input
+                            key="md"
+                            radious="md"
+                            type="file"
+                            label="Imagen"
+                            labelPlacement="inside"
+                            onChange={fileHandler}
+                            required
+                        />
+                    </div>
+                </div>
                 <div className="w-full mb-4">
                     <label htmlFor="achievement" className="mb-2 text-sm"></label>
                     <Textarea
@@ -129,20 +158,6 @@ const AchievementForm = (props) => {
                         onChange={handleChange}
                         required
                     />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="w-full">
-                        <label htmlFor="image" className="mb-2 text-sm"></label>
-                        <Input
-                            id="image"
-                            type="file"
-                            variant="faded"
-                            label="Imagen"
-                            name="image"
-                            onChange={fileHandler}
-                            required
-                        />
-                    </div>
                 </div>
                 <div className="flex justify-center">
                     <Button
