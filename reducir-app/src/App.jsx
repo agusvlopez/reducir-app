@@ -40,7 +40,8 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/perfil/:accountId" element={<Profile />} />
         <Route path="/acciones/:accountId" element={<Actions />} />
-        <Route path="/logros/:accountId" element={<Achievements />} />
+        <Route path="/perfil/:accountId/logros" element={<Profile />} />
+        <Route path="/perfil/:accountId/blogposts" element={<Profile />} />
         <Route path="/blogpost" element={<NewBlogpost />} />
         <Route path="/logros/:accountId/new/:actionId" element={<NewAchievement />} />
         <Route path="/achievementpost/:achievementId" element={<AchievementPost />} />

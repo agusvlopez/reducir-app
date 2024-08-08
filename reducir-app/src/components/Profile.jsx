@@ -59,9 +59,15 @@ export function Profile() {
                             <p className="text-center mt-4 text-white text-[18px]">Mi huella de carbono de este mes:</p>
                             <p className="font-bold text-center mb-8 textOrange text-[20px] animate__animated animate__pulse">{!carbonIsLoading ? `${accountData?.account.carbon} kg de CO2` : "Cargando..."}</p>
                             <div className="ms-[2%] mb-[-1rem] flex gap-2 w-fit">
-                                <div className={`font-bold rounded-t-[30px] pt-3 p-2 px-3 text-sm cursor-pointer hover:opacity-90 transition-all ${actionSection ? "backgroundWhite text-[#242424]" : "bg-[#00412f] text-white"}`} onClick={handleActionSection}>Acciones en proceso</div>
-                                <div className={`font-bold rounded-t-[30px] pt-3 p-2 px-3 text-sm cursor-pointer hover:opacity-90 transition-all ${achievementsSection ? "backgroundWhite text-[#242424]" : "bg-[#00412f] text-white"}`} onClick={handleAchievementsSection}>Mis logros</div>
-                                <div className={`font-bold rounded-t-[30px] pt-3 p-2 px-3 text-sm cursor-pointer hover:opacity-90 transition-all ${blogpostsSection ? "backgroundWhite text-[#242424]" : "bg-[#00412f] text-white"}`} onClick={handleBlogpostsSection}>Mis blogposts</div>
+                                <Link to={`/perfil/${accountId}`}>
+                                    <div className={`font-bold rounded-t-[30px] pt-3 p-2 px-3 text-sm cursor-pointer hover:opacity-90 transition-all ${actionSection ? "backgroundWhite text-[#242424]" : "bg-[#00412f] text-white"}`} onClick={handleActionSection}>Acciones en proceso</div>
+                                </Link>
+                                <Link to={`/perfil/${accountId}/logros`}>
+                                    <div className={`font-bold rounded-t-[30px] pt-3 p-2 px-3 text-sm cursor-pointer hover:opacity-90 transition-all ${achievementsSection ? "backgroundWhite text-[#242424]" : "bg-[#00412f] text-white"}`} onClick={handleAchievementsSection}>Mis logros</div>
+                                </Link>
+                                <Link to={`/perfil/${accountId}/blogposts`}>
+                                    <div className={`font-bold rounded-t-[30px] pt-3 p-2 px-3 text-sm cursor-pointer hover:opacity-90 transition-all ${blogpostsSection ? "backgroundWhite text-[#242424]" : "bg-[#00412f] text-white"}`} onClick={handleBlogpostsSection}>Mis blogposts</div>
+                                </Link>
                             </div>
                         </div>
                         {actionSection &&

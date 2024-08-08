@@ -7,7 +7,7 @@ import NavbarWeb from "./NavbarWeb";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import ChipArrow from "./ChipArrow";
-import { useCreateAchievementsMutation, useCreateCarbonMutation, useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsQuery, useGetActionQuery, useGetCarbonQuery, useGetFavoritesQuery, useGetUserQuery } from "../features/fetchFirebase";
+import { useCreateAchievementsMutation, useCreateCarbonMutation, useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsPostsQuery, useGetAchievementsQuery, useGetActionQuery, useGetCarbonQuery, useGetFavoritesQuery, useGetUserQuery } from "../features/fetchFirebase";
 import FloatingPopover from "./FloatingPopover";
 
 export function Action() {
@@ -24,17 +24,23 @@ export function Action() {
   const { data: carbonData, isLoading: carbonLoading, isError: carbonError } = useGetCarbonQuery(accountId);
   const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(accountId);
   const { data: achievementsData, isLoading: achievementsLoading, isError, achivementsError } = useGetAchievementsQuery(accountId);
-
+  const { data: achievementsPosts, isLoading: achievementsPostsLoading, isError: achievementsPostsIsError, achievementsPostsError } = useGetAchievementsPostsQuery();
+  const accountEmail = accountData?.account.email;
+  const isAchievementAdded2 = achievementsPosts?.find((a) => a.email === accountEmail && a.achievement === actionData?.title);
   const isActionLiked = accountData?.account.favorites.find((s) => s._id === actionId);
   const isAchievementAdded = accountData?.account.achievements.find((a) => a._id === actionId);
 
+  console.log("accountData", accountData);
+  console.log("achievementsData", achievementsData);
+  console.log("achievementsPosts", achievementsPosts);
+  console.log("isAchievementAdded2", isAchievementAdded2);
   const newCarbonValue = carbonData?.carbon - actionData?.carbon;
   const [likedAction, setLikedAction] = useState(isActionLiked);
-  const [addedAchievement, setAddedAchievement] = useState(isAchievementAdded);
+  const [addedAchievement, setAddedAchievement] = useState(isAchievementAdded2);
   const [popUpFavoriteAdded, setPopUpFavoriteAdded] = useState(false);
   const [popUpFavoriteDeleted, setPopUpFavoriteDeleted] = useState(false);
   const [popUpAchievementAdded, setPopUpAchievementAdded] = useState(false);
-
+  console.log("accountData", accountData);
 
   const favoriteAdded = {
     title: "¡Acción agregada a favoritos!"
@@ -185,7 +191,7 @@ export function Action() {
                     <div className="mb-2 border-2 border-transparent rounded-xl border-s-orange-600 p-2 backgroundSoftOrange font-semibold text-orange-800 italic"><span className="iconTip"><span className="invisible">Tip:</span></span> {actionData?.tip}</div>
 
                     <div className="flex justify-end pt-2">
-                      {!addedAchievement ?
+                      {!addedAchievement && !isAchievementAdded2 ?
                         <>
 
                           <Link to={`/logros/${accountId}/new/${actionData?._id}`} className="">

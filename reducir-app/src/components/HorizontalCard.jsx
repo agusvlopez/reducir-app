@@ -4,7 +4,7 @@ import { HeartIcon } from "./HeartIcon";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import ChipArrow from "./ChipArrow";
-import { useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsQuery, useGetActionQuery, useGetFavoritesQuery, useGetUserQuery } from "../features/fetchFirebase";
+import { useCreateFavoritesMutation, useDeleteFavoriteMutation, useGetAchievementsPostsQuery, useGetAchievementsQuery, useGetActionQuery, useGetFavoritesQuery, useGetUserQuery } from "../features/fetchFirebase";
 
 export default function HorizontalCard({
   titleCard,
@@ -24,14 +24,25 @@ export default function HorizontalCard({
 
   const { data: accountData, isLoading: accountIsLoading, isError: accountIsError } = useGetUserQuery(accountId);
   const { data: actionData, isLoading: actionLoading, isError: actionError } = useGetActionQuery(actionId);
+
   const { data: achievementsData, isLoading: achievementsLoading, isError, achivementsError } = useGetAchievementsQuery(accountId);
   const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(accountId);
+  const { data: achievementsPosts, isLoading: achievementsPostsLoading, isError: achievementsPostsIsError, achievementsPostsError } = useGetAchievementsPostsQuery();
+  console.log("actionData", actionData);
 
-  const isActionLiked = accountData?.account.favorites.find((s) => s._id == actionId);
+  const accountEmail = accountData?.account.email;
+  const isAchievementAdded2 = achievementsPosts?.find((a) => a.email == accountEmail && a.achievement == actionData?.title);
+  console.log("achievementsPosts", achievementsPosts);
+
+  const isActionLiked = accountData?.account.favorites.find((s) => s._id === actionId);
   const isAchievementAdded = accountData?.account.achievements.find((a) => a._id === actionId);
+  console.log("accountData", accountData);
+  console.log("isAchievementAdded2", isAchievementAdded2);
+  console.log("isAchievementAdded", isAchievementAdded);
 
   const [likedAction, setLikedAction] = useState(isActionLiked);
-  const [addedAchievement, setAddedAchievement] = useState(isAchievementAdded);
+  const [addedAchievement, setAddedAchievement] = useState(isAchievementAdded2);
+  console.log("addedAchievement", addedAchievement);
 
   const handleFavorite = async () => {
     const newFavorite = {
@@ -73,6 +84,7 @@ export default function HorizontalCard({
 
   return (
     <>
+
       <Card
         isBlurred
         className="border-none backgroundWhite/90 dark:bg-default-100/50 max-w-[610px] mx-auto mb-4"
@@ -101,7 +113,7 @@ export default function HorizontalCard({
                     <Link to={`/accion/${actionId}`} className="textDarkGreen font-bold flex items-center">Leer más</Link>
                   </div>
                 </div>
-                {!addedAchievement ?
+                {!addedAchievement && !isAchievementAdded2 ?
                   <Button
                     isIconOnly
                     className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2 mt-2"

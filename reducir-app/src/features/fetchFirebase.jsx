@@ -52,7 +52,7 @@ export const apiFirebaseSlice = createApi({
                 method: "DELETE",
                 headers: { 'auth-token': localStorage.getItem('token') }
             }),
-            invalidatesTags: ["Favorites"]
+            invalidatesTags: ["Favorites", "Achievements", "AchievementsPosts"]
         }),
         getCarbon: builder.query({
             query: (accountId) => `/account/${accountId}/carbon`,

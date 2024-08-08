@@ -44,16 +44,17 @@ const BlogpostsForm = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const updatedValues = { ...values };
+
         if (urlImg) {
+            const updatedValues = { ...values };
             await props.addBlogpost(updatedValues);
             setSuccessMessage("¡El formulario se completó con éxito!");
-        }
 
-        setTimeout(() => {
-            setSuccessMessage("");
-            navigate(`/blog`);
-        }, 3000);
+            setTimeout(() => {
+                setSuccessMessage("");
+                navigate(`/blog`);
+            }, 3000);
+        }
     };
 
     const fileHandler = async (e) => {

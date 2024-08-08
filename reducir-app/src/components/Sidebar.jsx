@@ -25,12 +25,12 @@ const Sidebar = () => {
         icon: actions,
     });
 
-    sidebarRoutes.push({
-        id: 7,
-        path: `/logros/${accountId}`,
-        name: 'Logros',
-        icon: achievements,
-    });
+    // sidebarRoutes.push({
+    //     id: 7,
+    //     path: `/logros/${accountId}`,
+    //     name: 'Logros',
+    //     icon: achievements,
+    // });
 
 
     sidebarRoutes.push({

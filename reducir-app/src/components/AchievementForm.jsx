@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { storage } from "../firebase/firebase.config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useCreateCarbonMutation, useGetAchievementQuery, useGetActionQuery, useGetCarbonQuery } from "../features/fetchFirebase";
+import { useCreateCarbonMutation, useDeleteFavoriteMutation, useGetAchievementQuery, useGetActionQuery, useGetCarbonQuery, useGetFavoritesQuery } from "../features/fetchFirebase";
 
 const AchievementForm = (props) => {
     const { accountId } = useParams();
@@ -22,7 +22,9 @@ const AchievementForm = (props) => {
     const navigate = useNavigate();
     const { data: actionData, isLoading: actionDataIsLoading, isError: actionDataIsError } = useGetActionQuery(actionId);
     const { data: carbonData, isLoading: carbonLoading, isError: carbonError } = useGetCarbonQuery(accountId);
+    const { data: favoritesData, isLoading: favoritesLoading, isError: favoritesError } = useGetFavoritesQuery(accountId);
     const [createCarbon] = useCreateCarbonMutation();
+    const [deleteFavorite] = useDeleteFavoriteMutation();
     const achievementTitle = actionData?.title;
 
     const validate = (value) => {
@@ -60,14 +62,34 @@ const AchievementForm = (props) => {
             image: imageUrl,
         }));
     };
+    const isActionInFavorites = favoritesData?.favorites.some((f) => f._id === actionId);
+    console.log("isActionInFavorites", isActionInFavorites);
+    console.log("accountId", accountId);
+    console.log("actionId", actionId);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const updatedValues = { ...values, achievement: actionData?.title || "" };
+        const result = await props.addAchievement(updatedValues);
 
-        await props.addAchievement(updatedValues);
-        setSuccessMessage("¡El formulario se completó con éxito!");
+        console.log("result", result);
+
+        // const favorite = {
+        //     accountId: result.data.accountId,
+        //     actionId: result.data.actionId,
+        // }
+        const isActionInFavorites = favoritesData?.favorites.some((f) => f._id === actionId);
+
+        if (isActionInFavorites) {
+            const actionDeleted = {
+                accountId,
+                actionId
+            }
+            const deleted = await deleteFavorite(actionDeleted);
+
+        }
+
         const newCarbonValue = carbonData?.carbon - actionData?.carbon;
 
         const newCarbon = {
@@ -81,10 +103,12 @@ const AchievementForm = (props) => {
             const result = await createCarbon(newCarbon);
             console.log("Result of createCarbon:", result);
         }
+
+        setSuccessMessage("¡El formulario se completó con éxito!");
+
         setTimeout(() => {
-            setSuccessMessage("Success");
             navigate(`/perfil/${accountId}`);
-        }, 2000);
+        }, 3000);
     };
 
     return (
