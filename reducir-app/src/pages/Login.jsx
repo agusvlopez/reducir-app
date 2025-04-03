@@ -1,32 +1,25 @@
-import React, { useState, useRef } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {Button} from "@nextui-org/react";
-import  NavbarWeb  from "../components/NavbarWeb";
-import { useAuth } from "../context/AuthContext";
 import warningIcon from "../covers/icons/warning-icon.png";
 import logo from '../covers/logo-horizontal.png';
+import { useCreateSessionMutation } from "../features/fetchFirebase";
+import Input from "../components/Base/Input";
+import CustomButton from "../components/Base/CustomButton";
 
-export function Login () {
+export function Login() {
     const navigate = useNavigate();
-    const auth = useAuth();
+    const [createSession, { isLoading, error }] = useCreateSessionMutation();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [validationMessage, setValidationMessage] = useState("");
 
-    console.log(email, password, "estados de login");
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value)
-    }
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value)
-    }
-
     const handleLogin = async (e) => {
-        console.log(email, password);
         e.preventDefault();
+
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+
+        const email = formData.get('email');
+        const password = formData.get('password');
 
         if (!email || !password) {
             setValidationMessage("Todos los campos son obligatorios.");
@@ -34,81 +27,82 @@ export function Login () {
         }
 
         try {
-            await auth.login(email, password);
-            navigate("/perfil");
-        } catch (error) {
+            const result = await createSession({ email, password }).unwrap();
+
+            localStorage.setItem('token', result.session.token);
+            localStorage.setItem('email', result.session.account.email);
+            localStorage.setItem('carbon', result.session.account.carbon);
+            localStorage.setItem('favorites', result.session.account.favorites);
+            localStorage.setItem('achievements', result.session.account.achievements);
+            localStorage.setItem('role', result.session.account.role);
+            localStorage.setItem('_id', result.session.account._id);
+            navigate(`/perfil/${result.session.account._id}`);
+        } catch (err) {
             setValidationMessage("Error al iniciar sesión. Verifica tus credenciales.");
         }
-       
-    }
-
-    const handleGoogle = (e) => {
-        e.preventDefault();
-        auth.loginWithGoogle();
-        navigate("/perfil");
-    }
+    };
 
     return (
         <>
-        <div className="container p-8 mx-auto min-h-screen backgroundTrama">
-        <div className="max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
-        <div className="p-2">
-            <div className="flex justify-center mb-4">
-                <img src={logo} />
-            </div>        
-            <h1 className="text-2xl mt-1 mb-2 text-center p-1">¡Bienvenido/a de vuelta!</h1>
-        </div>
-        {validationMessage && (
-        <div className="mb-4 flex items-center justify-center text-red-500">
-            <img src={warningIcon} className="mr-2 w-8 h-8" /><span><span className="font-bold pr-1">¡Atención!</span> 
-            {validationMessage}</span>
-        </div>
-        )}
+            <div className="p-8 mx-auto min-h-screen backgroundTrama">
+                <div className="container max-w-sm mx-auto backgroundWhite p-6 rounded-[24px] shadow-sm flex flex-col gap-3">
 
-        <form
-        onSubmit={(e)=>handleLogin(e)}>
-            <div className="mb-3">
-                <label className="mb-2 text-sm">Email</label>
-                <input     
-                    onChange={handleEmailChange}
-                    type="email" 
-                    id="email" 
-                    placeholder="Ingresá tu email"
-                    className="block w-full rounded-md border-0 py-1.5 pl-4 pr-2  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                />
-            </div>
-            <div className="mb-6">
-                <label className="mb-2 text-sm">Contraseña</label>
-                <input
-                    onChange={handlePasswordChange}
-                    type="password" 
-                    id="password"                   
-                    placeholder="Ingresá tu contraseña"
-                    className="block w-full rounded-md border-0 py-1.5 pl-4 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                />
-            </div>
-            <div className="flex justify-center">
-                <Button type="submit" value="login" className="bg-white textDarkGreen shadow">Ingresar</Button>
-            </div>
-            </form>
+                    <div className="flex justify-center p-1">
+                        <img src={logo} alt="Logo" />
+                    </div>
+                    <h1 className="text-lg text-center text-[#383838]">¡Bienvenido/a de vuelta!</h1>
 
-            <p className="text-center mt-8">¿Aún no tenés una cuenta?</p>  
-            <div className="flex justify-center mt-3">
-                <Link to="/registrarse">
-                    <Button className="backgroundDarkGreen text-white hover:text-white">
-                    Registrarse
-                    </Button>  
-                </Link>
+                    {validationMessage && (
+                        <div className="mb-4 flex items-center justify-center text-red-500 text-xs">
+                            <img src={warningIcon} className="mr-1 w-6 h-6" alt="Warning Icon" />
+                            <span>{validationMessage}</span>
+                        </div>
+                    )}
+                    {error && (
+                        <div className="mb-4 flex items-center justify-center text-red-500">
+                            <span>Error al iniciar sesión. Verifica tus credenciales.</span>
+                        </div>
+                    )}
+                    <form
+                        onSubmit={handleLogin}
+                        className="flex flex-col gap-3"
+                    >
+                        <Input
+                            label="Email"
+                            inputName="email"
+                            inputId="email"
+                            inputPlaceholder="Ingresá tu email"
+                        />
+                        <Input
+                            label="Contraseña"
+                            inputName="password"
+                            inputType="password"
+                            inputId="password"
+                            inputPlaceholder="Ingresá tu contraseña"
+                        />
+                        <Link className="text-center text-sm">
+                            ¿Olvidaste tu contraseña?
+                        </Link>
+                        <div className="flex justify-center mt-1">
+                            <CustomButton
+                                type="submit"
+                                variant="white">
+                                {isLoading ? "Cargando..." : "Iniciar sesión"}
+                            </CustomButton>
+                        </div>
+                    </form>
+                    <div>
+                        <p className="text-center mt-9 text-sm">¿Aún no tenés una cuenta?</p>
+                        <span className="flex justify-center mt-1">
+                            <Link to="/registrarse" className="textDarkGreen font-semibold">
+                                Registrarse
+                            </Link>
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div className="flex justify-center mt-3">
-                <Link className="textDarkGreen">
-                <Button className="bg-white shadow" onClick={(e)=> handleGoogle(e)}>
-                    Ingresar con Google
-                </Button>  
-                </Link>
-            </div>
-        </div>
-        </div>
         </>
-    )
+    );
 }
+
+export default Login;

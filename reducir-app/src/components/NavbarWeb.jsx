@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
 import ReducirLogo from './ReducirLogo';
 import { useAuth } from "../context/authContext";
@@ -94,7 +94,7 @@ const NavbarWeb = (() => {
           ))}
         {(role === "admin") &&
           adminMenuRoutes.map((item) => (
-            <NavbarItem>
+            <NavbarItem key={item.id}>
               <RouterLink color="foreground" to={item.path}>
                 {item.name}
               </RouterLink>
@@ -127,6 +127,7 @@ const NavbarWeb = (() => {
               <Button
                 color="warning"
                 variant="flat"
+                radius="full"
                 className="text-sm backgroundOrange text-white hover:text-white"
                 onClick={() => handleLogout()}
               >
@@ -140,6 +141,7 @@ const NavbarWeb = (() => {
             <Button
               onPress={handleLogin}
               type="button"
+              radius="full"
               variant="flat"
               className="text-sm backgroundOrange text-white hover:text-white"
             >
@@ -160,7 +162,7 @@ const NavbarWeb = (() => {
           ))}
         {(role === "admin") &&
           adminMenuRoutes.map((item) => (
-            <NavbarMenuItem>
+            <NavbarMenuItem key={item.id}>
               <RouterLink color="foreground" to={item.path}>
                 {item.name}
               </RouterLink>

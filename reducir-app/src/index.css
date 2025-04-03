@@ -4,11 +4,38 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+:root {
+  --main-bg-color: #f5f5f5;
+  --main-text-color: #383838;
+  --dark-green-color: #005840;
+  --light-green-color: #C9D641;
+  --orange-color: #ED6C1D;
+  --texture-bg: url('./covers/bg-texture.png');
+  --light-trama: url('./covers/home/light-trama.png');
+  --dark-trama: url('./covers/home/dark-trama.png');
+}
+
+@keyframes slide-up {
+  0% {
+
+    transform: translateY(100%);
+  }
+
+  100% {
+
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.7s ease-in-out forwards;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #F1EDEC;
+  /* background-color: #F1EDEC; */
   color: #242424;
   font-family: 'Poppins', sans-serif;
   font-family: 'Quicksand', sans-serif;
@@ -18,15 +45,68 @@ body {
   font-size: 0.8rem;
 }
 
-h1 {
+.header {
+  background-image: var(--texture-bg);
+}
+
+.backgroundLightTrama {
+  background-image: var(--light-trama);
+}
+
+.backgroundDarkTrama {
+  background-image: var(--dark-trama);
+}
+
+.backgroundSheet {
+  background-image: url('./covers/bg-sheet.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.backgroundPaper {
+  background-image: url('./covers/bg-brown.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+.backgroundApp {
+  background-image: url('./covers/home-2-app.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.backgroundVectorSheet {
+  background-image: url('./covers/vector-sheet.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+.backgroundTexture {
+  background-image: var(--texture-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.section4 img {
+  border-radius: 60px;
+}
+
+.swiper {
+  overflow: visible !important;
+  overflow-x: clip !important;
+
+}
+
+/* h1 {
   font-size: 2em;
   line-height: 1.1;
 }
 
 h2 {
   font-size: 1.6rem;
-  line-height: 1.5;
-}
+  line-height: 1.8;
+} */
 
 button {
   border-radius: 8px;
@@ -47,6 +127,14 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto transparent;
+}
+
+.clipped-image {
+  clip-path: circle(100.3% at 100% 55%);
+}
+
+.clipped-sheet {
+  clip-path: ellipse(43% 45% at 50% 48%);
 }
 
 .backgroundWhite {
@@ -126,8 +214,22 @@ button:focus-visible {
   display: inline-block;
 }
 
+.arrowRightGreen {
+  background-image: url('./covers/icons/arrow-right-green.png');
+  content: '';
+  width: 22px;
+  height: 12px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+}
+
 .backgroundTramaClaro {
   background-image: url('./covers/fondo-trama.png');
+}
+
+.backgroundTramaWhite {
+  background-image: url('./covers/trama-white.png');
 }
 
 .iconShare {
@@ -243,12 +345,12 @@ button:focus-visible {
   animation-duration: 2s;
 }
 
-strong {
+/* strong {
   color: #005840;
-}
+} */
 
 p {
-  color: #00271d;
+  color: var(--main-text-color);
 }
 
 h2 {
@@ -283,4 +385,16 @@ h2 {
   background-repeat: no-repeat;
   background-size: contain;
   display: inline-block;
+}
+
+.community-bg {
+  background-image: url('./covers/home/community.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 24px !important;
+  color: var(--dark-green-color);
 }

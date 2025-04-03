@@ -126,62 +126,54 @@ async function deleteAction(actionId) {
     }
 }
 
-async function updateAction(actionId, actionData) {
+export const updateAccount = async (accountId, accountData) => {
     try {
-        //await client.connect();
+        // Obtener la cuenta existente
+        const oldAccountData = await AccountRepository.getAccount(accountId);
+        if (!oldAccountData) {
+            throw new Error('Account not found');
+        }
 
-        // Obtener el producto existente
-        const oldAction = await getActionByID(actionId);
-
-        // Crear el objeto de producto actualizado
-        const updatedAction = {
-            _id: oldAction._id,
-            title: actionData.title || oldAction.title,
-            description: actionData.description || oldAction.description,
-            tip: actionData.tip || oldAction.tip,
-            image: oldAction.image,
-            alt: actionData.alt || oldAction.alt,
-            category: actionData.category || oldAction.category,
-            carbon: parseInt(actionData.carbon) || oldAction.carbon,
-            points: parseInt(actionData.points) || oldAction.points,
+        // Crear el objeto de cuenta actualizada
+        let updatedAccount = {
+            name: accountData.name || oldAccountData.name,
+            email: accountData.email || oldAccountData.email,
         };
 
-        // Si hay un nuevo archivo, actualizar la propiedad 'image' en 'updatedAction'
-        if (actionData.image) {
-            updatedAction.image = actionData.image;
-            // Eliminar la imagen anterior si existe
-            if (oldAction.image) {
-                await deleteImageFile(oldAction.image);
-                console.log('oldAction.image', oldAction.image);
-            }
+        // Hash de la nueva contraseña si se proporciona
+        if (accountData.password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(accountData.password, salt);
+            updatedAccount.password = hashedPassword;
+        } else {
+            // Mantener la contraseña actual si no se proporciona una nueva
+            updatedAccount.password = oldAccountData.password;
         }
 
-        // Actualizar el producto en la base de datos
-        const result = await ActionCollection.updateOne(
-            { _id: ObjectId.createFromHexString(actionId) },
-            { $set: updatedAction }
-        );
-
-        console.log('Producto antiguo:', oldAction);
-        console.log('Producto actualizado:', updatedAction);
+        // Actualizar la cuenta en la base de datos
+        const result = await AccountRepository.updateAccount(accountId, updatedAccount);
+        console.log('Cuenta antigua:', oldAccountData);
+        console.log('Cuenta actualizada:', updatedAccount);
         console.log('Resultado de la actualización:', result);
 
-        if (result.matchedCount === 1) {
-            console.log('Producto editado exitosamente.');
-            return ActionCollection.findOne({ _id: ObjectId.createFromHexString(actionId) });
+        if (result.count > 0) { // Verifica que se haya actualizado al menos una fila
+            // Obtener la cuenta actualizada para devolverla
+            const updatedAccountData = await AccountRepository.getAccount(accountId);
+            return updatedAccountData; // Devolver el objeto actualizado
+        } else {
+            throw new Error('Failed to update account');
         }
     } catch (error) {
-        console.error('Error actualizando producto:', error);
+        console.error('Error actualizando la cuenta:', error);
         throw { code: 500, msg: 'Internal Server Error' };
     }
-}
-
+};
 export {
     getActions,
     createAction,
     getActionByID,
     deleteAction,
-    updateAction
+
 }
 
 export default {
@@ -189,5 +181,5 @@ export default {
     createAction,
     getActionByID,
     deleteAction,
-    updateAction
+
 }

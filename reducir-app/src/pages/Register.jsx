@@ -1,145 +1,130 @@
-import React, { useState, useRef } from "react";
+import { useState } from "react";
 import warningIcon from './../covers/icons/warning-icon.png';
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { Button } from "@nextui-org/react";
-import NavbarWeb from "../components/NavbarWeb";
-import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 import logo from '../covers/logo-horizontal.png';
+import { useCreateAccountMutation } from "../features/fetchFirebase";
+import Input from "../components/Base/Input";
+import CustomButton from "../components/Base/CustomButton";
+
+const favorites = [];
+const achievements = [];
+const carbon = 0;
 
 export function Register() {
-    const auth = useAuth();
     const navigate = useNavigate();
-
-    const [emailRegister, setEmailRegister] = useState("");
-    const [passwordRegister, setPasswordRegister] = useState("");
-    const [passwordConfirm, setPasswordConfirm] = useState("");
-    const [favorites, setFavorites] = useState([]);
-    const [rol, setRol] = useState("");
-    const [carbon, setCarbon] = useState("");
+    const [createAccount] = useCreateAccountMutation();
     const [validationMessage, setValidationMessage] = useState("");
-    //console.log(emailRegister, passwordRegister, "Estados del formulario en registro");
-
-    const handleEmailChange = (e) => {
-        setEmailRegister(e.target.value)
-    }
-
-    const handlePasswordChange = (e) => {
-        setPasswordRegister(e.target.value)
-    }
-    const handlePasswordConfirm = (e) => {
-        setPasswordConfirm(e.target.value)
-    }
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        if (!emailRegister || !passwordRegister || !passwordConfirm) {
+
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+
+        const email = formData.get('email');
+        const password = formData.get('password');
+        const passwordConfirm = formData.get('password_confirm');
+
+
+        if (!email || !password || !passwordConfirm) {
             setValidationMessage("Todos los campos son obligatorios.");
             return;
         }
 
-        if (passwordRegister !== passwordConfirm) {
+        if (password !== passwordConfirm) {
             setValidationMessage("Las contraseñas no coinciden.");
             return;
         }
-        if (passwordRegister.length < 6 || passwordConfirm < 6) {
+        if (password.length < 6 || passwordConfirm < 6) {
             setValidationMessage("La contraseña debe tener como mínimo 6 caracteres.");
             return;
         }
 
+        const account = { email, password, carbon, favorites, achievements };
+
         try {
-            // Tu lógica de registro aquí...
-            await auth.register(emailRegister, passwordRegister, favorites, "usuario", carbon);
+            const result = await createAccount(account);
+            localStorage.setItem('token', result.data.account.token);
+            localStorage.setItem('email', result.data.account.email);
+            localStorage.setItem('favorites', result.data.account.favorites);
+            localStorage.setItem('achievements', result.data.account.achievements);
+            localStorage.setItem('role', result.data.account.role);
+            localStorage.setItem('_id', result.data.account._id);
+
             navigate("/bienvenida");
         } catch (error) {
             setValidationMessage("Error al registrar. Inténtalo de nuevo.");
-            console.log(error);
         }
-        // auth.register(emailRegister, passwordRegister, favorites);
     }
 
     return (
         <>
-            <div className="container p-8 mx-auto min-h-screen backgroundTrama">
-                <div className="max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
-                    <div className="p-2">
+            <div className="p-8 mx-auto min-h-screen backgroundTrama">
+                <div className="container max-w-sm mx-auto backgroundWhite p-6 mt-2 rounded-[24px] shadow-sm">
+                    <div className="p-2 pt-0">
                         <div className="flex justify-center mb-4">
                             <img src={logo} />
                         </div>
 
                     </div>
-                    <h1 className="text-2xl mt-1 mb-2 text-center">Registrarse</h1>
+                    <h1 className="invisible h-0">Registrarse</h1>
                     {validationMessage && (
-                        <div className="mb-4 mt-4 flex items-center justify-center text-red-500">
-                            <img src={warningIcon} className="mr-2 w-8 h-8" />
-                            <span><span className="font-bold">¡Atención!</span> {validationMessage}</span>
+                        <div className="my-2 flex items-center justify-center text-red-500 text-xs">
+                            <img src={warningIcon} className="mr-1 w-6 h-6" />
+                            <span> {validationMessage}</span>
                         </div>
                     )}
 
                     <form action=""
                         method=""
                         onSubmit={(e) => handleRegister(e)}
+                        className="flex flex-col gap-3"
                     >
-                        <div className="mb-3">
-                            <label className="mb-2 text-sm">Nombre</label>
-                            <input
-                                name="name"
-                                type="text"
-                                id="name"
-                                placeholder="Ingresá tu nombre"
-                                className="block w-full rounded-md border-0 py-1.5 pl-4 pr-2  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="mb-2 text-sm">Email</label>
-                            <input
-                                onChange={handleEmailChange}
-                                name="email"
-                                // ref={emailRef}
-                                type="email"
-                                id="email"
-                                placeholder="Ingresá tu email"
-                                className="block w-full rounded-md border-0 py-1.5 pl-4 pr-2  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label className="mb-2 text-sm">Contraseña</label>
-                            <input
-                                onChange={handlePasswordChange}
-                                name="password"
-                                // ref={passRef}
-                                type="password"
-                                id="password"
-                                placeholder="Ingresá tu contraseña"
-                                className="block w-full rounded-md border-0 py-1.5 pl-4 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label className="mb-2 text-sm">Confirmar contraseña</label>
-                            <input
-                                name="confirm_password"
-                                onChange={handlePasswordConfirm}
-                                type="password"
-                                id="passwordConfirm"
-                                placeholder="Confirmá tu contraseña"
-                                className="block w-full rounded-md border-0 py-1.5 pl-4 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                        <div className="flex justify-center mt-3">
-                            <Button type="submit" className="backgroundDarkGreen text-white"
-                                value="registrarse">
+                        <Input
+                            label="Nombre"
+                            inputName="name"
+                            inputId="name"
+                            inputPlaceholder="Ingresá tu nombre"
+                        />
+                        <Input
+                            label="Email"
+                            inputName="email"
+                            inputId="email"
+                            inputPlaceholder="Ingresá tu email"
+                        />
+                        <Input
+                            label="Contraseña"
+                            inputName="password"
+                            inputType="password"
+                            inputId="password"
+                            inputPlaceholder="Ingresá tu contraseña"
+                        />
+                        <Input
+                            label="Confirmar contraseña"
+                            inputName="password_confirm"
+                            inputType="password"
+                            inputId="passwordConfirm"
+                            inputPlaceholder="Confirmá tu contraseña"
+                        />
+                        <div className="flex justify-center mt-2">
+                            <CustomButton
+                                type="submit"
+                                variant="filled"
+                            >
                                 Registrarse
-                            </Button>
+                            </CustomButton>
                         </div>
                     </form>
-                    <div className="text-center mt-8">¿Ya tenés una cuenta?
-                        <Link className="pl-2 textDarkGreen font-bold" to="/iniciar-sesion">
-                            Iniciar sesión
-                        </Link>
-                    </div>
                 </div>
+                <p className="text-center mt-6 text-sm text-white">
+                    ¿Ya tenés una cuenta?
+                    <Link className="pl-2 font-bold" to="/iniciar-sesion">
+                        Iniciar sesión
+                    </Link>
+                </p>
             </div>
         </>
-    )
+    );
 }
 
 export default Register;
